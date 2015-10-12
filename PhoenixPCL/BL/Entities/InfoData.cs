@@ -32,6 +32,13 @@ namespace Phoenix.BL.Entities
     public class InfoData : EntityBase
     {
         /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
+        [PrimaryKey, AutoIncrement]
+        public override int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the group.
         /// </summary>
         /// <value>The group.</value>

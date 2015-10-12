@@ -35,6 +35,13 @@ namespace Phoenix.BL.Entities
     public class GameStatus : EntityBase
     {
         /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
+        [PrimaryKey, AutoIncrement]
+        public override int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the status message.
         /// </summary>
         /// <value>The status message.</value>

@@ -157,6 +157,13 @@ namespace Phoenix.BL.Entities
     public class ItemProperty : EntityBase 
     {
         /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
+        [PrimaryKey, AutoIncrement]
+        public override int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the item identifier.
         /// </summary>
         /// <value>The item identifier.</value>
@@ -188,6 +195,13 @@ namespace Phoenix.BL.Entities
     [Table("RawMaterial")]
     public class RawMaterial : EntityBase 
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
+        [PrimaryKey, AutoIncrement]
+        public override int Id { get; set; }
+
         /// <summary>
         /// Gets or sets the item identifier.
         /// </summary>

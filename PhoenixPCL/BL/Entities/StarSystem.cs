@@ -71,6 +71,13 @@ namespace Phoenix.BL.Entities
     public class CelestialBody : EntityBase 
     {
         /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
+        [PrimaryKey, AutoIncrement]
+        public override int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the star system identifier.
         /// </summary>
         /// <value>The star system identifier.</value>
@@ -125,6 +132,13 @@ namespace Phoenix.BL.Entities
     [Table("JumpLink")]
     public class JumpLink : EntityBase
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
+        [PrimaryKey, AutoIncrement]
+        public override int Id { get; set; }
+
         /// <summary>
         /// Gets or sets from system identifier.
         /// </summary>

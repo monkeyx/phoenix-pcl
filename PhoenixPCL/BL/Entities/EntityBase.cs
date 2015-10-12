@@ -44,8 +44,8 @@ namespace Phoenix.BL.Entities
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-		[PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+		[PrimaryKey]
+        public virtual int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.
@@ -96,6 +96,15 @@ namespace Phoenix.BL.Entities
         /// hash table.</returns>
         public override int GetHashCode() {
             return this.Id.GetHashCode();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.EntityBase"/>.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.EntityBase"/>.</returns>
+        public override string ToString ()
+        {
+            return string.Format ("[" + GetType().Name + "]: Id={0}, CreatedAt={1}, UpdatedAt={2}]", Id, CreatedAt, UpdatedAt);
         }
     }
 }
