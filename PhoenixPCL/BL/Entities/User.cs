@@ -24,13 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using SQLite;
 
 namespace Phoenix.BL.Entities
 {
     /// <summary>
     /// User.
     /// </summary>
-    public class User : EntityBase
+	[Table("users")]
+	public class User : EntityBase
     {
         /// <summary>
         /// Gets or sets the code.
