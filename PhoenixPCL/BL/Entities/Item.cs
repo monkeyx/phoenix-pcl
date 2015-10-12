@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using SQLite.Net.Attributes;
+using SQLite;
 
 namespace Phoenix.BL.Entities
 {
