@@ -35,7 +35,7 @@ namespace Phoenix.BL.Managers
     /// <summary>
     /// Nexus manager abstract class
     /// </summary>
-    public abstract class NexusManager<T> : IEntityManager<T> where T :   IEntity, new()
+    public abstract class NexusManager<T> : IEntityManager<T> where T :   EntityBase, new()
     {
         /// <summary>
         /// Gets or sets the user.

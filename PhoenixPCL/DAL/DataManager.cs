@@ -42,7 +42,7 @@ namespace Phoenix.DAL
         /// </summary>
         /// <returns>The manager.</returns>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static DataManager<T> GetManager<T>() where T : IEntity, new()
+        public static DataManager<T> GetManager<T>() where T : EntityBase, new()
         {
             string typeName = typeof(T).Name;
             if (_managers.Contains(typeName)) {
@@ -56,7 +56,7 @@ namespace Phoenix.DAL
         /// </summary>
         /// <param name="manager">Manager.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        static void RegisterManager<T>(DataManager<T> manager) where T : IEntity, new()
+        static void RegisterManager<T>(DataManager<T> manager) where T : EntityBase, new()
         {
             string typeName = typeof(T).Name;
             if (_managers.Contains(typeName)) {
@@ -90,7 +90,7 @@ namespace Phoenix.DAL
     /// <summary>
     /// Data manager.
     /// </summary>
-    public class DataManager<T> where T :   IEntity, new()
+    public class DataManager<T> where T :   EntityBase, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.DAL.DataManager`1"/> class.
