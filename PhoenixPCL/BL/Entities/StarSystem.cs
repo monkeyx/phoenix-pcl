@@ -32,7 +32,7 @@ namespace Phoenix.BL.Entities
     /// <summary>
     /// Star system.
     /// </summary>
-    [Table("star_systems")]
+    [Table("StarSystem")]
     public class StarSystem : EntityBase
     {
         /// <summary>
@@ -67,7 +67,7 @@ namespace Phoenix.BL.Entities
     /// <summary>
     /// Celestial body.
     /// </summary>
-    [Table("celestial_bodies")]
+    [Table("CelestialBody")]
     public class CelestialBody : EntityBase 
     {
         /// <summary>
@@ -122,7 +122,7 @@ namespace Phoenix.BL.Entities
     /// <summary>
     /// Jump link.
     /// </summary>
-    [Table("jump_links")]
+    [Table("JumpLink")]
     public class JumpLink : EntityBase
     {
         /// <summary>

@@ -28,7 +28,7 @@ using SQLite;
 
 namespace Phoenix.BL.Entities
 {
-    [Table("info")]
+    [Table("InfoData")]
     public class InfoData : EntityBase
     {
         /// <summary>

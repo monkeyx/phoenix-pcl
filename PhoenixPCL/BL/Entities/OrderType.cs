@@ -29,7 +29,7 @@ using SQLite;
 
 namespace Phoenix.BL.Entities
 {
-    [Table("order_types")]
+    [Table("OrderType")]
     public class OrderType : EntityBase
     {
         /// <summary>
@@ -80,7 +80,7 @@ namespace Phoenix.BL.Entities
         }
     }
 
-    [Table("order_parameter_type")]
+    [Table("OrderParameterType")]
     public class OrderParameterType
     {
         /// <summary>

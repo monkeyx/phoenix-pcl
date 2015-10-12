@@ -31,7 +31,7 @@ namespace Phoenix.BL.Entities
     /// <summary>
     /// User.
     /// </summary>
-	[Table("users")]
+    [Table("User")]
 	public class User : EntityBase
     {
         /// <summary>

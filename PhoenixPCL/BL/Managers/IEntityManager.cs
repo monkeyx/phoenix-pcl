@@ -35,6 +35,11 @@ namespace Phoenix.BL.Managers
     /// </summary>
     public interface IEntityManager<T> where T :   IEntity, new()
     {
+		/// <summary>
+		/// Count entities managed by this instance.
+		/// </summary>
+		int Count();
+
         /// <summary>
         /// Gets an entity by its identifier and passes it to the callback
         /// </summary>

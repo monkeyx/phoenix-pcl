@@ -58,6 +58,14 @@ namespace Phoenix.BL.Managers
             callback (user);
         }
 
+		/// <summary>
+		/// Count entities managed by this instance.
+		/// </summary>
+		public int Count()
+		{
+			return GetDataManager ().Count;
+		}
+
         /// <summary>
         /// Gets an entity by its identifier and passes it to the callback
         /// </summary>

@@ -28,7 +28,7 @@ using SQLite;
 
 namespace Phoenix.BL.Entities
 {
-    [Table("positions")]
+    [Table("Position")]
     public class Position : EntityBase
     {
         /// <summary>

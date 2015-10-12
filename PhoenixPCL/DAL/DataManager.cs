@@ -122,7 +122,8 @@ namespace Phoenix.DAL
                     int i = 0;
                     foreach(T item in models){
                         LoadRelationships(item);
-                        progressCallback.Report(i);
+						if(progressCallback != null)
+                        	progressCallback.Report(i);
                         i++;
                     }
                 }
@@ -143,7 +144,8 @@ namespace Phoenix.DAL
                 if(item != null){
                     LoadRelationships(item);
                 }
-                progressCallback.Report(1);
+				if(progressCallback != null)
+                	progressCallback.Report(1);
                 return item;
             });
         }
@@ -160,7 +162,8 @@ namespace Phoenix.DAL
                 if(item != null){
                     LoadRelationships(item);
                 }
-                progressCallback.Report(1);
+				if(progressCallback != null)
+                	progressCallback.Report(1);
                 return item;
             });
         }
@@ -174,10 +177,13 @@ namespace Phoenix.DAL
         public Task<T> SaveItem(T item, IProgress<int> progressCallback = null)
         {
             return Task<T>.Factory.StartNew (() => {
-                DeleteRelationships(item);
-                DL.PhoenixDatabase.SaveItem<T>(item);
-                PersistRelationships(item);
-                progressCallback.Report(1);
+				if(item != null){
+					DeleteRelationships(item);
+					DL.PhoenixDatabase.SaveItem<T>(item);
+					PersistRelationships(item);
+				}
+				if(progressCallback != null)
+                	progressCallback.Report(1);
                 return item;
             });
         }
@@ -196,7 +202,8 @@ namespace Phoenix.DAL
                 }
                 DL.PhoenixDatabase.DeleteItem(item);
                 DeleteRelationships(item);
-                progressCallback.Report(1);
+				if(progressCallback != null)
+                	progressCallback.Report(1);
             });
         }
 

@@ -31,7 +31,7 @@ namespace Phoenix.BL.Entities
     /// <summary>
     /// Game status.
     /// </summary>
-    [Table("game_status")]
+    [Table("GameStatus")]
     public class GameStatus : EntityBase
     {
         /// <summary>

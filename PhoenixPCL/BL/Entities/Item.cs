@@ -32,7 +32,7 @@ namespace Phoenix.BL.Entities
     /// <summary>
     /// Item.
     /// </summary>
-    [Table("items")]
+    [Table("Item")]
     public class Item : EntityBase
     {
         /// <summary>
@@ -153,7 +153,7 @@ namespace Phoenix.BL.Entities
     /// <summary>
     /// Item property.
     /// </summary>
-    [Table("item_properties")]
+    [Table("ItemProperty")]
     public class ItemProperty : EntityBase 
     {
         /// <summary>
@@ -185,7 +185,7 @@ namespace Phoenix.BL.Entities
     /// <summary>
     /// Raw material.
     /// </summary>
-    [Table("raw_materials")]
+    [Table("RawMaterial")]
     public class RawMaterial : EntityBase 
     {
         /// <summary>
