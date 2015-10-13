@@ -77,8 +77,8 @@ namespace Phoenix.DAL
             RegisterManager<GameStatus>(new DataManager<GameStatus>());
             RegisterManager<InfoData>(new DataManager<InfoData>());
             RegisterManager<Item>(new ItemDataManager());
-            RegisterManager<OrderType>(new DataManager<OrderType>());
-            RegisterManager<Position>(new DataManager<Position>());
+			RegisterManager<OrderType>(new OrderTypeDataManager());
+			RegisterManager<Position>(new PositionDataManager());
             RegisterManager<StarSystem>(new StarSystemDataManager());
             RegisterManager<User>(new DataManager<User>());
         }
@@ -252,7 +252,7 @@ namespace Phoenix.DAL
         /// </summary>
         protected virtual string OrderBy()
         {
-            return "Id ASC";
+			return "Id ASC";
         }
     }
 

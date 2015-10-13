@@ -92,6 +92,15 @@ namespace Phoenix.DAL
 			DL.PhoenixDatabase.ClearTable<CelestialBody>();
 			DL.PhoenixDatabase.ClearTable<JumpLink>();
 		}
+
+		/// <summary>
+		/// Order results by
+		/// </summary>
+		/// <returns>The by.</returns>
+		protected override string OrderBy ()
+		{
+			return "Name ASC";
+		}
     }
 }
 

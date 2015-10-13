@@ -124,6 +124,10 @@ namespace Phoenix.BL.Entities
         {
         }
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.OrderParameterType"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.OrderParameterType"/>.</returns>
 		public override string ToString ()
 		{
 			return string.Format ("[OrderParameterType: Name={0}, InfoType={1}, DataType={2}]", Name, InfoType, DataType);
