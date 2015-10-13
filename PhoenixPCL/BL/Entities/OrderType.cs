@@ -78,6 +78,15 @@ namespace Phoenix.BL.Entities
         {
             Parameters = new List<OrderParameterType>();
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.OrderType"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.OrderType"/>.</returns>
+		public override string ToString ()
+		{
+			return Name;
+		}
     }
 
     [Table("OrderParameterType")]

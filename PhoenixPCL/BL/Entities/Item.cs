@@ -148,6 +148,15 @@ namespace Phoenix.BL.Entities
             RawMaterials = new List<RawMaterial> ();
             Properties = new Dictionary<string, ItemProperty> ();
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.Item"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.Item"/>.</returns>
+		public override string ToString ()
+		{
+			return string.Format ("{0} ({1})", Name, Id);
+		}
     }
 
     /// <summary>

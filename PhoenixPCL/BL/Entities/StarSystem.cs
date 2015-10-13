@@ -61,7 +61,18 @@ namespace Phoenix.BL.Entities
         /// </summary>
         public StarSystem ()
         {
+			CelestialBodies = new List<CelestialBody> ();
+			JumpLinks = new List<JumpLink> ();
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.StarSystem"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.StarSystem"/>.</returns>
+		public override string ToString ()
+		{
+			return string.Format ("{0} ({1})", Name, Id);
+		}
     }
 
     /// <summary>

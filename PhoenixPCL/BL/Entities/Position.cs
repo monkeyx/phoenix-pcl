@@ -83,6 +83,15 @@ namespace Phoenix.BL.Entities
         public Position ()
         {
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.Position"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.Position"/>.</returns>
+		public override string ToString ()
+		{
+			return string.Format ("{0} ({1})", Name, Id);
+		}
     }
 }
 

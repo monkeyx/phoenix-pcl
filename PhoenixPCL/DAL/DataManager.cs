@@ -131,15 +131,6 @@ namespace Phoenix.DAL
             return Task<List<T>>.Factory.StartNew (() => {
                 List<T> models = DL.PhoenixDatabase.GetItems<T>(OrderBy());
 				Log.WriteLine(Log.Layer.DAL,this.GetType(), "Get Items: " + models.Count);
-                if(models.Count > 0){
-                    int i = 0;
-                    foreach(T item in models){
-                        LoadRelationships(item);
-						if(progressCallback != null)
-                        	progressCallback.Report(i);
-                        i++;
-                    }
-                }
 				return models;
             });
         }
