@@ -30,6 +30,7 @@ using System.Linq;
 using SQLite;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.DL
 {
@@ -77,7 +78,7 @@ namespace Phoenix.DL
 				DatabaseProvider.GetConnection().CreateTable<User> ();
             }
             catch(Exception e){
-                System.Diagnostics.Debug.WriteLine (e);
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), e);
                 throw e;
             }
 
@@ -118,7 +119,7 @@ namespace Phoenix.DL
                    return DatabaseProvider.GetConnection().Query<T>(sql);
                 }
             } catch(Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("GetItems", typeof(T), e));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("GetItems", typeof(T), e));
                 return new List<T>();
             }
         }
@@ -143,7 +144,7 @@ namespace Phoenix.DL
                     return default(T);
                 }
             } catch(Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("GetItem", typeof(T), e, id));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("GetItem", typeof(T), e, id));
                 return default(T);
             }
         }
@@ -168,7 +169,7 @@ namespace Phoenix.DL
                     return default(T);
                 }
             } catch(Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("GetFirstItem", typeof(T), e));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("GetFirstItem", typeof(T), e));
                 return default(T);
             }
         }
@@ -193,7 +194,7 @@ namespace Phoenix.DL
                     }
                 }
             } catch(Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("HasItem", typeof(T), e, id));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("HasItem", typeof(T), e, id));
                 return false;
             }
         }
@@ -224,7 +225,7 @@ namespace Phoenix.DL
                     }
                 }
             } catch (Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("SaveItem", item.GetType(), e, (item == null ? -1 : item.Id)));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("SaveItem", item.GetType(), e, (item == null ? -1 : item.Id)));
             }
         }
 
@@ -251,7 +252,7 @@ namespace Phoenix.DL
                     DatabaseProvider.GetConnection().Delete(item);
                 }
             } catch(Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("DeleteItem", item.GetType(), e, (item == null ?  -1 : item.Id)));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("DeleteItem", item.GetType(), e, (item == null ?  -1 : item.Id)));
             }
         }
 
@@ -270,7 +271,7 @@ namespace Phoenix.DL
                     return DatabaseProvider.GetConnection().ExecuteScalar<int>(sql);
                 }
             } catch(Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("DeleteItemById", typeof(T), e, id));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("DeleteItemById", typeof(T), e, id));
                 return -1;
             }
 
@@ -285,7 +286,7 @@ namespace Phoenix.DL
             try {
                 Execute(string.Format ("delete from \"{0}\"", TableName(typeof(T))));
             } catch(Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("ClearTable", typeof(T), e));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("ClearTable", typeof(T), e));
             }
         }
 
@@ -300,7 +301,7 @@ namespace Phoenix.DL
                 string sql = string.Format ("select count (*) from \"{0}\"", TableName(typeof(T)));
                 return ExecuteScalar<int>(sql);
             } catch(Exception e) {
-				System.Diagnostics.Debug.WriteLine(ErrorMessage("CountTable", typeof(T), e));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("CountTable", typeof(T), e));
                 return -1;
             }
         }
@@ -422,7 +423,7 @@ namespace Phoenix.DL
                     return DatabaseProvider.GetConnection().Query<T> (query, args).ToList();
                 }
             } catch(Exception e) {
-                System.Diagnostics.Debug.WriteLine(ErrorMessage("Query", typeof(T), e));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("Query", typeof(T), e));
                 return new List<T>();
             }
         }
@@ -439,7 +440,7 @@ namespace Phoenix.DL
 	                DatabaseProvider.GetConnection().Execute(sql, args);
 	            }
 			} catch(Exception e) {
-				System.Diagnostics.Debug.WriteLine(ErrorMessage("Execute", typeof(string), e));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("Execute", typeof(string), e));
 			}
         }
 
@@ -458,7 +459,7 @@ namespace Phoenix.DL
 	                return c.ExecuteScalar<T>();
 	            }
 			} catch(Exception e) {
-				System.Diagnostics.Debug.WriteLine(ErrorMessage("ExecuteScalar", typeof(T), e));
+				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage("ExecuteScalar", typeof(T), e));
 				return default(T);
 			}
         }

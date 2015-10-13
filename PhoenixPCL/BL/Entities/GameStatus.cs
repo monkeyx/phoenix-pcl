@@ -113,6 +113,15 @@ namespace Phoenix.BL.Entities
         public GameStatus ()
         {
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.GameStatus"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.GameStatus"/>.</returns>
+		public override string ToString ()
+		{
+			return string.Format ("[GameStatus: StatusMessage={0}, StarDate={1}]", StatusMessage, StarDate);
+		}
     }
 }
 

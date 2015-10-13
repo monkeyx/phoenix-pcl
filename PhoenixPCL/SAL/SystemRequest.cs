@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.SAL
 {
@@ -52,33 +53,41 @@ namespace Phoenix.SAL
         /// <param name="callback">Callback.</param>
         protected override void Success(XmlReader xmlReader, Action<List<StarSystem>> callback)
         {
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
+
             List<StarSystem> list = new List<StarSystem> ();
 
             StarSystem item = null;
 
             while (xmlReader.Read ()) {
-                if (xmlReader.Name == "system") {
-                    item = new StarSystem () {
-                        Id = Int32.Parse (xmlReader.GetAttribute ("id")),
-                        Name = xmlReader.GetAttribute ("name")    
-                    };
-                    list.Add (item);
-                } else if (xmlReader.Name == "cbody") {
-                    item.CelestialBodies.Add (new CelestialBody () {
-                        StarSystemId = item.Id,
-                        Name = xmlReader.GetAttribute ("name"),
-                        LocalCelestialBodyId = Int32.Parse (xmlReader.GetAttribute ("id")),
-                        Quad = Int32.Parse (xmlReader.GetAttribute ("quad")),
-                        Ring = Int32.Parse (xmlReader.GetAttribute ("ring")),
-                        CBodyType = Int32.Parse (xmlReader.GetAttribute ("type"))
-                    });
-                } else if (xmlReader.Name == "link") {
-                    item.JumpLinks.Add (new JumpLink () {
-                        StarSystemId = item.Id,
-                        ToSystemId = Int32.Parse (xmlReader.GetAttribute ("sys_id")),
-                        Distance = Int32.Parse (xmlReader.GetAttribute ("dist"))
-                    });
-                }
+				if (xmlReader.IsStartElement ()) {
+					try {
+						if (xmlReader.Name == "system") {
+							item = new StarSystem () {
+								Id = Int32.Parse (xmlReader.GetAttribute ("id")),
+								Name = xmlReader.GetAttribute ("name")    
+							};
+							list.Add (item);
+						} else if (xmlReader.Name == "cbody") {
+							item.CelestialBodies.Add (new CelestialBody () {
+								StarSystemId = item.Id,
+								Name = xmlReader.GetAttribute ("name"),
+								LocalCelestialBodyId = Int32.Parse (xmlReader.GetAttribute ("id")),
+								Quad = Int32.Parse (xmlReader.GetAttribute ("quad")),
+								Ring = Int32.Parse (xmlReader.GetAttribute ("ring")),
+								CBodyType = Int32.Parse (xmlReader.GetAttribute ("type"))
+							});
+						} else if (xmlReader.Name == "link") {
+							item.JumpLinks.Add (new JumpLink () {
+								StarSystemId = item.Id,
+								ToSystemId = Int32.Parse (xmlReader.GetAttribute ("sys_id")),
+								Distance = Int32.Parse (xmlReader.GetAttribute ("dist"))
+							});
+						}
+					} catch (Exception e) {
+						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);
+					}
+				}
             }
 
             callback (list);

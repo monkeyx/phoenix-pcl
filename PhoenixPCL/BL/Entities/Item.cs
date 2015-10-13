@@ -187,6 +187,15 @@ namespace Phoenix.BL.Entities
         public ItemProperty ()
         {
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.ItemProperty"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.ItemProperty"/>.</returns>
+		public override string ToString ()
+		{
+			return string.Format ("[ItemProperty: Key={0}, Value={1}]", Key, Value);
+		}
     }
 
     /// <summary>
@@ -226,6 +235,15 @@ namespace Phoenix.BL.Entities
         public RawMaterial()
         {
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.RawMaterial"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.RawMaterial"/>.</returns>
+		public override string ToString ()
+		{
+			return string.Format ("[RawMaterial:RawMaterialId={0}, Quantity={1}]", RawMaterialId, Quantity);
+		}
     }
 }
 

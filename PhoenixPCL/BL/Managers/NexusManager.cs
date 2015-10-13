@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using Phoenix.DAL;
 using Phoenix.SAL;
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.BL.Managers
 {
@@ -59,10 +60,16 @@ namespace Phoenix.BL.Managers
 		/// Fetches data from Nexus
 		/// </summary>
 		/// <param name="callback">Callback.</param>
-		public void Fetch(Action<List<T>> callback)
+		/// <param name="clearFirst">If set to <c>true</c> clear first.</param>
+		public async void Fetch(Action<List<T>, System.Net.HttpStatusCode> callback, bool clearFirst = false)
         {
+			if (clearFirst) {
+				Log.WriteLine (Log.Layer.BL, this.GetType (), "Clearing Entities");
+				await GetDataManager ().Clear ();
+			}
             FetchInProgress = true;
 			this.callback = callback;
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Fetching Entities");
             GetRequest ().Fetch (RequestCallback);
         }
 
@@ -74,6 +81,17 @@ namespace Phoenix.BL.Managers
 			return GetDataManager ().Count;
 		}
 
+		/// <summary>
+		/// Gets all entities
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		public async void All(Action<List<T>> callback)
+		{
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "All Entities");
+			List<T> results = await GetDataManager ().GetItems ();
+			callback (results);
+		}
+
         /// <summary>
         /// Gets an entity by its identifier and passes it to the callback
         /// </summary>
@@ -81,6 +99,7 @@ namespace Phoenix.BL.Managers
         /// <param name="callback">Callback.</param>
         public async void Get(int id, Action<T> callback)
         {
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Get Entity: " + id);
             T item = await GetDataManager ().GetItem (id);
             callback (item);
         }
@@ -91,6 +110,7 @@ namespace Phoenix.BL.Managers
         /// <param name="callback">Callback.</param>
         public async void First(Action<T> callback)
         {
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "First Entity");
             T item = await GetDataManager ().GetFirstItem ();
             callback (item);
         }
@@ -104,6 +124,7 @@ namespace Phoenix.BL.Managers
             User = user;
             FetchCompleted = false;
             FetchInProgress = false;
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Initialised with " + user);
         }
 
         /// <summary>
@@ -121,7 +142,10 @@ namespace Phoenix.BL.Managers
         /// <returns>The request.</returns>
         protected INexusRequest<T> GetRequest()
         {
-            return NexusRequestFactory.CreateRequest<T> (User);
+			if (request == null) {
+				request = NexusRequestFactory.CreateRequest<T> (User);
+			}
+			return request;
         }
 
         /// <summary>
@@ -130,15 +154,17 @@ namespace Phoenix.BL.Managers
         /// <param name="results">Results.</param>
         private void RequestCallback(List<T> results)
         {
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Request Callback: " + results.Count);
             foreach (T item in results) {
                 GetDataManager ().SaveItem (item);
             }
             FetchInProgress = false;
             FetchCompleted = true;
-			callback (results);
+			callback (results, request.StatusCode);
         }
 
-		private Action<List<T>> callback;
+		private Action<List<T>, System.Net.HttpStatusCode> callback;
+		private INexusRequest<T> request;
     }
 }
 

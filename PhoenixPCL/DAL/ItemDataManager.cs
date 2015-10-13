@@ -26,6 +26,7 @@
 using System;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.DAL
 {
@@ -48,12 +49,14 @@ namespace Phoenix.DAL
         protected override void PersistRelationships(Item item)
         {
             if (item != null) {
+				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Item Properties (" + item.Id + ": " + item.Properties.Count);
                 if (item.Properties.Count > 0) {
                     foreach (ItemProperty p in item.Properties.Values) {
                         p.ItemId = item.Id;
                         DL.PhoenixDatabase.SaveItemIfNew<ItemProperty> (p);
                     }
                 }
+				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Item Raw Materials (" + item.Id + ": " + item.RawMaterials.Count);
                 if (item.RawMaterials.Count > 0) {
                     foreach (RawMaterial rm in item.RawMaterials) {
                         rm.ItemId = item.Id;
@@ -69,6 +72,7 @@ namespace Phoenix.DAL
         /// <param name="item">Item.</param>
         protected override void LoadRelationships(Item item)
         {
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Load Relationships (" + item.Id + ")");
             foreach (ItemProperty ip in DL.PhoenixDatabase.GetItemProperties (item.Id)) {
                 item.AddProperty (ip.Key, ip.Value);
             }
@@ -81,9 +85,21 @@ namespace Phoenix.DAL
         /// <param name="item">Item.</param>
         protected override void DeleteRelationships(Item item)
         {
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete Relationships (" + item.Id + ")");
             DL.PhoenixDatabase.DeleteItemProperties (item.Id);
             DL.PhoenixDatabase.DeleteRawMaterials (item.Id);
         }
+
+		/// <summary>
+		/// Deletes all entities.
+		/// </summary>
+		protected override void DeleteAllEntities()
+		{
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete All Items, Item Properties and Raw Materials");
+			DL.PhoenixDatabase.ClearTable<Item>();
+			DL.PhoenixDatabase.ClearTable<ItemProperty>();
+			DL.PhoenixDatabase.ClearTable<RawMaterial>();
+		}
     }
 }
 

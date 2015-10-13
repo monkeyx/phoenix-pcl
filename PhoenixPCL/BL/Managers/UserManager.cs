@@ -27,6 +27,7 @@ using System;
 
 using Phoenix.BL.Entities;
 using Phoenix.DAL;
+using Phoenix.Util;
 
 namespace Phoenix.BL.Managers
 {
@@ -54,7 +55,9 @@ namespace Phoenix.BL.Managers
                 Id = id,
                 Code = code
             };
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Removing Users");
 			await GetDataManager ().Clear ();
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Saving " + user);
             user = await GetDataManager ().SaveItem (user);
             callback (user);
         }
@@ -74,6 +77,7 @@ namespace Phoenix.BL.Managers
         /// <param name="callback">Callback.</param>
         public async void Get(int id, Action<User> callback)
         {
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Get: " + id);
             User user = await GetDataManager ().GetItem (id);
             callback (user);
         }
@@ -84,6 +88,7 @@ namespace Phoenix.BL.Managers
         /// <param name="callback">Callback.</param>
         public async void First(Action<User> callback)
         {
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "First");
             User user = await GetDataManager ().GetFirstItem ();
             callback (user);
         }

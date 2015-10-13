@@ -26,6 +26,7 @@
 using System;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.DAL
 {
@@ -47,11 +48,13 @@ namespace Phoenix.DAL
         /// <param name="item">Item.</param>
         protected override void PersistRelationships(StarSystem item)
         {
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Persist Celestial Bodies (" + item.Id + "): " + item.CelestialBodies.Count);
             foreach (CelestialBody cb in item.CelestialBodies) {
                 cb.StarSystemId = item.Id;
                 DL.PhoenixDatabase.SaveItemIfNew<CelestialBody> (cb);
             }
-            foreach (JumpLink jl in item.JumpLinks) {
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Persist Jump Links (" + item.Id + "): " + item.JumpLinks.Count);
+			foreach (JumpLink jl in item.JumpLinks) {
                 jl.StarSystemId = item.Id;
                 DL.PhoenixDatabase.SaveItemIfNew<JumpLink> (jl);
             }
@@ -63,6 +66,7 @@ namespace Phoenix.DAL
         /// <param name="item">Item.</param>
         protected override void LoadRelationships(StarSystem item)
         {
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Load Relationships (" + item.Id + ")");
             item.CelestialBodies = DL.PhoenixDatabase.GetCelestialBodies (item.Id);
             item.JumpLinks = DL.PhoenixDatabase.GetJumpLinks (item.Id);
         }
@@ -73,9 +77,21 @@ namespace Phoenix.DAL
         /// <param name="item">Item.</param>
         protected override void DeleteRelationships(StarSystem item)
         {
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete Relationships (" + item.Id + ")");
             DL.PhoenixDatabase.DeleteCelestialBodies (item.Id);
             DL.PhoenixDatabase.DeleteJumpLinks (item.Id);
         }
+
+		/// <summary>
+		/// Deletes all entities.
+		/// </summary>
+		protected override void DeleteAllEntities()
+		{
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete All Star Systems, Celestial Bodies and Jump Links");
+			DL.PhoenixDatabase.ClearTable<StarSystem>();
+			DL.PhoenixDatabase.ClearTable<CelestialBody>();
+			DL.PhoenixDatabase.ClearTable<JumpLink>();
+		}
     }
 }
 

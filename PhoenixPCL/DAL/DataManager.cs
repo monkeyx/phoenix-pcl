@@ -29,6 +29,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.DAL
 {
@@ -64,6 +65,7 @@ namespace Phoenix.DAL
             } else {
                 _managers.Add(typeName, manager);
             }
+			Log.WriteLine (Log.Layer.DAL, typeof(DataManagerFactory), "Registered " + typeName);
         }
 
         /// <summary>
@@ -114,7 +116,7 @@ namespace Phoenix.DAL
 		public Task Clear()
 		{
 			return Task.Factory.StartNew (() => {
-				DL.PhoenixDatabase.ClearTable<T>();
+				DeleteAllEntities();
 			});
 		}
 
@@ -128,6 +130,7 @@ namespace Phoenix.DAL
         {
             return Task<List<T>>.Factory.StartNew (() => {
                 List<T> models = DL.PhoenixDatabase.GetItems<T>(OrderBy());
+				Log.WriteLine(Log.Layer.DAL,this.GetType(), "Get Items: " + models.Count);
                 if(models.Count > 0){
                     int i = 0;
                     foreach(T item in models){
@@ -137,7 +140,7 @@ namespace Phoenix.DAL
                         i++;
                     }
                 }
-                return models;
+				return models;
             });
         }
 
@@ -151,6 +154,7 @@ namespace Phoenix.DAL
         {
             return Task<T>.Factory.StartNew (() => {
                 T item = DL.PhoenixDatabase.GetItem<T>(id);
+				Log.WriteLine(Log.Layer.DAL,this.GetType(), " Get Item (" + id + "): " + item);
                 if(item != null){
                     LoadRelationships(item);
                 }
@@ -169,6 +173,7 @@ namespace Phoenix.DAL
         {
             return Task<T>.Factory.StartNew (() => {
                 T item = DL.PhoenixDatabase.GetFirstItem<T>(OrderBy());
+				Log.WriteLine(Log.Layer.DAL,this.GetType(),"Get First Item: " + item);
                 if(item != null){
                     LoadRelationships(item);
                 }
@@ -187,6 +192,7 @@ namespace Phoenix.DAL
         public Task<T> SaveItem(T item, IProgress<int> progressCallback = null)
         {
             return Task<T>.Factory.StartNew (() => {
+				Log.WriteLine(Log.Layer.DAL,this.GetType(),"Save Item:" + item);
 				if(item != null){
 					DeleteRelationships(item);
 					DL.PhoenixDatabase.SaveItem<T>(item);
@@ -207,6 +213,7 @@ namespace Phoenix.DAL
         public Task DeleteItem(T item, IProgress<int> progressCallback = null)
         {
             return Task.Factory.StartNew(() => {
+				Log.WriteLine(Log.Layer.DAL,this.GetType(),"Delete Item: " + item);
                 if(item == null){
                     return;
                 }
@@ -216,6 +223,14 @@ namespace Phoenix.DAL
                 	progressCallback.Report(1);
             });
         }
+
+		/// <summary>
+		/// Deletes all entities.
+		/// </summary>
+		protected virtual void DeleteAllEntities()
+		{
+			DL.PhoenixDatabase.ClearTable<T>();
+		}
 
         /// <summary>
         /// Persists the relationships.

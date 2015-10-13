@@ -31,6 +31,7 @@ using System.Net;
 using System.Xml;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.SAL
 {
@@ -133,6 +134,7 @@ namespace Phoenix.SAL
         public void Fetch(Action<List<T>> callback)
         {
             _callback = callback;
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Fetch: " + RequestURL ());
             HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create (RequestURL());
             httpRequest.BeginGetResponse (new AsyncCallback (FinishWebRequest), httpRequest);
         }
@@ -154,13 +156,15 @@ namespace Phoenix.SAL
         private void FinishWebRequest(IAsyncResult result)
         {
             HttpWebResponse httpResponse = (result.AsyncState as HttpWebRequest).EndGetResponse(result) as HttpWebResponse;
-            if (httpResponse.StatusCode == HttpStatusCode.OK) {
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Status: " + httpResponse.StatusCode);
+			if (httpResponse.StatusCode == HttpStatusCode.OK) {
                 Stream httpResponseStream = httpResponse.GetResponseStream ();
                 XmlReader xmlReader = XmlReader.Create (httpResponseStream);
+				xmlReader.MoveToContent ();
                 Success (xmlReader, _callback);
-
             }
             StatusCode = httpResponse.StatusCode;
+
         }
     }
 }

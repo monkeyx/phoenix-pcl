@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.SAL
 {
@@ -52,25 +53,33 @@ namespace Phoenix.SAL
         /// <param name="callback">Callback.</param>
         protected override void Success(XmlReader xmlReader, Action<List<InfoData>> callback)
         {
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
+
             List<InfoData> list = new List<InfoData> ();
 
             string groupName = null;
             int groupId = 0;
 
             while (xmlReader.Read ()) {
-                if (xmlReader.Name == "type") {
-                    groupName = xmlReader.GetAttribute ("name");
-                    groupId = Int32.Parse (xmlReader.GetAttribute ("num"));
-                } else if (xmlReader.Name == "data") {
-                    InfoData item = new InfoData(){
-                        Name = xmlReader.GetAttribute("name"),
-                        NexusID = Int32.Parse (xmlReader.GetAttribute("num")),
-                        DataType = Int32.Parse (xmlReader.GetAttribute("type")),
-                        Group = groupName,
-                        GroupID = groupId
-                    };
-                    list.Add (item);
-                }
+				if (xmlReader.IsStartElement ()) {
+					try {
+						if (xmlReader.Name == "type") {
+							groupName = xmlReader.GetAttribute ("name");
+							groupId = Int32.Parse (xmlReader.GetAttribute ("num"));
+						} else if (xmlReader.Name == "data") {
+							InfoData item = new InfoData () {
+								Name = xmlReader.GetAttribute ("name"),
+								NexusID = Int32.Parse (xmlReader.GetAttribute ("num")),
+								DataType = Int32.Parse (xmlReader.GetAttribute ("type")),
+								Group = groupName,
+								GroupID = groupId
+							};
+							list.Add (item);
+						}
+					} catch (Exception e) {
+						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);
+					}
+				}
             }
 
             callback (list);

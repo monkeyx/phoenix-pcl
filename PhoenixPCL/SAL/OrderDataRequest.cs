@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.SAL
 {
@@ -52,30 +53,39 @@ namespace Phoenix.SAL
         /// <param name="callback">Callback.</param>
         protected override void Success(XmlReader xmlReader, Action<List<OrderType>> callback)
         {
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
+
             List<OrderType> list = new List<OrderType> ();
 
             OrderType item = null;
             while (xmlReader.Read ()) {
-                if (xmlReader.Name == "order") {
-                    item = new OrderType () {
-                        Name = xmlReader.GetAttribute ("name"),
-                        Id = Int32.Parse (xmlReader.GetAttribute ("id")),
-                        TypeFlag = Int32.Parse (xmlReader.GetAttribute ("typeflag")),
-                        PositionFlag = Int32.Parse (xmlReader.GetAttribute ("posflag")),
-                        TUCost = Int32.Parse (xmlReader.GetAttribute ("tus"))
-                    };
-                    list.Add (item);
-                } else if (xmlReader.Name == "desc") {
-                    item.Description = xmlReader.ReadContentAsString ();
-                } else if (xmlReader.Name == "param") {
-                    OrderParameterType param = new OrderParameterType () {
-                        Name = xmlReader.GetAttribute("name"),
-                        InfoType = Int32.Parse(xmlReader.GetAttribute("infotype")),
-                        DataType = Int32.Parse(xmlReader.GetAttribute("datatype"))
-                    };
-                    item.Parameters.Add (param);
-                }
-            }
+				if (xmlReader.IsStartElement ()) {
+					try {
+						if (xmlReader.Name == "order") {
+							item = new OrderType () {
+								Name = xmlReader.GetAttribute ("name"),
+								Id = Int32.Parse (xmlReader.GetAttribute ("id")),
+								TypeFlag = Int32.Parse (xmlReader.GetAttribute ("typeflag")),
+								PositionFlag = Int32.Parse (xmlReader.GetAttribute ("posflag")),
+								TUCost = Int32.Parse (xmlReader.GetAttribute ("tus"))
+							};
+							list.Add (item);
+						} else if (xmlReader.Name == "desc") {
+							if(xmlReader.Read())
+								item.Description = xmlReader.Value.Trim ();
+						} else if (xmlReader.Name == "param") {
+							OrderParameterType param = new OrderParameterType () {
+								Name = xmlReader.GetAttribute ("name"),
+								InfoType = Int32.Parse (xmlReader.GetAttribute ("infotype")),
+								DataType = Int32.Parse (xmlReader.GetAttribute ("datatype"))
+							};
+							item.Parameters.Add (param);
+						}
+					} catch (Exception e) {
+						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);
+					}    
+				}
+			}
 
             callback (list);
         }

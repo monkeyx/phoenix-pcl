@@ -114,6 +114,11 @@ namespace Phoenix.BL.Entities
         public OrderParameterType()
         {
         }
+
+		public override string ToString ()
+		{
+			return string.Format ("[OrderParameterType: Name={0}, InfoType={1}, DataType={2}]", Name, InfoType, DataType);
+		}
     }
 }
 

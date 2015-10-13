@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.SAL
 {
@@ -52,51 +53,83 @@ namespace Phoenix.SAL
         /// <param name="callback">Callback.</param>
         protected override void Success(XmlReader xmlReader, Action<List<Item>> callback)
         {
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
+
             List<Item> list = new List<Item> ();
 
             Item item = null;
             RawMaterial rm = null;
 
             while (xmlReader.Read ()) {
-                if (xmlReader.Name == "items" && xmlReader.HasAttributes) {
-                    item = new Item () {
-                        Id = Int32.Parse(xmlReader.GetAttribute ("key"))
-                    };
-                    list.Add (item);
-                } else if (xmlReader.Name == "Name") {
-                    item.Name = xmlReader.GetAttribute ("value");
-                } else if (xmlReader.Name == "Type") {
-                    item.ItemType = xmlReader.GetAttribute ("value");
-                } else if (xmlReader.Name == "Mus") {
-                    item.MassUnits = Int32.Parse (xmlReader.GetAttribute ("value"));
-                } else if (xmlReader.Name == "Prod") {
-                    item.Production = Int32.Parse (xmlReader.GetAttribute ("value"));
-                } else if (xmlReader.Name == "Race") {
-                    item.Race = xmlReader.GetAttribute ("value");
-                } else if (xmlReader.Name == "SubType") {
-                    item.SubType = xmlReader.GetAttribute ("value");
-                } else if (xmlReader.Name == "SubItem") {
-                    item.SubstituteItem = Int32.Parse (xmlReader.GetAttribute ("value"));
-                } else if (xmlReader.Name == "SubRatio") {
-                    item.SubstituteRatio = float.Parse (xmlReader.GetAttribute ("value"));
-                } else if (xmlReader.Name == "TechManual") {
-                    item.TechManual = xmlReader.ReadContentAsString ();
-                } else if (xmlReader.Name == "RawMaterials" && xmlReader.HasAttributes) {
-                    rm = new RawMaterial () {
-                        ItemId = item.Id
-                    };
-                    item.RawMaterials.Add (rm);
-                } else if (xmlReader.Name == "Item" && rm != null) {
-                    rm.RawMaterialId = Int32.Parse (xmlReader.GetAttribute ("value"));
-                } else if (xmlReader.Name == "Quantity" && rm != null) {
-                    rm.Quantity = Int32.Parse (xmlReader.GetAttribute ("value"));
-                } else if (xmlReader.Name == "Blueprint") {
-                    item.Blueprint = Int32.Parse (xmlReader.GetAttribute ("value"));
-                } else {
-                    if (xmlReader.HasAttributes) {
-                        item.AddProperty (xmlReader.Name, xmlReader.GetAttribute ("value"));
-                    }
-                }
+				if (xmlReader.IsStartElement ()) {
+					try {
+						switch(xmlReader.Name){
+						case "items":
+							if(xmlReader.HasAttributes) {
+								item = new Item () {
+									Id = Int32.Parse (xmlReader.GetAttribute ("key"))
+								};
+								list.Add (item);
+							}
+							break;
+						case "Name":
+							item.Name = xmlReader.GetAttribute ("value");
+							break;
+						case "Type":
+							item.ItemType = xmlReader.GetAttribute ("value");
+							break;
+						case "Mus":
+							item.MassUnits = Int32.Parse (xmlReader.GetAttribute ("value"));
+							break;
+						case "Prod":
+							item.Production = Int32.Parse (xmlReader.GetAttribute ("value"));
+							break;
+						case "Race":
+							item.Race = xmlReader.GetAttribute ("value");
+							break;
+						case "SubType":
+							item.SubType = xmlReader.GetAttribute ("value");
+							break;
+						case "SubItem":
+							item.SubstituteItem = Int32.Parse (xmlReader.GetAttribute ("value"));
+							break;
+						case "SubRatio":
+							item.SubstituteRatio = float.Parse (xmlReader.GetAttribute ("value"));
+							break;
+						case "TechManual":
+							item.TechManual = xmlReader.ReadElementContentAsString ();
+							break;
+						case "RawMaterials":
+							if(xmlReader.HasAttributes) {
+								rm = new RawMaterial () {
+									ItemId = item.Id
+								};
+								item.RawMaterials.Add (rm);
+							}
+							break;
+						case "Item":
+							if(rm != null) {
+								rm.RawMaterialId = Int32.Parse (xmlReader.GetAttribute ("value"));
+							}
+							break;
+						case "Quantity":
+							if(rm != null) {
+								rm.Quantity = Int32.Parse (xmlReader.GetAttribute ("value"));
+							}
+							break;
+						case "Blueprint":
+							item.Blueprint = Int32.Parse (xmlReader.GetAttribute ("value"));
+							break;
+						default:
+							if (xmlReader.HasAttributes) {
+								item.AddProperty (xmlReader.Name, xmlReader.GetAttribute ("value"));
+							}
+							break;
+						}
+					} catch (Exception e) {
+						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);
+					}
+				}
             }
 
             callback (list);

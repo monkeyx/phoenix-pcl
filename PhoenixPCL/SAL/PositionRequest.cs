@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.SAL
 {
@@ -52,29 +53,51 @@ namespace Phoenix.SAL
         /// <param name="callback">Callback.</param>
         protected override void Success(XmlReader xmlReader, Action<List<Position>> callback)
         {
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
+
             List<Position> list = new List<Position> ();
 
             Position item = null;
             while (xmlReader.Read ()) {
-                if (xmlReader.Name == "position") {
-                    item = new Position () {
-                        Name = xmlReader.GetAttribute ("name"),
-                        Id = Int32.Parse (xmlReader.GetAttribute ("num"))
-                    };
-                    list.Add (item);
-                } else if (xmlReader.Name == "system_text") {
-                    item.SystemText = xmlReader.ReadContentAsString ();
-                } else if (xmlReader.Name == "loc_text") {
-                    item.LocationText = xmlReader.ReadContentAsString ();
-                } else if (xmlReader.Name == "size") {
-                    item.Size = xmlReader.ReadContentAsString ();
-                } else if (xmlReader.Name == "design") {
-                    item.Design = xmlReader.ReadContentAsString ();
-                } else if (xmlReader.Name == "class") {
-                    item.PositionClass = xmlReader.ReadContentAsString ();
-                } else if (xmlReader.Name == "orders") {
-                    item.Orders = Boolean.Parse (xmlReader.ReadContentAsString ());
-                }
+				if (xmlReader.IsStartElement ()) {
+					try {
+						switch(xmlReader.Name){
+						case "position":
+							item = new Position () {
+								Name = xmlReader.GetAttribute ("name"),
+								Id = Int32.Parse (xmlReader.GetAttribute ("num"))
+							};
+							list.Add (item);
+							break;
+						case "system_text":
+							if(xmlReader.Read())
+								item.SystemText = xmlReader.Value.Trim ();
+							break;
+						case "loc_text":
+							if(xmlReader.Read())
+								item.LocationText = xmlReader.Value.Trim ();
+							break;
+						case "size":
+							if(xmlReader.Read())
+								item.Size = xmlReader.Value.Trim ();
+							break;
+						case "design":
+							if(xmlReader.Read())
+								item.Design = xmlReader.Value.Trim ();
+							break;
+						case "class":
+							if(xmlReader.Read())
+								item.PositionClass = xmlReader.Value.Trim ();
+							break;
+						case "orders":
+							if(xmlReader.Read())
+								item.Orders = Boolean.Parse (xmlReader.Value.Trim ());
+							break;
+						}
+					} catch (Exception e) {
+						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);
+					}
+				}
             }
             callback (list);
         }

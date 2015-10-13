@@ -78,6 +78,15 @@ namespace Phoenix.BL.Entities
         public InfoData ()
         {
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.InfoData"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.InfoData"/>.</returns>
+		public override string ToString ()
+		{
+			return string.Format ("[InfoData: Group={0}, GroupID={1}, Name={2}, NexusID={3}, DataType={4}]", Group, GroupID, Name, NexusID, DataType);
+		}
     }
 }
 

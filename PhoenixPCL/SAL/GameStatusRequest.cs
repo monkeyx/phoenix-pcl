@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 using Phoenix.BL.Entities;
+using Phoenix.Util;
 
 namespace Phoenix.SAL
 {
@@ -52,43 +53,63 @@ namespace Phoenix.SAL
         /// <param name="callback">Callback.</param>
         protected override void Success(XmlReader xmlReader, Action<List<GameStatus>> callback)
         {
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
             List<GameStatus> list = new List<GameStatus> ();
             GameStatus status = new GameStatus ();
             list.Add (status);
 
-            while (xmlReader.Read ()) {
-                if (xmlReader.Name == "status") {
-                    status.StatusMessage = xmlReader.ReadContentAsString ();
-                }
-                else if (xmlReader.Name == "current_day") {
-                    status.CurrentDay = Int32.Parse(xmlReader.ReadContentAsString ());
-                }
-                else if (xmlReader.Name == "year_start") {
-                    status.YearStart = Int32.Parse(xmlReader.ReadContentAsString ());
-                }
-                else if (xmlReader.Name == "turns_downloaded") {
-                    status.TurnsDownloaded = Int32.Parse(xmlReader.ReadContentAsString ());
-                }
-                else if (xmlReader.Name == "turns_processed") {
-                    status.TurnsProcessed = Int32.Parse(xmlReader.ReadContentAsString ());
-                }
-                else if (xmlReader.Name == "turns_uploaded") {
-                    status.TurnsUploaded = Int32.Parse(xmlReader.ReadContentAsString ());
-                }
-                else if (xmlReader.Name == "emails_sent") {
-                    status.EmailsSent = Int32.Parse(xmlReader.ReadContentAsString ());
-                }
-                else if (xmlReader.Name == "specials_processed") {
-                    status.SpecialsProcessed = Int32.Parse(xmlReader.ReadContentAsString ());
-                }
-                else if (xmlReader.Name == "day_finished") {
-                    status.DayFinished = Int32.Parse(xmlReader.ReadContentAsString ());
-                }
-                else if (xmlReader.Name == "star_date") {
-                    status.StarDate = xmlReader.ReadContentAsString ();
-                }
-            }
-
+			while (xmlReader.Read ()) {
+				if (xmlReader.IsStartElement ()) {
+					Log.WriteLine (Log.Layer.SAL, this.GetType (), xmlReader.Name);
+					try {
+						switch (xmlReader.Name) {
+						case "status":
+							if(xmlReader.Read())
+								status.StatusMessage = xmlReader.Value.Trim ();
+							break;
+						case "current_day":
+							if(xmlReader.Read())
+								status.CurrentDay = Int32.Parse (xmlReader.Value.Trim ());
+							break;
+						case "year_start":
+							if(xmlReader.Read())
+								status.YearStart = Int32.Parse (xmlReader.Value.Trim ());
+							break;
+						case "turns_downloaded":
+							if(xmlReader.Read())
+								status.TurnsDownloaded = Int32.Parse (xmlReader.Value.Trim ());
+							break;
+						case "turns_processed":
+							if(xmlReader.Read())
+								status.TurnsProcessed = Int32.Parse (xmlReader.Value.Trim ());
+							break;
+						case "turns_uploaded":
+							if(xmlReader.Read())
+								status.TurnsUploaded = Int32.Parse (xmlReader.Value.Trim ());
+							break;
+						case "emails_sent":
+							if(xmlReader.Read())
+								status.EmailsSent = Int32.Parse (xmlReader.Value.Trim ());
+							break;
+						case "specials_processed":
+							if(xmlReader.Read())
+								status.SpecialsProcessed = Int32.Parse (xmlReader.Value.Trim ());
+							break;
+						case "day_finished":
+							if(xmlReader.Read())
+								status.DayFinished = Int32.Parse (xmlReader.Value.Trim ());
+							break;
+						case "star_date":
+							if(xmlReader.Read())
+								status.StarDate = xmlReader.Value.Trim ();
+							break;
+						}
+					} catch (Exception e) {
+						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);
+					}
+				}
+			}
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), status.ToString());
             callback (list);
         }
     }
