@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using System.Linq;
 
 using Phoenix.BL.Entities;
 using Phoenix.Util;
@@ -51,7 +52,7 @@ namespace Phoenix.SAL
         /// </summary>
         /// <param name="xmlReader">Xml reader.</param>
         /// <param name="callback">Callback.</param>
-        protected override void Success(XmlReader xmlReader, Action<List<Item>> callback)
+		protected override void Success(XmlReader xmlReader, Action<IEnumerable<Item>> callback)
         {
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
 
@@ -132,7 +133,9 @@ namespace Phoenix.SAL
 				}
             }
 
-            callback (list);
+			callback (from element in list
+				orderby element.Id
+				select element);
         }
     }
 }

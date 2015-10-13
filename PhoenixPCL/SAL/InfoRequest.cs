@@ -51,7 +51,7 @@ namespace Phoenix.SAL
         /// </summary>
         /// <param name="xmlReader">Xml reader.</param>
         /// <param name="callback">Callback.</param>
-        protected override void Success(XmlReader xmlReader, Action<List<InfoData>> callback)
+		protected override void Success(XmlReader xmlReader, Action<IEnumerable<InfoData>> callback)
         {
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
 

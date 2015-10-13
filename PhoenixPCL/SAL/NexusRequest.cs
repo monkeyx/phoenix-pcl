@@ -35,10 +35,22 @@ using Phoenix.Util;
 
 namespace Phoenix.SAL
 {
+	/// <summary>
+	/// Nexus request interface
+	/// </summary>
     public interface INexusRequest<T> where T :   IEntity, new()
     {
+		/// <summary>
+		/// Gets or sets the status code.
+		/// </summary>
+		/// <value>The status code.</value>
         HttpStatusCode StatusCode { get; set;}
-        void Fetch(Action<List<T>> callback);
+
+		/// <summary>
+		/// Fetches data from Nexus
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		void Fetch(Action<IEnumerable<T>> callback);
     }
 
     /// <summary>
@@ -131,7 +143,7 @@ namespace Phoenix.SAL
         /// </summary>
         /// <param name="callback">Callback.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public void Fetch(Action<List<T>> callback)
+		public void Fetch(Action<IEnumerable<T>> callback)
         {
             _callback = callback;
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Fetch: " + RequestURL ());
@@ -144,9 +156,9 @@ namespace Phoenix.SAL
         /// </summary>
         /// <param name="xmlReader">Xml reader.</param>
         /// <param name="callback">Callback.</param>
-        protected abstract void Success(XmlReader xmlReader, Action<List<T>> callback);
+		protected abstract void Success(XmlReader xmlReader, Action<IEnumerable<T>> callback);
 
-        private Action<List<T>> _callback;
+		private Action<IEnumerable<T>> _callback;
 
         private string RequestURL()
         {
