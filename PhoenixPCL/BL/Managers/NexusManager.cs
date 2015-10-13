@@ -55,12 +55,14 @@ namespace Phoenix.BL.Managers
         /// <value><c>true</c> if fetch in progress; otherwise, <c>false</c>.</value>
         public bool FetchInProgress { get; set; }
 
-        /// <summary>
-        /// Starts the fetch.
-        /// </summary>
-        public void StartFetch()
+		/// <summary>
+		/// Fetches data from Nexus
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		public void Fetch(Action<List<T>> callback)
         {
             FetchInProgress = true;
+			this.callback = callback;
             GetRequest ().Fetch (RequestCallback);
         }
 
@@ -126,14 +128,17 @@ namespace Phoenix.BL.Managers
         /// Requests the callback.
         /// </summary>
         /// <param name="results">Results.</param>
-        protected void RequestCallback(List<T> results)
+        private void RequestCallback(List<T> results)
         {
             foreach (T item in results) {
                 GetDataManager ().SaveItem (item);
             }
             FetchInProgress = false;
             FetchCompleted = true;
+			callback (results);
         }
+
+		private Action<List<T>> callback;
     }
 }
 

@@ -54,6 +54,7 @@ namespace Phoenix.BL.Managers
                 Id = id,
                 Code = code
             };
+			await GetDataManager ().Clear ();
             user = await GetDataManager ().SaveItem (user);
             callback (user);
         }

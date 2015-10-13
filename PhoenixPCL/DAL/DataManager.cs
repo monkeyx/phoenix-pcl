@@ -108,6 +108,16 @@ namespace Phoenix.DAL
             get { return DL.PhoenixDatabase.CountTable<T>(); }
         }
 
+		/// <summary>
+		/// Clear all entities
+		/// </summary>
+		public Task Clear()
+		{
+			return Task.Factory.StartNew (() => {
+				DL.PhoenixDatabase.ClearTable<T>();
+			});
+		}
+
         /// <summary>
         /// Gets the items.
         /// </summary>
