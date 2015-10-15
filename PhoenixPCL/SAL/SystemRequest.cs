@@ -74,14 +74,14 @@ namespace Phoenix.SAL
 								StarSystemId = item.Id,
 								Name = xmlReader.GetAttribute ("name"),
 								LocalCelestialBodyId = Int32.Parse (xmlReader.GetAttribute ("id")),
-								Quad = Int32.Parse (xmlReader.GetAttribute ("quad")),
+								Quad = (CelestialBody.QuadType) Int32.Parse (xmlReader.GetAttribute ("quad")),
 								Ring = Int32.Parse (xmlReader.GetAttribute ("ring")),
-								CBodyType = Int32.Parse (xmlReader.GetAttribute ("type"))
+								CBodyType = (CelestialBody.BodyType) Int32.Parse (xmlReader.GetAttribute ("type"))
 							});
 						} else if (xmlReader.Name == "link") {
 							item.JumpLinks.Add (new JumpLink () {
 								StarSystemId = item.Id,
-								ToSystemId = Int32.Parse (xmlReader.GetAttribute ("sys_id")),
+								ToStarSystemId = Int32.Parse (xmlReader.GetAttribute ("sys_id")),
 								Distance = Int32.Parse (xmlReader.GetAttribute ("dist"))
 							});
 						}

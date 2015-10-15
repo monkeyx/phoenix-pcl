@@ -77,6 +77,15 @@ namespace Phoenix.DAL
                 item.AddProperty (ip.Key, ip.Value);
             }
             item.RawMaterials = DL.PhoenixDatabase.GetRawMaterials (item.Id);
+			foreach (RawMaterial rm in item.RawMaterials) {
+				rm.RawMaterialItem = DL.PhoenixDatabase.GetItem<Item> (rm.RawMaterialId);
+			}
+			if (item.BlueprintId > 0) {
+				item.BlueprintItem = DL.PhoenixDatabase.GetItem<Item> (item.BlueprintId);
+			}
+			if (item.SubstituteItemId > 0) {
+				item.SubstituteItem = DL.PhoenixDatabase.GetItem<Item> (item.SubstituteItemId);
+			}
         }
 
         /// <summary>

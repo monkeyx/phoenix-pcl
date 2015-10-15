@@ -43,7 +43,7 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The group.</value>
         [Indexed]
-        public string Group { get; set; }
+        public override string Group { get; set; }
 
         /// <summary>
         /// Gets or sets the group I.

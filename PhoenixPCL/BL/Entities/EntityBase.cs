@@ -61,6 +61,26 @@ namespace Phoenix.BL.Entities
         [Indexed]
         public DateTime UpdatedAt { get; set; }
 
+		/// <summary>
+		/// Gets the group that the entity belongs to
+		/// </summary>
+		/// <value>The group.</value>
+		[Ignore]
+		public virtual string Group { get; set; }
+
+		/// <summary>
+		/// Gets the group short name the entity belongs to
+		/// </summary>
+		/// <value>The group short name.</value>
+		[Ignore]
+		public virtual string GroupShortName { 
+			get {
+				return string.IsNullOrWhiteSpace (Group) ? "*" : Group.Substring (0, (Group.Length > 1 ? 2 : Group.Length));
+			}
+			set {
+			}
+		}
+
         /// <summary>
         /// Determines whether the specified <see cref="Phoenix.EntityBase"/> is equal to the current <see cref="Phoenix.EntityBase"/>.
         /// </summary>

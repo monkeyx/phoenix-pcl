@@ -40,6 +40,17 @@ namespace Phoenix.BL.Entities
         /// <value>The code.</value>
         public string Code { get; set; }
 
+		/// <summary>
+		/// Gets the group that the entity belongs to
+		/// </summary>
+		/// <value>The group.</value>
+		[Ignore]
+		public override string Group { 
+			get { 
+				return null;
+			}
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.User"/> class.
         /// </summary>

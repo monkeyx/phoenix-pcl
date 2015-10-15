@@ -38,6 +38,8 @@ namespace Phoenix.SAL
     /// </summary>
     public class ItemRequest : NexusRequest<Item>
     {
+		readonly static string[] IGNORE_PROPERTIES = {"Number", "itype", "MoveRate0"};
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.SAL.ItemRequest"/> class.
         /// </summary>
@@ -92,7 +94,7 @@ namespace Phoenix.SAL
 							item.SubType = xmlReader.GetAttribute ("value");
 							break;
 						case "SubItem":
-							item.SubstituteItem = Int32.Parse (xmlReader.GetAttribute ("value"));
+							item.SubstituteItemId = Int32.Parse (xmlReader.GetAttribute ("value"));
 							break;
 						case "SubRatio":
 							item.SubstituteRatio = float.Parse (xmlReader.GetAttribute ("value"));
@@ -115,20 +117,23 @@ namespace Phoenix.SAL
 							break;
 						case "Quantity":
 							if(rm != null) {
-								rm.Quantity = Int32.Parse (xmlReader.GetAttribute ("value"));
+								rm.Quantity = float.Parse (xmlReader.GetAttribute ("value"));
 							}
 							break;
 						case "Blueprint":
-							item.Blueprint = Int32.Parse (xmlReader.GetAttribute ("value"));
+							item.BlueprintId = Int32.Parse (xmlReader.GetAttribute ("value"));
 							break;
 						default:
 							if (xmlReader.HasAttributes) {
-								item.AddProperty (xmlReader.Name, xmlReader.GetAttribute ("value"));
+								if(!IGNORE_PROPERTIES.Contains(xmlReader.Name) &&
+									!item.Properties.ContainsKey(xmlReader.Name)){
+									item.AddProperty (xmlReader.Name, xmlReader.GetAttribute ("value"));
+								}
 							}
 							break;
 						}
 					} catch (Exception e) {
-						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);
+						Log.WriteLine (Log.Layer.SAL, this.GetType (), "Error Parsing Item " + item + ": " + e);
 					}
 				}
             }

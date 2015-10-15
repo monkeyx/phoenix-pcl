@@ -49,6 +49,18 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The updated at.</value>
         DateTime UpdatedAt { get; set; }
+
+		/// <summary>
+		/// Gets the group that the entity belongs to
+		/// </summary>
+		/// <value>The group.</value>
+		string Group { get; }
+
+		/// <summary>
+		/// Gets the group short name the entity belongs to
+		/// </summary>
+		/// <value>The group short name.</value>
+		string GroupShortName { get; }
     }
 }
 

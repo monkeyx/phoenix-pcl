@@ -31,7 +31,24 @@ namespace Phoenix.BL.Entities
     [Table("Position")]
     public class Position : EntityBase
     {
-        /// <summary>
+		/// <summary>
+		/// Position types.
+		/// </summary>
+		public enum PositionType
+		{
+			Agent = 7,
+			Debris = 4,
+			GP = 1,
+			None = 0,
+			Platform = 6,
+			Political = 5,
+			PD = 8,
+			Ship = 2,
+			Starbase = 3,
+			Misc = 32
+		}
+
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -76,6 +93,17 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value><c>true</c> if orders; otherwise, <c>false</c>.</value>
         public bool Orders { get; set; }
+
+		/// <summary>
+		/// Gets the group that the entity belongs to
+		/// </summary>
+		/// <value>The group.</value>
+		[Ignore]
+		public override string Group { 
+			get { 
+				return PositionClass;
+			}
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.Position"/> class.

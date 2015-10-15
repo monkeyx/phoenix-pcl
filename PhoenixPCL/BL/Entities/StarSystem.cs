@@ -56,6 +56,17 @@ namespace Phoenix.BL.Entities
         [Ignore]
         public List<JumpLink> JumpLinks { get; set; }
 
+		/// <summary>
+		/// Gets the group that the entity belongs to
+		/// </summary>
+		/// <value>The group.</value>
+		[Ignore]
+		public override string Group { 
+			get { 
+				return string.IsNullOrWhiteSpace(Name) ? "" : Name.Substring(0,1);
+			}
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.StarSystem"/> class.
         /// </summary>
@@ -81,6 +92,32 @@ namespace Phoenix.BL.Entities
     [Table("CelestialBody")]
     public class CelestialBody : EntityBase 
     {
+		/// <summary>
+		/// Quad type.
+		/// </summary>
+		public enum QuadType 
+		{
+			Alpha = 1,
+			Beta = 2,
+			Gamma = 3,
+			Delta = 4
+		}
+
+		/// <summary>
+		/// Body type.
+		/// </summary>
+		public enum BodyType
+		{
+			AsteroidA = 4,
+			AsteroidB = 10,
+			AsteroidBelt = 5,
+			GasGiant = 3,
+			Moon = 2,
+			Nebula = 6,
+			Planet = 1,
+			Wormhole = 7
+		}
+
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
@@ -114,7 +151,7 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The quad.</value>
         [Indexed]
-        public int Quad { get; set; }
+		public QuadType Quad { get; set; }
 
         /// <summary>
         /// Gets or sets the ring.
@@ -127,7 +164,17 @@ namespace Phoenix.BL.Entities
         /// Gets or sets the type of the C body.
         /// </summary>
         /// <value>The type of the C body.</value>
-        public int CBodyType { get; set; }
+		public BodyType CBodyType { get; set; }
+
+		/// <summary>
+		/// Gets the location.
+		/// </summary>
+		/// <value>The location.</value>
+		public string Location {
+			get {
+				return Quad.ToString () + " " + Ring;
+			}
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.CelestialBody"/> class.
@@ -142,7 +189,7 @@ namespace Phoenix.BL.Entities
 		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.CelestialBody"/>.</returns>
 		public override string ToString ()
 		{
-			return string.Format ("[CelestialBody: StarSystemId={0}, CelestialBodyId={1}, Name={2}, Quad={3}, Ring={4}, CBodyType={5}]", StarSystemId, LocalCelestialBodyId, Name, Quad, Ring, CBodyType);
+			return string.Format ("{0} ({1}) [{2}]", Name, LocalCelestialBodyId, CBodyType);
 		}
     }
 
@@ -171,7 +218,14 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>To system identifier.</value>
         [Indexed]
-        public int ToSystemId { get; set; }
+        public int ToStarSystemId { get; set; }
+
+		/// <summary>
+		/// Gets or sets to star sysytem.
+		/// </summary>
+		/// <value>To star sysytem.</value>
+		[Ignore]
+		public StarSystem ToStarSysytem { get; set; }
 
         /// <summary>
         /// Gets or sets the distance.
@@ -192,7 +246,7 @@ namespace Phoenix.BL.Entities
 		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.JumpLink"/>.</returns>
 		public override string ToString ()
 		{
-			return string.Format ("[JumpLink: StarSystemId={0}, ToSystemId={1}, Distance={2}]", StarSystemId, ToSystemId, Distance);
+			return string.Format ("[JumpLink: StarSystemId={0}, ToSystemId={1}, Distance={2}]", StarSystemId, ToStarSystemId, Distance);
 		}
     }
 }

@@ -32,7 +32,7 @@ namespace Phoenix.BL.Entities
     [Table("OrderType")]
     public class OrderType : EntityBase
     {
-        /// <summary>
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -70,6 +70,30 @@ namespace Phoenix.BL.Entities
         /// <value>The parameters.</value>
         [Ignore]
         public List<OrderParameterType> Parameters { get; set; }
+
+		/// <summary>
+		/// Gets the group that the entity belongs to
+		/// </summary>
+		/// <value>The group.</value>
+		[Ignore]
+		public override string Group { 
+			get { 
+				return GetPositionType ();
+			}
+		}
+
+		/// <summary>
+		/// Gets the type of the position.
+		/// </summary>
+		/// <returns>The position type.</returns>
+		public string GetPositionType()
+		{
+			if (Enum.IsDefined (typeof(Position.PositionType), PositionFlag)) {
+				return ((Position.PositionType)PositionFlag).ToString ();
+			} else {
+				return "Any";
+			}
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.OrderType"/> class.

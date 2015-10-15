@@ -56,10 +56,17 @@ namespace Phoenix.BL.Entities
         public int MassUnits { get; set; }
 
         /// <summary>
-        /// Gets or sets the blueprint.
+        /// Gets or sets the blueprint identifier.
         /// </summary>
         /// <value>The blueprint.</value>
-        public int Blueprint { get; set; }
+        public int BlueprintId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the blueprint item.
+		/// </summary>
+		/// <value>The blueprint item.</value>
+		[Ignore]
+		public Item BlueprintItem { get; set; }
 
         /// <summary>
         /// Gets or sets the production.
@@ -68,10 +75,17 @@ namespace Phoenix.BL.Entities
         public int Production { get; set; }
 
         /// <summary>
-        /// Gets or sets the substitute item.
+		/// Gets or sets the substitute item identifier.
         /// </summary>
         /// <value>The substitute item.</value>
-        public int SubstituteItem { get; set; }
+        public int SubstituteItemId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the substitute item.
+		/// </summary>
+		/// <value>The substitute item.</value>
+		[Ignore]
+		public Item SubstituteItem { get; set; }
 
         /// <summary>
         /// Gets or sets the substitute ratio.
@@ -110,6 +124,17 @@ namespace Phoenix.BL.Entities
         /// <value>The properties.</value>
         [Ignore]
         public Dictionary<string, ItemProperty> Properties { get; set; }
+
+		/// <summary>
+		/// Gets the group that the entity belongs to
+		/// </summary>
+		/// <value>The group.</value>
+		[Ignore]
+		public override string Group { 
+			get { 
+				return ItemType;
+			}
+		}
 
         /// <summary>
         /// Adds the property.
@@ -226,6 +251,13 @@ namespace Phoenix.BL.Entities
         /// <value>The item identifier.</value>
         public int ItemId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the raw material item.
+		/// </summary>
+		/// <value>The raw material item.</value>
+		[Ignore]
+		public Item RawMaterialItem { get; set; }
+
         /// <summary>
         /// Gets or sets the raw material identifier.
         /// </summary>
@@ -236,7 +268,7 @@ namespace Phoenix.BL.Entities
         /// Gets or sets the quantity.
         /// </summary>
         /// <value>The quantity.</value>
-        public int Quantity { get; set; }
+        public float Quantity { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.RawMaterial"/> class.

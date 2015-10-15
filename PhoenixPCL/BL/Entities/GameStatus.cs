@@ -107,6 +107,17 @@ namespace Phoenix.BL.Entities
         /// <value>The star date.</value>
         public string StarDate { get; set; }
 
+		/// <summary>
+		/// Gets the group that the entity belongs to
+		/// </summary>
+		/// <value>The group.</value>
+		[Ignore]
+		public override string Group { 
+			get { 
+				return StarDate;
+			}
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.GameStatus"/> class.
         /// </summary>

@@ -379,7 +379,7 @@ namespace Phoenix.DL
         /// <param name="starSystemId">Star system identifier.</param>
         public static void DeleteJumpLinks(int starSystemId)
         {
-            Execute("delete from JumpLink where StarSystemId = ? OR ToStarSystemId = ?", starSystemId, starSystemId);
+			Execute("delete from JumpLink where StarSystemId = ? OR ToStarSystemId = ?", starSystemId, starSystemId);
         }
 
 		/// <summary>
