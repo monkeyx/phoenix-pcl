@@ -24,6 +24,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 using SQLite;
 
@@ -87,6 +91,27 @@ namespace Phoenix
 	}
 
 	/// <summary>
+	/// Rest client interface
+	/// </summary>
+	public interface IRestClient
+	{
+		/// <summary>
+		/// Async GET method
+		/// </summary>
+		/// <returns>Stream</returns>
+		/// <param name="url">URL.</param>
+		Task<Stream> GetAsync(string url);
+
+		/// <summary>
+		/// Async POST method
+		/// </summary>
+		/// <returns>Stream</returns>
+		/// <param name="url">URL.</param>
+		/// <param name="dto">Dto.</param>
+		Task<HttpResponseMessage> PostAsync(string url, object dto);
+	}
+
+	/// <summary>
 	/// Phoenix Application.
 	/// </summary>
 	public static class Application
@@ -146,12 +171,18 @@ namespace Phoenix
 		public static IDocumentFolder DocumentFolder { get; set; }
 
 		/// <summary>
+		/// Gets or sets the rest client.
+		/// </summary>
+		/// <value>The rest client.</value>
+		public static IRestClient RestClient { get; set; }
+
+		/// <summary>
 		/// Initialize the Phoenix system
 		/// </summary>
 		/// <param name="dabaseProvider">Dabase provider.</param>
 		/// <param name="logger">Logger.</param>
 		/// <param name="documentFolder">Document folder.</param>
-		public static void Initialize(IDatabase dabaseProvider, ILogger logger, IDocumentFolder documentFolder)
+		public static void Initialize(IDatabase dabaseProvider, ILogger logger, IDocumentFolder documentFolder, IRestClient restClient)
 		{
 			Log.Logger = logger;
 			PhoenixDatabase.DatabaseProvider = dabaseProvider;
@@ -160,6 +191,7 @@ namespace Phoenix
 			UserManager = new UserManager ();
 
 			DocumentFolder = documentFolder;
+			RestClient = restClient;
 		}
 
 		/// <summary>

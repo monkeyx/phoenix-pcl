@@ -28,7 +28,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Xml;
+using System.Threading.Tasks;
 
 using Phoenix.BL.Entities;
 using Phoenix.Util;
@@ -40,12 +42,6 @@ namespace Phoenix.SAL
 	/// </summary>
     public interface INexusRequest<T> where T :   IEntity, new()
     {
-		/// <summary>
-		/// Gets or sets the status code.
-		/// </summary>
-		/// <value>The status code.</value>
-        HttpStatusCode StatusCode { get; set;}
-
 		/// <summary>
 		/// Fetches data from Nexus
 		/// </summary>
@@ -120,12 +116,6 @@ namespace Phoenix.SAL
         public int PositionId { get; set; }
 
         /// <summary>
-        /// Gets or sets the status code.
-        /// </summary>
-        /// <value>The status code.</value>
-        public HttpStatusCode StatusCode { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.SAL.BaseNexusRequest"/> class.
         /// </summary>
         /// <param name="UID">User interface.</param>
@@ -143,12 +133,12 @@ namespace Phoenix.SAL
         /// </summary>
         /// <param name="callback">Callback.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void Fetch(Action<IEnumerable<T>> callback)
+		public async void Fetch(Action<IEnumerable<T>> callback)
         {
 			resultCallback = callback;
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Fetch: " + RequestURL ());
-            HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create (RequestURL());
-            httpRequest.BeginGetResponse (new AsyncCallback (FinishWebRequest), httpRequest);
+			Stream stream = await Application.RestClient.GetAsync (RequestURL ());
+			ReadStream (stream);
         }
 
 		/// <summary>
@@ -173,20 +163,9 @@ namespace Phoenix.SAL
 
 		protected Action<IEnumerable<T>> resultCallback;
 
-        private string RequestURL()
+		private string RequestURL()
         {
             return BASE_URL + "&uid=" + UID + "&code=" + Code + "&sa=" + Action + "&tid=" + PositionId + "&pid=" + PositionId;
-        }
-
-        private void FinishWebRequest(IAsyncResult result)
-        {
-            HttpWebResponse httpResponse = (result.AsyncState as HttpWebRequest).EndGetResponse(result) as HttpWebResponse;
-			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Status: " + httpResponse.StatusCode);
-			if (httpResponse.StatusCode == HttpStatusCode.OK) {
-				ReadStream (httpResponse.GetResponseStream ());
-            }
-            StatusCode = httpResponse.StatusCode;
-
         }
     }
 }

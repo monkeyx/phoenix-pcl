@@ -61,7 +61,7 @@ namespace Phoenix.BL.Managers
 		/// </summary>
 		/// <param name="callback">Callback.</param>
 		/// <param name="clearFirst">If set to <c>true</c> clear first.</param>
-		public async void Fetch(Action<IEnumerable<T>, System.Net.HttpStatusCode> callback, bool clearFirst = false)
+		public async void Fetch(Action<IEnumerable<T>> callback, bool clearFirst = false)
         {
 			if (clearFirst) {
 				Log.WriteLine (Log.Layer.BL, this.GetType (), "Clearing Entities");
@@ -164,10 +164,10 @@ namespace Phoenix.BL.Managers
             }
             FetchInProgress = false;
             FetchCompleted = true;
-			callback (results, request.StatusCode);
+			callback (results);
         }
 
-		private Action<IEnumerable<T>, System.Net.HttpStatusCode> callback;
+		private Action<IEnumerable<T>> callback;
 		private INexusRequest<T> request;
     }
 }
