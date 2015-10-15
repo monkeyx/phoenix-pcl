@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Phoenix.BL.Entities;
 using Phoenix.Util;
@@ -35,6 +37,21 @@ namespace Phoenix.DAL
 	/// </summary>
 	public class PositionDataManager : DataManager<Position>
 	{
+		/// <summary>
+		/// Gets the positions in star system.
+		/// </summary>
+		/// <returns>The positions in star system.</returns>
+		/// <param name="starSystem">Star system.</param>
+		public Task<List<Position>> GetPositionsInStarSystem(StarSystem starSystem)
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				if (starSystem == null) {
+					return new List<Position> ();
+				}
+				return DL.PhoenixDatabase.GetPositionsInStarSystem (starSystem.Id);
+			});
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Phoenix.DAL.PositionDataManager"/> class.
 		/// </summary>

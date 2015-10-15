@@ -306,6 +306,16 @@ namespace Phoenix.DL
             }
         }
 
+		/// <summary>
+		/// Gets the positions in star system.
+		/// </summary>
+		/// <returns>The positions in star system.</returns>
+		/// <param name="starSystemId">Star system identifier.</param>
+		public static List<Position> GetPositionsInStarSystem(int starSystemId)
+		{
+			return Query<Position> ("select p.* from Position p where p.StarSystemId = ?", starSystemId);
+		}
+
         /// <summary>
         /// Gets the item properties.
         /// </summary>

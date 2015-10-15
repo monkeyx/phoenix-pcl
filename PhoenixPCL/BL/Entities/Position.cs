@@ -114,7 +114,7 @@ namespace Phoenix.BL.Entities
 		[Ignore]
 		public override string Group { 
 			get { 
-				return PositionClass;
+				return StarSystemName == null ? "None" : StarSystemName;
 			}
 		}
 

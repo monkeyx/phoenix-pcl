@@ -75,7 +75,7 @@ namespace Phoenix.BL.Entities
 		[Ignore]
 		public virtual string GroupShortName { 
 			get {
-				return string.IsNullOrWhiteSpace (Group) ? "*" : Group.Substring (0, (Group.Length > 1 ? 2 : Group.Length));
+				return string.IsNullOrWhiteSpace (Group) ? "*" : Group.Substring (0, 1);
 			}
 			set {
 			}

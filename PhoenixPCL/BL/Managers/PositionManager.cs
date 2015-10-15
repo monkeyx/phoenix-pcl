@@ -24,8 +24,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
 
 using Phoenix.BL.Entities;
+using Phoenix.DAL;
 
 namespace Phoenix.BL.Managers
 {
@@ -41,6 +43,17 @@ namespace Phoenix.BL.Managers
         public PositionManager (User user) : base(user)
         {
         }
+
+		/// <summary>
+		/// Gets the positions in star system.
+		/// </summary>
+		/// <param name="starSystem">Star system.</param>
+		/// <param name="callback">Callback.</param>
+		public async void GetPositionsInStarSystem(StarSystem starSystem, Action<IEnumerable<Position>> callback)
+		{
+			List<Position> list = await ((PositionDataManager)GetDataManager ()).GetPositionsInStarSystem (starSystem);
+			callback (list);
+		}
     }
 }
 

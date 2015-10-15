@@ -78,7 +78,7 @@ namespace Phoenix.BL.Entities
 		[Ignore]
 		public override string Group { 
 			get { 
-				return GetPositionType ();
+				return Name.Substring(0,1);
 			}
 		}
 
