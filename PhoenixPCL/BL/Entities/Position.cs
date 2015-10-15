@@ -62,6 +62,13 @@ namespace Phoenix.BL.Entities
         public string SystemText { get; set; }
 
 		/// <summary>
+		/// Gets or sets the star system.
+		/// </summary>
+		/// <value>The star system.</value>
+		[Ignore]
+		public StarSystem StarSystem { get; set; }
+
+		/// <summary>
         /// Gets or sets the location text.
         /// </summary>
         /// <value>The location text.</value>
@@ -235,18 +242,17 @@ namespace Phoenix.BL.Entities
 			if (value.StartsWith ("Docked")) {
 				Docked = true;
 				value = value.Replace ("Docked at ", "");
-				string[] parts = value.Split(new string[]{" - "}, StringSplitOptions.RemoveEmptyEntries);
+				string[] parts = value.Split (new string[]{ " - " }, StringSplitOptions.RemoveEmptyEntries);
 				if (parts.Length > 0) {
 					ParsePositionString (parts [0]);
 				}
 				if (parts.Length > 1) {
 					ParseStarSystemString (parts [1]);
 				}
-			}
-			else if (value.StartsWith ("Landed")) {
+			} else if (value.StartsWith ("Landed")) {
 				Landed = true;
 				value = value.Replace ("Landed on ", "").Replace (" at ", " ").Replace (" in ", " ");
-				string[] parts = value.Split(new string[]{" - "}, StringSplitOptions.RemoveEmptyEntries);
+				string[] parts = value.Split (new string[]{ " - " }, StringSplitOptions.RemoveEmptyEntries);
 				if (parts.Length > 0) {
 					ParsePlanetString (parts [0]);
 				}
@@ -262,11 +268,10 @@ namespace Phoenix.BL.Entities
 				if (parts.Length > 4) {
 					ParseStarSystemString (parts [4]);
 				}
-			}
-			else if (value.Contains(" Orbit - ")){
+			} else if (value.Contains (" Orbit - ")) {
 				Orbiting = true;
 				value = value.Replace (" Orbit", "");
-				string[] parts = value.Split(new string[]{" - "}, StringSplitOptions.RemoveEmptyEntries);
+				string[] parts = value.Split (new string[]{ " - " }, StringSplitOptions.RemoveEmptyEntries);
 				if (parts.Length > 0) {
 					ParsePlanetString (parts [0]);
 				}
@@ -275,6 +280,14 @@ namespace Phoenix.BL.Entities
 				}
 				if (parts.Length > 2) {
 					ParseStarSystemString (parts [2]);
+				}
+			} else if(value.Contains(" - ")){ // in space!?
+				string[] parts = value.Split (new string[]{ " - " }, StringSplitOptions.RemoveEmptyEntries);
+				if (parts.Length > 0) {
+					ParseSystemCoordinateString (parts [0]);
+				}
+				if (parts.Length > 1) {
+					ParseStarSystemString (parts [1]);
 				}
 			}
 		}

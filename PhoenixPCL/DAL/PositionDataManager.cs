@@ -43,6 +43,17 @@ namespace Phoenix.DAL
 		}
 
 		/// <summary>
+		/// Loads the relationships.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected override void LoadRelationships (Position item)
+		{
+			if (item.StarSystemId > 0) {
+				item.StarSystem = DL.PhoenixDatabase.GetItem<StarSystem> (item.StarSystemId);
+			}
+		}
+
+		/// <summary>
 		/// Order results by
 		/// </summary>
 		/// <returns>The by.</returns>

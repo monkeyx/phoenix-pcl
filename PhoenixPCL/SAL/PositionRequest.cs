@@ -80,15 +80,15 @@ namespace Phoenix.SAL
 							break;
 						case "size":
 							if(xmlReader.Read())
-								item.Size = xmlReader.Value.Trim ();
+								item.Size = xmlReader.Value.Trim ().Replace("-","");
 							break;
 						case "design":
 							if(xmlReader.Read())
-								item.Design = xmlReader.Value.Trim ();
+								item.Design = xmlReader.Value.Trim ().Replace("-","");
 							break;
 						case "class":
 							if(xmlReader.Read())
-								item.PositionClass = xmlReader.Value.Trim ();
+								item.PositionClass = xmlReader.Value.Trim ().Replace("-","");
 							break;
 						case "orders":
 							if(xmlReader.Read())

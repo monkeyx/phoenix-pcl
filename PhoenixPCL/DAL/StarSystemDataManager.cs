@@ -67,7 +67,7 @@ namespace Phoenix.DAL
         protected override void LoadRelationships(StarSystem item)
         {
 			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Load Relationships (" + item.Id + ")");
-            item.CelestialBodies = DL.PhoenixDatabase.GetCelestialBodies (item.Id);
+			item.CelestialBodies = DL.PhoenixDatabase.GetCelestialBodies (item.Id);
             item.JumpLinks = DL.PhoenixDatabase.GetJumpLinks (item.Id);
 			foreach (JumpLink jl in item.JumpLinks) {
 				jl.ToStarSysytem = DL.PhoenixDatabase.GetItem<StarSystem> (jl.ToStarSystemId);
