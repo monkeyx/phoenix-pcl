@@ -55,6 +55,17 @@ namespace Phoenix.BL.Entities
         [Indexed]
         public string Name { get; set; }
 
+		/// <summary>
+		/// Gets the name and identifier.
+		/// </summary>
+		/// <value>The name and identifier.</value>
+		[Ignore]
+		public string NameAndId { 
+			get { 
+				return Name + " (" + Id + ")";
+			}
+		}
+
         /// <summary>
         /// Gets or sets the system text.
         /// </summary>

@@ -313,7 +313,7 @@ namespace Phoenix.DL
 		/// <param name="starSystemId">Star system identifier.</param>
 		public static List<Position> GetPositionsInStarSystem(int starSystemId)
 		{
-			return Query<Position> ("select p.* from Position p where p.StarSystemId = ?", starSystemId);
+			return Query<Position> ("select p.* from Position p where p.StarSystemId = ? order by Name asc", starSystemId);
 		}
 
         /// <summary>
