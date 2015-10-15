@@ -35,7 +35,18 @@ namespace Phoenix.BL.Entities
     [Table("StarSystem")]
     public class StarSystem : EntityBase
     {
-        /// <summary>
+		/// <summary>
+		/// Quad type.
+		/// </summary>
+		public enum QuadType 
+		{
+			Alpha = 1,
+			Beta = 2,
+			Gamma = 3,
+			Delta = 4
+		}
+
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -92,17 +103,6 @@ namespace Phoenix.BL.Entities
     [Table("CelestialBody")]
     public class CelestialBody : EntityBase 
     {
-		/// <summary>
-		/// Quad type.
-		/// </summary>
-		public enum QuadType 
-		{
-			Alpha = 1,
-			Beta = 2,
-			Gamma = 3,
-			Delta = 4
-		}
-
 		/// <summary>
 		/// Body type.
 		/// </summary>
@@ -162,7 +162,7 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The quad.</value>
         [Indexed]
-		public QuadType Quad { get; set; }
+		public StarSystem.QuadType Quad { get; set; }
 
         /// <summary>
         /// Gets or sets the ring.

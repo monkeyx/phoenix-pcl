@@ -74,7 +74,7 @@ namespace Phoenix.SAL
 								StarSystemId = item.Id,
 								Name = xmlReader.GetAttribute ("name"),
 								LocalCelestialBodyId = Int32.Parse (xmlReader.GetAttribute ("id")),
-								Quad = (CelestialBody.QuadType) Int32.Parse (xmlReader.GetAttribute ("quad")),
+								Quad = (StarSystem.QuadType) Int32.Parse (xmlReader.GetAttribute ("quad")),
 								Ring = Int32.Parse (xmlReader.GetAttribute ("ring")),
 								CBodyType = (CelestialBody.BodyType) Int32.Parse (xmlReader.GetAttribute ("type"))
 							});
