@@ -346,6 +346,16 @@ namespace Phoenix.DL
             return Query<JumpLink> ("select jl.* from JumpLink jl where jl.StarSystemId = ?", starSystemId);
         }
 
+		/// <summary>
+		/// Gets the order parameters.
+		/// </summary>
+		/// <returns>The order parameters.</returns>
+		/// <param name="orderId">Order identifier.</param>
+		public static List<OrderParameterType> GetOrderParameters(int orderId)
+		{
+			return Query<OrderParameterType> ("select op.* from OrderParameterType op where op.OrderId = ?", orderId);
+		}
+
         /// <summary>
         /// Deletes the item properties.
         /// </summary>
@@ -379,8 +389,17 @@ namespace Phoenix.DL
         /// <param name="starSystemId">Star system identifier.</param>
         public static void DeleteJumpLinks(int starSystemId)
         {
-			Execute("delete from JumpLink where StarSystemId = ?", starSystemId, starSystemId);
+			Execute("delete from JumpLink where StarSystemId = ?", starSystemId);
         }
+
+		/// <summary>
+		/// Deletes the order parameters.
+		/// </summary>
+		/// <param name="orderId">Order identifier.</param>
+		public static void DeleteOrderParameters(int orderId)
+		{
+			Execute ("delete from OrderParameterType where OrderId = ?", orderId);
+		}
 
 		/// <summary>
         /// The locker.

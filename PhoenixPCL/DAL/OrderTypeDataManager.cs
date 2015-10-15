@@ -43,6 +43,51 @@ namespace Phoenix.DAL
 		}
 
 		/// <summary>
+		/// Persists the relationships.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected override void PersistRelationships (OrderType item)
+		{
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Order Type Parameters (" + item.Id + ": " + item.Parameters.Count);
+			if (item.Parameters.Count > 0) {
+				foreach (OrderParameterType param in item.Parameters) {
+					param.OrderId = item.Id;
+					DL.PhoenixDatabase.SaveItemIfNew<OrderParameterType> (param);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Loads the relationships.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected override void LoadRelationships (OrderType item)
+		{
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Load Relationships (" + item.Id + ")");
+			item.Parameters = DL.PhoenixDatabase.GetOrderParameters (item.Id);
+		}
+
+		/// <summary>
+		/// Deletes the relationships.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected override void DeleteRelationships (OrderType item)
+		{
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete Relationships (" + item.Id + ")");
+			DL.PhoenixDatabase.DeleteOrderParameters (item.Id);
+		}
+
+		/// <summary>
+		/// Deletes all entities.
+		/// </summary>
+		protected override void DeleteAllEntities ()
+		{
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete All Order Types and Order Type Parameters");
+			DL.PhoenixDatabase.ClearTable<OrderType> ();
+			DL.PhoenixDatabase.ClearTable<OrderParameterType> ();
+		}
+
+		/// <summary>
 		/// Order results by
 		/// </summary>
 		/// <returns>The by.</returns>

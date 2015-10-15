@@ -146,6 +146,17 @@ namespace Phoenix.BL.Entities
         [Indexed]
         public string Name { get; set; }
 
+		/// <summary>
+		/// Gets the name and identifier.
+		/// </summary>
+		/// <value>The name and identifier.</value>
+		[Ignore]
+		public string NameAndId { 
+			get { 
+				return Name + " (" + Id + ")";
+			}
+		}
+
         /// <summary>
         /// Gets or sets the quad.
         /// </summary>
@@ -227,11 +238,33 @@ namespace Phoenix.BL.Entities
 		[Ignore]
 		public StarSystem ToStarSysytem { get; set; }
 
+		/// <summary>
+		/// Gets the name of the to star system.
+		/// </summary>
+		/// <value>The name of the to star system.</value>
+		[Ignore]
+		public string ToStarSystemName { 
+			get {
+				return ToStarSysytem.ToString ();
+			}
+		}
+
         /// <summary>
         /// Gets or sets the distance.
         /// </summary>
         /// <value>The distance.</value>
         public int Distance { get; set; }
+
+		/// <summary>
+		/// Gets the distance string.
+		/// </summary>
+		/// <value>The distance string.</value>
+		[Ignore]
+		public string DistanceString {
+			get {
+				return Distance.ToString () + (Distance == 1 ? " jump" : " jumps");
+			}
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.JumpLink"/> class.

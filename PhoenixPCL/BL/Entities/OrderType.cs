@@ -114,7 +114,7 @@ namespace Phoenix.BL.Entities
     }
 
     [Table("OrderParameterType")]
-    public class OrderParameterType
+	public class OrderParameterType : EntityBase
     {
         /// <summary>
         /// Gets or sets the name.
@@ -140,6 +140,17 @@ namespace Phoenix.BL.Entities
         /// <value>The order identifier.</value>
         [Indexed]
         public int OrderId { get; set; }
+
+		/// <summary>
+		/// Gets the detail.
+		/// </summary>
+		/// <value>The detail.</value>
+		[Ignore]
+		public string Detail {
+			get {
+				return "Info Type: " + InfoType + " Data Type: " + DataType;
+			}
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.OrderParameterType"/> class.
