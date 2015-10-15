@@ -116,6 +116,13 @@ namespace Phoenix.BL.Entities
     [Table("OrderParameterType")]
 	public class OrderParameterType : EntityBase
     {
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey, AutoIncrement]
+		public override int Id { get; set; }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
