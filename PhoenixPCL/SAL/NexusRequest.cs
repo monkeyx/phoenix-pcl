@@ -145,20 +145,33 @@ namespace Phoenix.SAL
         /// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void Fetch(Action<IEnumerable<T>> callback)
         {
-            _callback = callback;
+			resultCallback = callback;
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Fetch: " + RequestURL ());
             HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create (RequestURL());
             httpRequest.BeginGetResponse (new AsyncCallback (FinishWebRequest), httpRequest);
         }
+
+		/// <summary>
+		/// Reads the stream.
+		/// </summary>
+		/// <param name="stream">Stream.</param>
+		protected virtual void ReadStream(Stream stream)
+		{
+			XmlReader xmlReader = XmlReader.Create (stream);
+			xmlReader.MoveToContent ();
+			Success (xmlReader, resultCallback);
+		}
 
         /// <summary>
         /// Successfully fetched data and should be processed by subclass
         /// </summary>
         /// <param name="xmlReader">Xml reader.</param>
         /// <param name="callback">Callback.</param>
-		protected abstract void Success(XmlReader xmlReader, Action<IEnumerable<T>> callback);
+		protected virtual void Success(XmlReader xmlReader, Action<IEnumerable<T>> callback)
+		{
+		}
 
-		private Action<IEnumerable<T>> _callback;
+		protected Action<IEnumerable<T>> resultCallback;
 
         private string RequestURL()
         {
@@ -170,10 +183,7 @@ namespace Phoenix.SAL
             HttpWebResponse httpResponse = (result.AsyncState as HttpWebRequest).EndGetResponse(result) as HttpWebResponse;
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Status: " + httpResponse.StatusCode);
 			if (httpResponse.StatusCode == HttpStatusCode.OK) {
-                Stream httpResponseStream = httpResponse.GetResponseStream ();
-                XmlReader xmlReader = XmlReader.Create (httpResponseStream);
-				xmlReader.MoveToContent ();
-                Success (xmlReader, _callback);
+				ReadStream (httpResponse.GetResponseStream ());
             }
             StatusCode = httpResponse.StatusCode;
 

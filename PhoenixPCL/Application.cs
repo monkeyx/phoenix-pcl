@@ -25,6 +25,8 @@
 // THE SOFTWARE.
 using System;
 
+using SQLite;
+
 using Phoenix.BL.Entities;
 using Phoenix.BL.Managers;
 using Phoenix.DL;
@@ -33,6 +35,57 @@ using Phoenix.Util;
 
 namespace Phoenix
 {
+	/// <summary>
+	/// Database interface
+	/// </summary>
+	public interface IDatabase
+	{
+		/// <summary>
+		/// Gets the connection.
+		/// </summary>
+		/// <returns>The connection.</returns>
+		SQLiteConnection GetConnection();
+	}
+
+	/// <summary>
+	/// Interface for platform specific logging
+	/// </summary>
+	public interface ILogger
+	{
+		/// <summary>
+		/// Writes the line.
+		/// </summary>
+		/// <param name="format">Format.</param>
+		/// <param name="arg">Argument.</param>
+		void WriteLine(string format, params object[] arg);
+	}
+
+	/// <summary>
+	/// Interface for document folder
+	/// </summary>
+	public interface IDocumentFolder
+	{
+		/// <summary>
+		/// Gets the document path.
+		/// </summary>
+		/// <returns>The document path.</returns>
+		string GetDocumentPath();
+
+		/// <summary>
+		/// Writes the file.
+		/// </summary>
+		/// <param name="filename">Filename.</param>
+		/// <param name="content">Content.</param>
+		void WriteFile(string filename, string content);
+
+		/// <summary>
+		/// Reads the file.
+		/// </summary>
+		/// <returns>The file.</returns>
+		/// <param name="filename">Filename.</param>
+		string ReadFile(string filename);
+	}
+
 	/// <summary>
 	/// Phoenix Application.
 	/// </summary>
@@ -87,11 +140,18 @@ namespace Phoenix
 		public static StarSystemManager StarSystemManager { get; set; }
 
 		/// <summary>
+		/// Gets or sets the document folder.
+		/// </summary>
+		/// <value>The document folder.</value>
+		public static IDocumentFolder DocumentFolder { get; set; }
+
+		/// <summary>
 		/// Initialize the Phoenix system
 		/// </summary>
 		/// <param name="dabaseProvider">Dabase provider.</param>
 		/// <param name="logger">Logger.</param>
-		public static void Initialize(IDatabase dabaseProvider, ILogger logger)
+		/// <param name="documentFolder">Document folder.</param>
+		public static void Initialize(IDatabase dabaseProvider, ILogger logger, IDocumentFolder documentFolder)
 		{
 			Log.Logger = logger;
 			PhoenixDatabase.DatabaseProvider = dabaseProvider;
@@ -99,6 +159,7 @@ namespace Phoenix
 			PhoenixDatabase.CreateTables ();
 			UserManager = new UserManager ();
 
+			DocumentFolder = documentFolder;
 		}
 
 		/// <summary>

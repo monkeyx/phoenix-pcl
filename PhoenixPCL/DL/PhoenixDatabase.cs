@@ -29,24 +29,13 @@ using System.Collections.Generic;
 using System.Linq;
 using SQLite;
 
+using Phoenix;
 using Phoenix.BL.Entities;
 using Phoenix.Util;
 
 namespace Phoenix.DL
 {
 	/// <summary>
-	/// Database interface
-	/// </summary>
-	public interface IDatabase
-	{
-		/// <summary>
-		/// Gets the connection.
-		/// </summary>
-		/// <returns>The connection.</returns>
-		SQLiteConnection GetConnection();
-	}
-
-    /// <summary>
     /// Phoenix database.
     /// </summary>
     public static class PhoenixDatabase
@@ -72,6 +61,7 @@ namespace Phoenix.DL
                 DatabaseProvider.GetConnection().CreateTable<OrderType> ();
                 DatabaseProvider.GetConnection().CreateTable<OrderParameterType> ();
                 DatabaseProvider.GetConnection().CreateTable<Position> ();
+				DatabaseProvider.GetConnection().CreateTable<PositionTurn> ();
                 DatabaseProvider.GetConnection().CreateTable<StarSystem> ();
                 DatabaseProvider.GetConnection().CreateTable<CelestialBody> ();
                 DatabaseProvider.GetConnection().CreateTable<JumpLink> ();
@@ -97,6 +87,7 @@ namespace Phoenix.DL
             DatabaseProvider.GetConnection().DropTable<OrderType> ();
             DatabaseProvider.GetConnection().DropTable<OrderParameterType> ();
             DatabaseProvider.GetConnection().DropTable<Position> ();
+			DatabaseProvider.GetConnection().DropTable<PositionTurn> ();
             DatabaseProvider.GetConnection().DropTable<StarSystem> ();
             DatabaseProvider.GetConnection().DropTable<CelestialBody> ();
             DatabaseProvider.GetConnection().DropTable<JumpLink> ();

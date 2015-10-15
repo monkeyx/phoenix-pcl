@@ -412,5 +412,37 @@ namespace Phoenix.BL.Entities
 			}
 		}
     }
+
+	/// <summary>
+	/// Position turn.
+	/// </summary>
+	public class PositionTurn : EntityBase 
+	{
+
+		/// <summary>
+		/// Gets or sets the turn path.
+		/// </summary>
+		/// <value>The turn path.</value>
+		[Ignore]
+		public string TurnPath { 
+			get {
+				return Id.ToString () + ".html";
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the content.
+		/// </summary>
+		/// <value>The content.</value>
+		[Ignore]
+		public string Content { get; set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Phoenix.BL.Entities.PositionTurn"/> class.
+		/// </summary>
+		public PositionTurn()
+		{
+		}
+	}
 }
 

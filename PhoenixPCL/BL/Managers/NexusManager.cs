@@ -155,7 +155,12 @@ namespace Phoenix.BL.Managers
 		private async void RequestCallback(IEnumerable<T> results)
         {
 			foreach (T item in results) {
-                await GetDataManager ().SaveItem (item);
+				try {
+               		await GetDataManager ().SaveItem (item);
+				}
+				catch(Exception e){
+					Log.WriteLine (Log.Layer.BL, this.GetType (), e);
+				}
             }
             FetchInProgress = false;
             FetchCompleted = true;

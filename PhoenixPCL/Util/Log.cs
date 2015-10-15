@@ -26,16 +26,10 @@
 using System;
 using System.Collections.Generic;
 
+using Phoenix;
+
 namespace Phoenix.Util
 {
-	/// <summary>
-	/// Interface for platform specific logging
-	/// </summary>
-	public interface ILogger
-	{
-		void WriteLine(string format, params object[] arg);
-	}
-
 	/// <summary>
 	/// Log.
 	/// </summary>

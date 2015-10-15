@@ -25,9 +25,11 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Phoenix.BL.Entities;
 using Phoenix.DAL;
+using Phoenix.SAL;
 
 namespace Phoenix.BL.Managers
 {
@@ -53,6 +55,48 @@ namespace Phoenix.BL.Managers
 		{
 			List<Position> list = await ((PositionDataManager)GetDataManager ()).GetPositionsInStarSystem (starSystem);
 			callback (list);
+		}
+
+		/// <summary>
+		/// Gets the turn report.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void GetTurnReport(int positionId, Action<string> callback)
+		{
+			DataManager<PositionTurn> turnDM = DataManagerFactory.GetManager<PositionTurn> ();
+			PositionTurn pt = await turnDM.GetItem (positionId);
+			if (pt == null) {
+				FetchTurn(positionId, callback);
+			} else {
+				await Task.Factory.StartNew (() => {
+					try {
+						string content = Application.DocumentFolder.ReadFile(pt.TurnPath);
+						callback(content);
+						FetchTurn(positionId, callback);
+					}
+					catch {
+						FetchTurn(positionId, callback);
+					}
+
+				});
+			}
+		}
+
+		private void FetchTurn(int positionId, Action<string> callback)
+		{
+			DataManager<PositionTurn> turnDM = DataManagerFactory.GetManager<PositionTurn> ();
+			TurnRequest request = new TurnRequest (User.Id, User.Code, positionId);
+			request.Fetch ((results) => {
+				IEnumerator<PositionTurn> i = results.GetEnumerator ();
+				if (i.MoveNext ()) {
+					PositionTurn pt = i.Current;
+					turnDM.SaveItem (pt);
+					callback (pt.Content);
+				} else {
+					callback("Not Found");
+				}
+			});
 		}
     }
 }
