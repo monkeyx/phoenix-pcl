@@ -152,10 +152,10 @@ namespace Phoenix.BL.Managers
         /// Requests the callback.
         /// </summary>
         /// <param name="results">Results.</param>
-		private void RequestCallback(IEnumerable<T> results)
+		private async void RequestCallback(IEnumerable<T> results)
         {
 			foreach (T item in results) {
-                GetDataManager ().SaveItem (item);
+                await GetDataManager ().SaveItem (item);
             }
             FetchInProgress = false;
             FetchCompleted = true;

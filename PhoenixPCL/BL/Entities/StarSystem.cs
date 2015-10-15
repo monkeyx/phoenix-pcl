@@ -245,7 +245,7 @@ namespace Phoenix.BL.Entities
 		[Ignore]
 		public string ToStarSystemName { 
 			get {
-				return ToStarSysytem.ToString ();
+				return ToStarSysytem == null ? "Unknown" : ToStarSysytem.ToString ();
 			}
 		}
 
