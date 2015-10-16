@@ -57,21 +57,6 @@ namespace Phoenix.BL.Entities
 		}
 
 		/// <summary>
-		/// Position flags.
-		/// </summary>
-		public enum PositionFlag {
-			None = 0x00,           
-			GroundParty = 0x01,           
-			Ship = 0x02,           
-			Starbase = 0x04,           
-			Political = 0x08,           
-			Platform = 0x10,           
-			Agent = 0x20,           
-			Debris = 0x40   
-		}
-		  
-
-		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -132,15 +117,14 @@ namespace Phoenix.BL.Entities
 		{
 			get {
 				string positionType = "";
-				foreach(var mask in Enum.GetValues(typeof(PositionFlag))){
-					PositionFlag flag = (PositionFlag)mask;
+				foreach(var mask in Enum.GetValues(typeof(Position.PositionFlag))){
+					Position.PositionFlag flag = (Position.PositionFlag)mask;
 					if ((Position & (int)flag) != 0) {
 						positionType += flag.ToString () + " ";
 					}
 				}
 				return positionType.Trim();
 			}
-
 		}
 
         /// <summary>
@@ -178,7 +162,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <returns><c>true</c> if this instance is for the position of the specified flag; otherwise, <c>false</c>.</returns>
 		/// <param name="flag">Flag.</param>
-		public bool IsForPosition(PositionFlag flag)
+		public bool IsForPosition(Position.PositionFlag flag)
 		{
 			return ((Position & (int)flag) != 0);
 		}

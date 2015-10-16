@@ -49,7 +49,7 @@ namespace Phoenix.BL.Managers
 		/// </summary>
 		/// <param name="positionFlag">Position flag.</param>
 		/// <param name="callback">Callback.</param>
-		public async void GetOrderTypesForPosition(OrderType.PositionFlag positionFlag, Action<IEnumerable<OrderType>> callback)
+		public async void GetOrderTypesForPosition(Position.PositionFlag positionFlag, Action<IEnumerable<OrderType>> callback)
 		{
 			List<OrderType> orderTypes = await GetDataManager ().GetItems (null, true);
 			IEnumerable<OrderType> results = from element in orderTypes
