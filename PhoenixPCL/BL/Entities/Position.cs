@@ -276,22 +276,28 @@ namespace Phoenix.BL.Entities
 				}
 			} else if (value.StartsWith ("Landed")) {
 				Landed = true;
-				value = value.Replace ("Landed on ", "").Replace (" at ", " ").Replace (" in ", " ");
+				value = value.Replace ("Landed on ", "");
 				string[] parts = value.Split (new string[]{ " - " }, StringSplitOptions.RemoveEmptyEntries);
 				if (parts.Length > 0) {
-					ParsePlanetString (parts [0]);
+					string[] subparts = value.Split(new string[]{" at "}, StringSplitOptions.RemoveEmptyEntries);
+					if (subparts.Length > 0) {
+						ParsePlanetString (subparts [0]);
+					}
+					if (subparts.Length > 1) {
+						subparts = value.Split(new string[]{" in "}, StringSplitOptions.RemoveEmptyEntries);
+						if (subparts.Length > 0) {
+							ParsePlanetCoordinateString (subparts [0]);
+						}
+						if (subparts.Length > 1) {
+							LandedTerrain = subparts [1];
+						}
+					}
 				}
 				if (parts.Length > 1) {
-					ParsePlanetCoordinateString (parts [1]);
+					ParseSystemCoordinateString (parts [1]);
 				}
 				if (parts.Length > 2) {
-					LandedTerrain = parts [2];
-				}
-				if (parts.Length > 3) {
-					ParseSystemCoordinateString (parts [3]);
-				}
-				if (parts.Length > 4) {
-					ParseStarSystemString (parts [4]);
+					ParseStarSystemString (parts [2]);
 				}
 			} else if (value.Contains (" Orbit - ")) {
 				Orbiting = true;
