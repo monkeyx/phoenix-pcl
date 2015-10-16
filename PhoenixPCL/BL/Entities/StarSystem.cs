@@ -261,7 +261,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <value>The list text.</value>
 		[Ignore]
-		public override string ListText { get { return ToStarSysytem == null ? ToStarSysytem.NameAndId : ""; } }
+		public override string ListText { get { return ToStarSystemName; } }
 
 		/// <summary>
 		/// Gets the list detail.
