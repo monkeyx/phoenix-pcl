@@ -87,6 +87,10 @@ namespace Phoenix.DAL
 		/// <param name="item">Item.</param>
 		protected override void DeleteRelationships (Position item)
 		{
+			if (item == null || item.Id == 0)
+				return;
+			
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete Relationships (" + item.Id + ")");
 			DL.PhoenixDatabase.DeleteItemById<PositionTurn> (item.Id);
 			DL.PhoenixDatabase.DeleteOrders (item.Id);
 		}

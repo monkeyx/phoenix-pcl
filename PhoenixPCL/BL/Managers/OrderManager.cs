@@ -76,6 +76,27 @@ namespace Phoenix.BL.Managers
 			GetRequest (positionId).Fetch (RequestCallback);
 		}
 
+		/// <summary>
+		/// Requests the callback.
+		/// </summary>
+		/// <param name="results">Results.</param>
+		/// <param name="e">E.</param>
+		protected override async void RequestCallback(IEnumerable<Order> results, Exception e)
+		{
+			foreach (Order item in results) {
+				try {
+					await GetDataManager ().SaveItem (item);
+					item.OrderType = DL.PhoenixDatabase.GetItem<OrderType>(item.OrderTypeId);
+				}
+				catch(Exception ex){
+					Log.WriteLine (Log.Layer.BL, this.GetType (), ex);
+				}
+			}
+			FetchInProgress = false;
+			FetchCompleted = true;
+			callback (results, e);
+		}
+
 		private OrderDataManager GetOrderDataManager()
 		{
 			return (OrderDataManager)GetDataManager ();

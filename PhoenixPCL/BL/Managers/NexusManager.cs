@@ -150,7 +150,7 @@ namespace Phoenix.BL.Managers
         /// Requests the callback.
         /// </summary>
         /// <param name="results">Results.</param>
-		protected async void RequestCallback(IEnumerable<T> results, Exception e)
+		protected virtual async void RequestCallback(IEnumerable<T> results, Exception e)
         {
 			foreach (T item in results) {
 				try {
