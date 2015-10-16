@@ -67,7 +67,7 @@ namespace Phoenix.SAL
 								Name = xmlReader.GetAttribute ("name"),
 								Id = Int32.Parse (xmlReader.GetAttribute ("id")),
 								TypeFlag = Int32.Parse (xmlReader.GetAttribute ("typeflag")),
-								PositionFlag = Int32.Parse (xmlReader.GetAttribute ("posflag")),
+								Position = Int32.Parse (xmlReader.GetAttribute ("posflag")),
 								TUCost = Int32.Parse (xmlReader.GetAttribute ("tus"))
 							};
 							list.Add (item);

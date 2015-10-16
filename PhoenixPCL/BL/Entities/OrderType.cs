@@ -33,6 +33,45 @@ namespace Phoenix.BL.Entities
     public class OrderType : EntityBase
     {
 		/// <summary>
+		/// Order flags.
+		/// </summary>
+		public enum OrderFlag {
+			Any = 0x0,           
+			ThrustMove = 0x1,           
+			Movement = 0x2,           
+			Transaction = 0x4,           
+			StandingOrder = 0x8,           
+			Basic = 0x10,           
+			Scan = 0x20,           
+			Other = 0x40,           
+			Issue = 0x80,           
+			Create = 0x100,           
+			SquadronOrder = 0x200,           
+			SquadronStandingOrder = 0x400,           
+			TurnType = 0x800,           
+			Boarding = 0x1000,           
+			PlanetaryInteraction = 0x2000,           
+			Macro = 0x4000,           
+			Copy = 0x8000,           
+			Full = 0xfffff  
+		}
+
+		/// <summary>
+		/// Position flags.
+		/// </summary>
+		public enum PositionFlag {
+			None = 0x00,           
+			GroundParty = 0x01,           
+			Ship = 0x02,           
+			Starbase = 0x04,           
+			Political = 0x08,           
+			Platform = 0x10,           
+			Agent = 0x20,           
+			Debris = 0x40   
+		}
+		  
+
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -51,7 +90,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <value>The list detail.</value>
 		[Ignore]
-		public override string ListDetail { get { return GetPositionType(); } }
+		public override string ListDetail { get { return PositionType; } }
 
         /// <summary>
         /// Gets or sets the type flag.
@@ -59,12 +98,50 @@ namespace Phoenix.BL.Entities
         /// <value>The type flag.</value>
         public int TypeFlag { get; set; }
 
+		/// <summary>
+		/// Gets the type description.
+		/// </summary>
+		/// <value>The type description.</value>
+		public string TypeDescription
+		{
+			get {
+				string description = "";
+				foreach(var mask in Enum.GetValues(typeof(OrderFlag))){
+					OrderFlag flag = (OrderFlag)mask;
+					if ((TypeFlag & (int)flag) != 0) {
+						description += flag.ToString () + " ";
+					}
+				}
+				return description.Trim();
+			}
+
+		}
+
         /// <summary>
         /// Gets or sets the position flag.
         /// </summary>
         /// <value>The position flag.</value>
         [Indexed]
-        public int PositionFlag { get; set; }
+        public int Position { get; set; }
+
+		/// <summary>
+		/// Gets the type of the position.
+		/// </summary>
+		/// <value>The type of the position.</value>
+		public string PositionType
+		{
+			get {
+				string positionType = "";
+				foreach(var mask in Enum.GetValues(typeof(PositionFlag))){
+					PositionFlag flag = (PositionFlag)mask;
+					if ((Position & (int)flag) != 0) {
+						positionType += flag.ToString () + " ";
+					}
+				}
+				return positionType.Trim();
+			}
+
+		}
 
         /// <summary>
         /// Gets or sets the TU cost.
@@ -93,19 +170,6 @@ namespace Phoenix.BL.Entities
 		public override string Group { 
 			get { 
 				return Name.Substring(0,1);
-			}
-		}
-
-		/// <summary>
-		/// Gets the type of the position.
-		/// </summary>
-		/// <returns>The position type.</returns>
-		public string GetPositionType()
-		{
-			if (Enum.IsDefined (typeof(Position.PositionType), PositionFlag)) {
-				return ((Position.PositionType)PositionFlag).ToString ();
-			} else {
-				return "Any";
 			}
 		}
 
