@@ -139,20 +139,18 @@ namespace Phoenix.BL.Managers
         /// <summary>
         /// Gets the request.
         /// </summary>
+		/// <param name="positionId">Position identifier</param>
         /// <returns>The request.</returns>
-        protected INexusRequest<T> GetRequest()
+		protected INexusRequest<T> GetRequest(int positionId = 0)
         {
-			if (request == null) {
-				request = NexusRequestFactory.CreateRequest<T> (User);
-			}
-			return request;
+			return NexusRequestFactory.CreateRequest<T> (User,positionId);
         }
 
         /// <summary>
         /// Requests the callback.
         /// </summary>
         /// <param name="results">Results.</param>
-		private async void RequestCallback(IEnumerable<T> results, Exception e)
+		protected async void RequestCallback(IEnumerable<T> results, Exception e)
         {
 			foreach (T item in results) {
 				try {
@@ -167,8 +165,7 @@ namespace Phoenix.BL.Managers
 			callback (results, e);
         }
 
-		private Action<IEnumerable<T>, Exception> callback;
-		private INexusRequest<T> request;
+		protected Action<IEnumerable<T>, Exception> callback;
     }
 }
 

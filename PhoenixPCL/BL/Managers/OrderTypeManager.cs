@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Phoenix.BL.Entities;
 
@@ -41,6 +43,20 @@ namespace Phoenix.BL.Managers
         public OrderTypeManager (User user) : base(user)
         {
         }
+
+		/// <summary>
+		/// Gets the order types for position.
+		/// </summary>
+		/// <param name="positionFlag">Position flag.</param>
+		/// <param name="callback">Callback.</param>
+		public async void GetOrderTypesForPosition(OrderType.PositionFlag positionFlag, Action<IEnumerable<OrderType>> callback)
+		{
+			List<OrderType> orderTypes = await GetDataManager ().GetItems (null, true);
+			IEnumerable<OrderType> results = from element in orderTypes
+			                                where element.IsForPosition (positionFlag)
+			                                select element;
+			callback (results);
+		}
     }
 }
 

@@ -173,6 +173,16 @@ namespace Phoenix.BL.Entities
 			}
 		}
 
+		/// <summary>
+		/// Determines whether this instance is for position of the specified flag.
+		/// </summary>
+		/// <returns><c>true</c> if this instance is for the position of the specified flag; otherwise, <c>false</c>.</returns>
+		/// <param name="flag">Flag.</param>
+		public bool IsForPosition(PositionFlag flag)
+		{
+			return ((Position & (int)flag) != 0);
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.OrderType"/> class.
         /// </summary>

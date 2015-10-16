@@ -82,6 +82,7 @@ namespace Phoenix.DAL
             RegisterManager<StarSystem>(new StarSystemDataManager());
             RegisterManager<User>(new DataManager<User>());
 			RegisterManager<PositionTurn> (new DataManager<PositionTurn> ());
+			RegisterManager<Order> (new OrderDataManager ());
         }
 
         /// <summary>

@@ -59,8 +59,9 @@ namespace Phoenix.SAL
         /// </summary>
         /// <returns>The request.</returns>
         /// <param name="user">User.</param>
+		/// <param name="positionId">Position identifier</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static INexusRequest<T> CreateRequest<T>(User user) where T : IEntity, new()
+		public static INexusRequest<T> CreateRequest<T>(User user, int positionId = 0) where T : IEntity, new()
         {
             switch (typeof(T).Name) {
             case "GameStatus":
@@ -75,6 +76,8 @@ namespace Phoenix.SAL
                 return (INexusRequest<T>)new PositionRequest (user.Id, user.Code);
             case "StarSystem":
                 return (INexusRequest<T>)new SystemRequest (user.Id, user.Code);
+			case "Order":
+				return (INexusRequest<T>)new PendingOrdersRequest (user.Id, user.Code, positionId);
             default:
                 throw new Exception ("Unsupported type"); 
             }

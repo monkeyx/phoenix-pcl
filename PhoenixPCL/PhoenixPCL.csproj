@@ -66,6 +66,10 @@
     <Compile Include="DAL\PositionDataManager.cs" />
     <Compile Include="DAL\OrderTypeDataManager.cs" />
     <Compile Include="SAL\TurnRequest.cs" />
+    <Compile Include="BL\Entities\Order.cs" />
+    <Compile Include="DAL\OrderDataManager.cs" />
+    <Compile Include="SAL\PendingOrdersRequest.cs" />
+    <Compile Include="BL\Managers\OrderManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

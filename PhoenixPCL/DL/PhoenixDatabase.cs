@@ -60,6 +60,8 @@ namespace Phoenix.DL
                 DatabaseProvider.GetConnection().CreateTable<ItemProperty> ();
                 DatabaseProvider.GetConnection().CreateTable<OrderType> ();
                 DatabaseProvider.GetConnection().CreateTable<OrderParameterType> ();
+				DatabaseProvider.GetConnection().CreateTable<Order> ();
+				DatabaseProvider.GetConnection().CreateTable<OrderParameter> ();
                 DatabaseProvider.GetConnection().CreateTable<Position> ();
 				DatabaseProvider.GetConnection().CreateTable<PositionTurn> ();
                 DatabaseProvider.GetConnection().CreateTable<StarSystem> ();
@@ -86,6 +88,8 @@ namespace Phoenix.DL
             DatabaseProvider.GetConnection().DropTable<ItemProperty> ();
             DatabaseProvider.GetConnection().DropTable<OrderType> ();
             DatabaseProvider.GetConnection().DropTable<OrderParameterType> ();
+			DatabaseProvider.GetConnection().DropTable<Order> ();
+			DatabaseProvider.GetConnection().DropTable<OrderParameter> ();
             DatabaseProvider.GetConnection().DropTable<Position> ();
 			DatabaseProvider.GetConnection().DropTable<PositionTurn> ();
             DatabaseProvider.GetConnection().DropTable<StarSystem> ();
@@ -348,13 +352,33 @@ namespace Phoenix.DL
         }
 
 		/// <summary>
+		/// Gets the order type parameters.
+		/// </summary>
+		/// <returns>The order parameters.</returns>
+		/// <param name="orderId">Order identifier.</param>
+		public static List<OrderParameterType> GetOrderTypeParameters(int orderId)
+		{
+			return Query<OrderParameterType> ("select op.* from OrderParameterType op where op.OrderId = ?", orderId);
+		}
+
+		/// <summary>
+		/// Gets the orders for position.
+		/// </summary>
+		/// <returns>The orders for position.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public static List<Order> GetOrdersForPosition(int positionId)
+		{
+			return Query<Order> ("select o.* from `Order` o where o.PositionId = ? order by SequencePosition asc", positionId);
+		}
+
+		/// <summary>
 		/// Gets the order parameters.
 		/// </summary>
 		/// <returns>The order parameters.</returns>
 		/// <param name="orderId">Order identifier.</param>
-		public static List<OrderParameterType> GetOrderParameters(int orderId)
+		public static List<OrderParameter> GetOrderParameters(int orderId)
 		{
-			return Query<OrderParameterType> ("select op.* from OrderParameterType op where op.OrderId = ?", orderId);
+			return Query<OrderParameter> ("select op.* from OrderParameter op where op.OrderId = ? order by SequencePosition asc", orderId);
 		}
 
         /// <summary>
@@ -394,12 +418,30 @@ namespace Phoenix.DL
         }
 
 		/// <summary>
+		/// Deletes the order type parameters.
+		/// </summary>
+		/// <param name="orderId">Order identifier.</param>
+		public static void DeleteOrderTypeParameters(int orderId)
+		{
+			Execute ("delete from OrderParameterType where OrderId = ?", orderId);
+		}
+
+		/// <summary>
+		/// Deletes the orders.
+		/// </summary>
+		/// <param name="positionid">Positionid.</param>
+		public static void DeleteOrders(int positionid)
+		{
+			Execute ("delete from `Order` where PositionId = ?", positionid);
+		}
+
+		/// <summary>
 		/// Deletes the order parameters.
 		/// </summary>
 		/// <param name="orderId">Order identifier.</param>
 		public static void DeleteOrderParameters(int orderId)
 		{
-			Execute ("delete from OrderParameterType where OrderId = ?", orderId);
+			Execute ("delete from OrderParameter where OrderId = ?", orderId);
 		}
 
 		/// <summary>
