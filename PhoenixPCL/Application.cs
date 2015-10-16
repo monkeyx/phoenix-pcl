@@ -117,6 +117,11 @@ namespace Phoenix
 	public static class Application
 	{
 		/// <summary>
+		/// Base URL for Nexus XML
+		/// </summary>
+		public const string BASE_URL = "http://www.phoenixbse.com/";
+
+		/// <summary>
 		/// Gets or sets the user.
 		/// </summary>
 		/// <value>The user.</value>

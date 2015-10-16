@@ -65,7 +65,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <value>The list detail.</value>
 		[Ignore]
-		public override string ListDetail { get { return SubType; } }
+		public override string ListDetail { get { return SubType == "None" ? "" : SubType; } }
 
         /// <summary>
         /// Gets or sets the type of the item.

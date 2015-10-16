@@ -57,7 +57,7 @@ namespace Phoenix.SAL
 		{
 			string fileName = PositionId.ToString () + ".html";
 			StreamReader reader = new StreamReader (stream);
-			string content = reader.ReadToEnd ();
+			string content = reader.ReadToEnd ().Replace("url(","url(" + Phoenix.Application.BASE_URL);
 
 			List<PositionTurn> list = new List<PositionTurn> () {
 				new PositionTurn{

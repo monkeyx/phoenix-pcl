@@ -89,7 +89,7 @@ namespace Phoenix.SAL
         /// <summary>
         /// Base URL for Nexus XML
         /// </summary>
-        const string BASE_URL = "http://www.phoenixbse.com/index.php?a=xml";
+		public const string BASE_URL = Phoenix.Application.BASE_URL + "index.php?a=xml";
 
         /// <summary>
         /// Gets or sets the user interface.

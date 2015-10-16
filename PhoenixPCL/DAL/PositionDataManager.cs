@@ -71,6 +71,24 @@ namespace Phoenix.DAL
 		}
 
 		/// <summary>
+		/// Deletes all entities.
+		/// </summary>
+		protected override void DeleteAllEntities ()
+		{
+			DL.PhoenixDatabase.ClearTable<Position> ();
+			DL.PhoenixDatabase.ClearTable<PositionTurn> ();
+		}
+
+		/// <summary>
+		/// Deletes the relationships.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected override void DeleteRelationships (Position item)
+		{
+			DL.PhoenixDatabase.DeleteItemById<PositionTurn> (item.Id);
+		}
+
+		/// <summary>
 		/// Order results by
 		/// </summary>
 		/// <returns>The by.</returns>
