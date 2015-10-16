@@ -87,7 +87,7 @@ namespace Phoenix.BL.Managers
 		{
 			DataManager<PositionTurn> turnDM = DataManagerFactory.GetManager<PositionTurn> ();
 			TurnRequest request = new TurnRequest (User.Id, User.Code, positionId);
-			request.Fetch ((results) => {
+			request.Fetch ((results, ex) => {
 				IEnumerator<PositionTurn> i = results.GetEnumerator ();
 				if (i.MoveNext ()) {
 					PositionTurn pt = i.Current;

@@ -62,6 +62,20 @@ namespace Phoenix.BL.Entities
         public DateTime UpdatedAt { get; set; }
 
 		/// <summary>
+		/// Gets the list text.
+		/// </summary>
+		/// <value>The list text.</value>
+		[Ignore]
+		public virtual string ListText { get { return ToString(); } }
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		[Ignore]
+		public virtual string ListDetail { get { return ""; } }
+
+		/// <summary>
 		/// Gets the group that the entity belongs to
 		/// </summary>
 		/// <value>The group.</value>

@@ -46,7 +46,7 @@ namespace Phoenix.SAL
 		/// Fetches data from Nexus
 		/// </summary>
 		/// <param name="callback">Callback.</param>
-		void Fetch(Action<IEnumerable<T>> callback);
+		void Fetch(Action<IEnumerable<T>, Exception> callback);
     }
 
     /// <summary>
@@ -128,17 +128,21 @@ namespace Phoenix.SAL
             this.PositionId = positionId;
         }
 
-        /// <summary>
-        /// Fetch data from Nexus
-        /// </summary>
-        /// <param name="callback">Callback.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
-		public async void Fetch(Action<IEnumerable<T>> callback)
+		/// <summary>
+		/// Fetches data from Nexus
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		public async void Fetch(Action<IEnumerable<T>, Exception> callback)
         {
 			resultCallback = callback;
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Fetch: " + RequestURL ());
-			Stream stream = await Application.RestClient.GetAsync (RequestURL ());
-			ReadStream (stream);
+			try {
+				Stream stream = await Application.RestClient.GetAsync (RequestURL ());
+				ReadStream (stream);
+			}
+			catch(Exception ex){
+				callback (null, ex);
+			}
         }
 
 		/// <summary>
@@ -157,11 +161,11 @@ namespace Phoenix.SAL
         /// </summary>
         /// <param name="xmlReader">Xml reader.</param>
         /// <param name="callback">Callback.</param>
-		protected virtual void Success(XmlReader xmlReader, Action<IEnumerable<T>> callback)
+		protected virtual void Success(XmlReader xmlReader, Action<IEnumerable<T>, Exception> callback)
 		{
 		}
 
-		protected Action<IEnumerable<T>> resultCallback;
+		protected Action<IEnumerable<T>, Exception> resultCallback;
 
 		private string RequestURL()
         {

@@ -53,6 +53,31 @@ namespace Phoenix.BL.Entities
         [Indexed]
         public string Name { get; set; }
 
+		/// <summary>
+		/// Gets the name and identifier.
+		/// </summary>
+		/// <value>The name and identifier.</value>
+		[Ignore]
+		public string NameAndId { 
+			get { 
+				return Name + " (" + Id + ")";
+			}
+		}
+
+		/// <summary>
+		/// Gets the list text.
+		/// </summary>
+		/// <value>The list text.</value>
+		[Ignore]
+		public override string ListText { get { return NameAndId; } }
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		[Ignore]
+		public override string ListDetail { get { return ""; } }
+
         /// <summary>
         /// Gets or sets the celestial bodies.
         /// </summary>
@@ -157,6 +182,20 @@ namespace Phoenix.BL.Entities
 			}
 		}
 
+		/// <summary>
+		/// Gets the list text.
+		/// </summary>
+		/// <value>The list text.</value>
+		[Ignore]
+		public override string ListText { get { return NameAndId; } }
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		[Ignore]
+		public override string ListDetail { get { return Location; } }
+
         /// <summary>
         /// Gets or sets the quad.
         /// </summary>
@@ -216,6 +255,20 @@ namespace Phoenix.BL.Entities
         /// <value>The identifier.</value>
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
+
+		/// <summary>
+		/// Gets the list text.
+		/// </summary>
+		/// <value>The list text.</value>
+		[Ignore]
+		public override string ListText { get { return ToStarSysytem == null ? ToStarSysytem.NameAndId : ""; } }
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		[Ignore]
+		public override string ListDetail { get { return DistanceString; } }
 
         /// <summary>
         /// Gets or sets from system identifier.

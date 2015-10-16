@@ -42,6 +42,31 @@ namespace Phoenix.BL.Entities
         [Indexed]
         public string Name {get; set; }
 
+		/// <summary>
+		/// Gets the name and identifier.
+		/// </summary>
+		/// <value>The name and identifier.</value>
+		[Ignore]
+		public string NameAndId { 
+			get { 
+				return Name + " (" + Id + ")";
+			}
+		}
+
+		/// <summary>
+		/// Gets the list text.
+		/// </summary>
+		/// <value>The list text.</value>
+		[Ignore]
+		public override string ListText { get { return NameAndId; } }
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		[Ignore]
+		public override string ListDetail { get { return SubType; } }
+
         /// <summary>
         /// Gets or sets the type of the item.
         /// </summary>

@@ -66,6 +66,20 @@ namespace Phoenix.BL.Entities
 			}
 		}
 
+		/// <summary>
+		/// Gets the list text.
+		/// </summary>
+		/// <value>The list text.</value>
+		[Ignore]
+		public override string ListText { get { return NameAndId; } }
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		[Ignore]
+		public override string ListDetail { get { return LocationText; } }
+
         /// <summary>
         /// Gets or sets the system text.
         /// </summary>

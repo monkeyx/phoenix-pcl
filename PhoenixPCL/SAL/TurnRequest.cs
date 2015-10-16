@@ -68,7 +68,7 @@ namespace Phoenix.SAL
 
 			Application.DocumentFolder.WriteFile (fileName, content);
 
-			resultCallback (list);
+			resultCallback (list,null);
 		}
 	}
 }
