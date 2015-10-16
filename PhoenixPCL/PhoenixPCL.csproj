@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{364EF96F-144B-4416-AF34-C3400E76656F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Phoenix</RootNamespace>
+    <AssemblyName>PhoenixPCL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+    <Description>Portable class library for Phoenix Nexus</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BL\Entities\EntityBase.cs" />
+    <Compile Include="BL\Entities\GameStatus.cs" />
+    <Compile Include="BL\Entities\IEntity.cs" />
+    <Compile Include="BL\Entities\InfoData.cs" />
+    <Compile Include="BL\Entities\Item.cs" />
+    <Compile Include="BL\Entities\OrderType.cs" />
+    <Compile Include="BL\Entities\Position.cs" />
+    <Compile Include="BL\Entities\StarSystem.cs" />
+    <Compile Include="BL\Entities\User.cs" />
+    <Compile Include="BL\Managers\GameStatusManager.cs" />
+    <Compile Include="BL\Managers\IEntityManager.cs" />
+    <Compile Include="BL\Managers\InfoManager.cs" />
+    <Compile Include="BL\Managers\ItemManager.cs" />
+    <Compile Include="BL\Managers\NexusManager.cs" />
+    <Compile Include="BL\Managers\OrderTypeManager.cs" />
+    <Compile Include="BL\Managers\PositionManager.cs" />
+    <Compile Include="BL\Managers\StarSystemManager.cs" />
+    <Compile Include="BL\Managers\UserManager.cs" />
+    <Compile Include="DAL\DataManager.cs" />
+    <Compile Include="DAL\ItemDataManager.cs" />
+    <Compile Include="DAL\StarSystemDataManager.cs" />
+    <Compile Include="DL\PhoenixDatabase.cs" />
+    <Compile Include="SAL\GameStatusRequest.cs" />
+    <Compile Include="SAL\InfoRequest.cs" />
+    <Compile Include="SAL\ItemRequest.cs" />
+    <Compile Include="SAL\NexusRequest.cs" />
+    <Compile Include="SAL\OrderDataRequest.cs" />
+    <Compile Include="SAL\PositionRequest.cs" />
+    <Compile Include="SAL\SystemRequest.cs" />
+    <Compile Include="Util\Log.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="DAL\PositionDataManager.cs" />
+    <Compile Include="DAL\OrderTypeDataManager.cs" />
+    <Compile Include="SAL\TurnRequest.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="BL\" />
+    <Folder Include="DAL\" />
+    <Folder Include="DL\" />
+    <Folder Include="SAL\" />
+    <Folder Include="Util\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SQLite-net">
+      <HintPath>..\packages\sqlite-net-pcl.1.0.11\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCL.raw">
+      <HintPath>..\..\PhoenixImperator\packages\SQLitePCL.raw_basic.0.8.2\lib\portable-net45+netcore45+wp8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCL.raw.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
