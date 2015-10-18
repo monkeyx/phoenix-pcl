@@ -57,6 +57,15 @@ namespace Phoenix.BL.Entities
 		}
 
 		/// <summary>
+		/// Special orders.
+		/// </summary>
+		public enum SpecialOrders 
+		{
+			RequestUpdate = 1,
+			ClearPendingOrders = 1050
+		}
+
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>

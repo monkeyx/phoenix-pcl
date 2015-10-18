@@ -69,6 +69,18 @@ namespace Phoenix.DAL
 		}
 
 		/// <summary>
+		/// Clears the orders for position.
+		/// </summary>
+		/// <returns>The orders for position.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public Task ClearOrdersForPosition(int positionId)
+		{
+			return Task.Factory.StartNew (() => {
+				DL.PhoenixDatabase.DeleteOrders(positionId);
+			});
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Phoenix.DAL.OrderDataManager"/> class.
 		/// </summary>
 		public OrderDataManager ()

@@ -77,6 +77,43 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
+		/// Deletes the order.
+		/// </summary>
+		/// <param name="order">Order.</param>
+		public async void DeleteOrder(Order order)
+		{
+			await GetDataManager ().DeleteItem (order);
+		}
+
+		/// <summary>
+		/// Clears the orders.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void ClearOrders(int positionId, Action<IEnumerable<Order>> callback)
+		{
+			await GetOrderDataManager ().ClearOrdersForPosition (positionId);
+			Order order = Order.ClearPendingOrders (positionId);
+			await GetDataManager ().SaveItem (order);
+			List<Order> list = new List<Order>();
+			list.Add(order);
+			callback(list);
+		}
+
+		/// <summary>
+		/// Requests turn update
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void RequestUpdate(int positionId, Action<IEnumerable<Order>> callback)
+		{
+			Order order = Order.RequestUpdate (positionId);
+			await GetDataManager ().SaveItem (order);
+			List<Order> list = await GetOrderDataManager ().GetOrdersForPosition (positionId);
+			callback (list);
+		}
+
+		/// <summary>
 		/// Requests the callback.
 		/// </summary>
 		/// <param name="results">Results.</param>

@@ -36,6 +36,40 @@ namespace Phoenix.BL.Entities
 	public class Order : EntityBase
 	{
 		/// <summary>
+		/// Clears the pending orders.
+		/// </summary>
+		/// <returns>The pending orders.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public static Order ClearPendingOrders(int positionId)
+		{
+			return new Order {
+				PositionId = positionId,
+				OrderTypeId = (int) OrderType.SpecialOrders.ClearPendingOrders,
+				OrderType = new OrderType{
+					Id = (int) OrderType.SpecialOrders.ClearPendingOrders,
+					Name = "Clear Pending Orders"
+				}
+			};
+		}
+
+		/// <summary>
+		/// Requests the update.
+		/// </summary>
+		/// <returns>The update.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public static Order RequestUpdate(int positionId)
+		{
+			return new Order {
+				PositionId = positionId,
+				OrderTypeId = (int) OrderType.SpecialOrders.RequestUpdate,
+				OrderType = new OrderType{
+					Id = (int) OrderType.SpecialOrders.RequestUpdate,
+					Name = "Request Update"
+				}
+			};
+		}
+
+		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
@@ -77,18 +111,33 @@ namespace Phoenix.BL.Entities
 		public int PositionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the sequence position.
-		/// </summary>
-		/// <value>The sequence position.</value>
-		[Indexed]
-		public int SequencePosition { get; set; }
-
-		/// <summary>
 		/// Gets or sets the parameters.
 		/// </summary>
 		/// <value>The parameters.</value>
 		[Ignore]
 		public List<OrderParameter> Parameters { get; set; }
+
+		/// <summary>
+		/// Gets the parameter description.
+		/// </summary>
+		/// <returns>The parameter description.</returns>
+		public string GetParameterDescription()
+		{
+			if (OrderType == null) {
+				return string.Join(",", Parameters);
+			} else {
+				List<string> list = new List<string> ();
+				int i = 0;
+				foreach (OrderParameter param in Parameters) {
+					if (OrderType.Parameters.Count > i) {
+						list.Add (OrderType.Parameters [i].ToString () + ": " + param);
+					} else {
+						list.Add (param.ToString ());
+					}
+				}
+				return string.Join(",", Parameters);
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Phoenix.BL.Entities.Order"/> class.
@@ -118,13 +167,6 @@ namespace Phoenix.BL.Entities
 		/// <value>The order identifier.</value>
 		[Indexed]
 		public int OrderId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the sequence position.
-		/// </summary>
-		/// <value>The sequence position.</value>
-		[Indexed]
-		public int SequencePosition { get; set; }
 
 		/// <summary>
 		/// Gets or sets the value.

@@ -69,7 +69,6 @@ namespace Phoenix.SAL
 							order = new Order{
 								PositionId = PositionId,
 								OrderTypeId = Int32.Parse(xmlReader.GetAttribute("id")),
-								SequencePosition = list.Count
 							};
 							list.Add(order);
 							break;
@@ -78,7 +77,6 @@ namespace Phoenix.SAL
 							if(xmlReader.Read())
 								value = xmlReader.Value.Trim ();
 							OrderParameter param = new OrderParameter{
-								SequencePosition = order.Parameters.Count,
 								Value = value
 							};
 							order.Parameters.Add(param);

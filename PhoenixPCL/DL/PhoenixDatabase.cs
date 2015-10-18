@@ -377,7 +377,7 @@ namespace Phoenix.DL
 		/// <param name="positionId">Position identifier.</param>
 		public static List<Order> GetOrdersForPosition(int positionId)
 		{
-			return Query<Order> ("select o.* from `Order` o where o.PositionId = ? order by SequencePosition asc", positionId);
+			return Query<Order> ("select o.* from `Order` o where o.PositionId = ? order by Id asc", positionId);
 		}
 
 		/// <summary>
@@ -387,7 +387,7 @@ namespace Phoenix.DL
 		/// <param name="orderId">Order identifier.</param>
 		public static List<OrderParameter> GetOrderParameters(int orderId)
 		{
-			return Query<OrderParameter> ("select op.* from OrderParameter op where op.OrderId = ? order by SequencePosition asc", orderId);
+			return Query<OrderParameter> ("select op.* from OrderParameter op where op.OrderId = ? order by Id asc", orderId);
 		}
 
         /// <summary>
