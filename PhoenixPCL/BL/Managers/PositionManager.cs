@@ -58,6 +58,16 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
+		/// Gets the positions with orders.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		public async void GetPositionsWithOrders(Action<IEnumerable<Position>> callback)
+		{
+			List<Position> list = await ((PositionDataManager)GetDataManager ()).GetPositionsWithOrders ();
+			callback (list);
+		}
+
+		/// <summary>
 		/// Gets the turn report.
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>

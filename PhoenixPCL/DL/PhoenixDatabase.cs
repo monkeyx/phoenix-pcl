@@ -311,6 +311,15 @@ namespace Phoenix.DL
 			return Query<Position> ("select p.* from Position p where p.StarSystemId = ? order by Name asc", starSystemId);
 		}
 
+		/// <summary>
+		/// Gets the positions with orders.
+		/// </summary>
+		/// <returns>The positions with orders.</returns>
+		public static List<Position> GetPositionsWithOrders()
+		{
+			return Query<Position> ("select distinct p.* from Position p, `Order` o where o.PositionId = p.Id order by Name asc");
+		}
+
         /// <summary>
         /// Gets the item properties.
         /// </summary>

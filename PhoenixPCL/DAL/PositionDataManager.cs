@@ -53,6 +53,17 @@ namespace Phoenix.DAL
 		}
 
 		/// <summary>
+		/// Gets the positions with orders.
+		/// </summary>
+		/// <returns>The positions with orders.</returns>
+		public Task<List<Position>> GetPositionsWithOrders()
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetPositionsWithOrders();
+			});
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Phoenix.DAL.PositionDataManager"/> class.
 		/// </summary>
 		public PositionDataManager ()
