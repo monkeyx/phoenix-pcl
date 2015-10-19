@@ -1,10 +1,10 @@
 ﻿//
-// InfoManager.cs
+// InfoDataManager.cs
 //
 // Author:
 //       Seyed Razavi <monkeyx@gmail.com>
 //
-// Copyright (c) 2015 Seyed Razavi 
+// Copyright (c) 2015 Seyed Razavi
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,53 +25,49 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Phoenix.BL.Entities;
-using Phoenix.BL.Managers;
-using Phoenix.DAL;
+using Phoenix.Util;
 
-namespace Phoenix.BL.Managers
+namespace Phoenix.DAL
 {
-    /// <summary>
-    /// Info manager.
-    /// </summary>
-    public class InfoManager : NexusManager<InfoData>
-    {
+	/// <summary>
+	/// Info data manager.
+	/// </summary>
+	public class InfoDataManager : DataManager<InfoData>
+	{
 		/// <summary>
 		/// Gets the info data by group identifier and nexus identifier.
 		/// </summary>
+		/// <returns>The info data by group identifier and nexus identifier.</returns>
 		/// <param name="groupId">Group identifier.</param>
 		/// <param name="nexusId">Nexus identifier.</param>
-		/// <param name="callback">Callback.</param>
-		public async void GetInfoDataByGroupIdAndNexusId(int groupId, int nexusId, Action<InfoData> callback)
+		public Task<InfoData> GetInfoDataByGroupIdAndNexusId(int groupId, int nexusId)
 		{
-			InfoData data = await GetInfoDataManager ().GetInfoDataByGroupIdAndNexusId (groupId,nexusId);
-			callback (data);
+			return Task<InfoData>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetInfoDataByGroupIdAndNexusId(groupId,nexusId);
+			});
 		}
 
 		/// <summary>
 		/// Gets the info data by group identifier.
 		/// </summary>
+		/// <returns>The info data by group identifier.</returns>
 		/// <param name="groupId">Group identifier.</param>
-		/// <param name="callback">Callback.</param>
-		public async void GetInfoDataByGroupId(int groupId, Action<List<InfoData>> callback)
+		public Task<List<InfoData>> GetInfoDataByGroupId(int groupId)
 		{
-			List<InfoData> list = await GetInfoDataManager ().GetInfoDataByGroupId (groupId);
-			callback (list);
+			return Task<List<InfoData>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetInfoDataByGroupId(groupId);
+			});
 		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Phoenix.BL.Managers.InfoManager"/> class.
-        /// </summary>
-        /// <param name="user">User.</param>
-        public InfoManager (User user) : base(user)
-        {
-        }
-
-		private InfoDataManager GetInfoDataManager()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Phoenix.DAL.InfoDataManager"/> class.
+		/// </summary>
+		public InfoDataManager ()
 		{
-			return (InfoDataManager)GetDataManager ();
 		}
-    }
+	}
 }
 

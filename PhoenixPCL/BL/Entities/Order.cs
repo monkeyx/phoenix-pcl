@@ -123,20 +123,11 @@ namespace Phoenix.BL.Entities
 		/// <returns>The parameter description.</returns>
 		public string GetParameterDescription()
 		{
-			if (OrderType == null) {
-				return string.Join(",", Parameters);
-			} else {
-				List<string> list = new List<string> ();
-				int i = 0;
-				foreach (OrderParameter param in Parameters) {
-					if (OrderType.Parameters.Count > i) {
-						list.Add (OrderType.Parameters [i].ToString () + ": " + param);
-					} else {
-						list.Add (param.ToString ());
-					}
-				}
-				return string.Join(",", Parameters);
+			List<string> list = new List<string> ();
+			foreach (OrderParameter param in Parameters) {
+				list.Add (param.ToString ());
 			}
+			return string.Join(",", Parameters);
 		}
 
 		/// <summary>
@@ -175,6 +166,12 @@ namespace Phoenix.BL.Entities
 		public string Value { get; set; }
 
 		/// <summary>
+		/// Gets or sets the display value.
+		/// </summary>
+		/// <value>The display value.</value>
+		public string DisplayValue { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Phoenix.BL.Entities.OrderParameter"/> class.
 		/// </summary>
 		public OrderParameter()
@@ -187,7 +184,7 @@ namespace Phoenix.BL.Entities
 		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.OrderParameter"/>.</returns>
 		public override string ToString ()
 		{
-			return Value;
+			return DisplayValue == null ? Value : DisplayValue;
 		}
 	}
 }

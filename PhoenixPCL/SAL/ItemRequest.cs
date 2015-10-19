@@ -112,7 +112,10 @@ namespace Phoenix.SAL
 							break;
 						case "Item":
 							if(rm != null) {
-								rm.RawMaterialId = Int32.Parse (xmlReader.GetAttribute ("value"));
+								string value = xmlReader.GetAttribute ("value");
+								if(value != "xxx"){
+									rm.RawMaterialId = Int32.Parse (value);
+								}
 							}
 							break;
 						case "Quantity":

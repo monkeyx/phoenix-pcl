@@ -47,11 +47,43 @@ namespace Phoenix.BL.Entities
 		}
 
 		/// <summary>
+		/// Periphery.
+		/// </summary>
+		public enum Periphery
+		{
+			None = 0,
+			InnerCapellan = 1,
+			Darkfold = 2,
+			Cluster = 3,
+			DewiekHome = 4,
+			DewiekPocket = 5,
+			DetinusRepublic = 6,
+			Twilight = 7,
+			InnerEmpire = 8,
+			Caliphate = 9,
+			FlagritzHome = 10,
+			FeliniEmpire = 11,
+			OuterCapellan = 12,
+			Halo = 13,
+			CorewardArm = 14,
+			TranSpiral = 15,
+			OrionSpur = 16,
+			PerfidionReach = 17
+		}
+
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
         [Indexed]
         public string Name { get; set; }
+
+		/// <summary>
+		/// Gets or sets the system periphery.
+		/// </summary>
+		/// <value>The system periphery.</value>
+		[Indexed]
+		public Periphery SystemPeriphery { get; set; }
 
 		/// <summary>
 		/// Gets the name and identifier.
@@ -76,7 +108,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <value>The list detail.</value>
 		[Ignore]
-		public override string ListDetail { get { return ""; } }
+		public override string ListDetail { get { return SystemPeriphery.ToString(); } }
 
         /// <summary>
         /// Gets or sets the celestial bodies.

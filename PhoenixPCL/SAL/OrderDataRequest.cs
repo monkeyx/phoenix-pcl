@@ -78,7 +78,7 @@ namespace Phoenix.SAL
 							OrderParameterType param = new OrderParameterType () {
 								Name = xmlReader.GetAttribute ("name"),
 								InfoType = Int32.Parse (xmlReader.GetAttribute ("infotype")),
-								DataType = Int32.Parse (xmlReader.GetAttribute ("datatype"))
+								DataType = (OrderType.DataTypes) Int32.Parse (xmlReader.GetAttribute ("datatype"))
 							};
 							item.Parameters.Add (param);
 						}

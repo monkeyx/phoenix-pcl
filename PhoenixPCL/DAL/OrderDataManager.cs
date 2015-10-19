@@ -94,10 +94,32 @@ namespace Phoenix.DAL
 		protected override void PersistRelationships (Order item)
 		{
 			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Order Parameters (" + item.Id + ": " + item.Parameters.Count);
+			if (item.OrderType == null) {
+				item.OrderType = DL.PhoenixDatabase.GetItem<OrderType> (item.OrderTypeId);
+				if (item.OrderType != null) {
+					item.OrderType.Parameters = DL.PhoenixDatabase.GetOrderTypeParameters (item.OrderTypeId);
+				}
+			}
 			if (item.Parameters.Count > 0) {
+				int i = 0;
 				foreach (OrderParameter param in item.Parameters) {
 					param.OrderId = item.Id;
+					param.DisplayValue = param.Value;
+					if (item.OrderType != null && item.OrderType.Parameters.Count > i) {
+						OrderParameterType paramType = item.OrderType.Parameters [i];
+						if (paramType.InfoType > 0) {
+							try {
+								InfoData info = DL.PhoenixDatabase.GetInfoDataByGroupIdAndNexusId (paramType.InfoType, Int32.Parse (param.Value));
+								if(info != null){
+									param.DisplayValue = info.ToString();
+								}
+							}
+							catch {
+							}
+						}
+					}
 					DL.PhoenixDatabase.SaveItemIfNew<OrderParameter> (param);
+					i += 1;
 				}
 			}
 		}
@@ -111,6 +133,9 @@ namespace Phoenix.DAL
 			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Load Relationships (" + item.Id + ")");
 			item.Parameters = DL.PhoenixDatabase.GetOrderParameters (item.Id);
 			item.OrderType = DL.PhoenixDatabase.GetItem<OrderType> (item.OrderTypeId);
+			if (item.OrderType != null) {
+				item.OrderType.Parameters = DL.PhoenixDatabase.GetOrderTypeParameters (item.OrderTypeId);
+			}
 		}
 
 		/// <summary>

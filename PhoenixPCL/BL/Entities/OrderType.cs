@@ -33,6 +33,17 @@ namespace Phoenix.BL.Entities
     public class OrderType : EntityBase
     {
 		/// <summary>
+		/// Data types.
+		/// </summary>
+		public enum DataTypes
+		{
+			None = 0,
+			Integer = 1,
+			String = 2,
+			Boolean = 3
+		}
+
+		/// <summary>
 		/// Order flags.
 		/// </summary>
 		public enum OrderFlag {
@@ -220,7 +231,7 @@ namespace Phoenix.BL.Entities
         /// Gets or sets the type of the data.
         /// </summary>
         /// <value>The type of the data.</value>
-        public int DataType { get; set; }
+		public OrderType.DataTypes DataType { get; set; }
 
         /// <summary>
         /// Gets or sets the order identifier.

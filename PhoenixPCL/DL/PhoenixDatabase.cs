@@ -302,6 +302,31 @@ namespace Phoenix.DL
         }
 
 		/// <summary>
+		/// Gets the info data by group identifier and nexus identifier.
+		/// </summary>
+		/// <returns>The info data by group identifier and nexus identifier.</returns>
+		/// <param name="groupId">Group identifier.</param>
+		/// <param name="nexusId">Nexus identifier.</param>
+		public static InfoData GetInfoDataByGroupIdAndNexusId(int groupId, int nexusId)
+		{
+			List<InfoData> list = Query<InfoData> ("select i.* from InfoData i where GroupId = ? and NexusId = ?", groupId, nexusId);
+			if (list.Count > 0) {
+				return list [0];
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Gets the info data by group identifier.
+		/// </summary>
+		/// <returns>The info data by group identifier.</returns>
+		/// <param name="groupId">Group identifier.</param>
+		public static List<InfoData> GetInfoDataByGroupId(int groupId)
+		{
+			return Query<InfoData> ("select i.* from InfoData i where GroupId = ? order by Name asc, NexusId asc", groupId);
+		}
+
+		/// <summary>
 		/// Gets the positions in star system.
 		/// </summary>
 		/// <returns>The positions in star system.</returns>

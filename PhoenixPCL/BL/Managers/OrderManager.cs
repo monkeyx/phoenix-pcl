@@ -86,6 +86,42 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
+		/// Adds the order.
+		/// </summary>
+		/// <param name="position">Position.</param>
+		/// <param name="orderType">Order type.</param>
+		/// <param name="callback">Callback.</param>
+		public async void AddOrder(Position position, OrderType orderType, Action<IEnumerable<Order>> callback)
+		{
+			if (position == null || orderType == null)
+				return;
+			
+			Order order = new Order {
+				OrderTypeId = orderType.Id,
+				OrderType = orderType,
+				PositionId = position.Id
+			};
+
+			await GetDataManager ().SaveItem (order);
+			IEnumerable<Order> list = await GetOrderDataManager ().GetOrdersForPosition (position.Id);
+			callback (list);
+		}
+
+		/// <summary>
+		/// Saves the order.
+		/// </summary>
+		/// <param name="order">Order.</param>
+		/// <param name="callback">Callback.</param>
+		public async void SaveOrder(Order order, Action<IEnumerable<Order>> callback)
+		{
+			if (order == null)
+				return;
+			order = await GetDataManager ().SaveItem (order);
+			IEnumerable<Order> list = await GetOrderDataManager ().GetOrdersForPosition (order.PositionId);
+			callback (list);
+		}
+
+		/// <summary>
 		/// Clears the orders.
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>
