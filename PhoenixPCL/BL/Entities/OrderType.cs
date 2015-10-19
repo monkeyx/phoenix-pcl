@@ -47,20 +47,20 @@ namespace Phoenix.BL.Entities
 		/// Order flags.
 		/// </summary>
 		public enum OrderFlag {
-			Any = 0x0,           
+			Any = 0x0,    
 			ThrustMove = 0x1,           
 			Movement = 0x2,           
-			Transaction = 0x4,           
+			Transaction = 0x4,  
 			StandingOrder = 0x8,           
 			Basic = 0x10,           
 			Scan = 0x20,           
 			Other = 0x40,           
 			Issue = 0x80,           
-			Create = 0x100,           
-			SquadronOrder = 0x200,           
-			SquadronStandingOrder = 0x400,           
+			Create = 0x100,        
+			SquadronOrder = 0x200,    
+			SquadronStandingOrder = 0x400,  
 			TurnType = 0x800,           
-			Boarding = 0x1000,           
+			Boarding = 0x1000,        
 			PlanetaryInteraction = 0x2000,           
 			Macro = 0x4000,           
 			Copy = 0x8000,           
@@ -110,14 +110,16 @@ namespace Phoenix.BL.Entities
 		public string TypeDescription
 		{
 			get {
-				string description = "";
+				List<string> types = new List<string> ();
 				foreach(var mask in Enum.GetValues(typeof(OrderFlag))){
 					OrderFlag flag = (OrderFlag)mask;
 					if ((TypeFlag & (int)flag) != 0) {
-						description += flag.ToString () + " ";
+						types.Add (
+							System.Text.RegularExpressions.Regex.Replace (flag.ToString (), "(\\B[A-Z])", " $1")
+						);
 					}
 				}
-				return description.Trim();
+				return string.Join (", ", types);
 			}
 
 		}
@@ -136,14 +138,16 @@ namespace Phoenix.BL.Entities
 		public string PositionType
 		{
 			get {
-				string positionType = "";
+				List<string> types = new List<string> ();
 				foreach(var mask in Enum.GetValues(typeof(Position.PositionFlag))){
 					Position.PositionFlag flag = (Position.PositionFlag)mask;
 					if ((Position & (int)flag) != 0) {
-						positionType += flag.ToString () + " ";
+						types.Add (
+							System.Text.RegularExpressions.Regex.Replace (flag.ToString (), "(\\B[A-Z])", " $1")
+						);
 					}
 				}
-				return positionType.Trim();
+				return string.Join (", ", types);
 			}
 		}
 

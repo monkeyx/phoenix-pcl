@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+
 using SQLite;
 
 namespace Phoenix.BL.Entities
@@ -35,7 +37,7 @@ namespace Phoenix.BL.Entities
 		/// Position flags.
 		/// </summary>
 		public enum PositionFlag {
-			None = 0x00,           
+			None = 0x00,          
 			GroundParty = 0x01,           
 			Ship = 0x02,           
 			Starbase = 0x04,           
@@ -70,6 +72,7 @@ namespace Phoenix.BL.Entities
 		/// <value>The type of the position.</value>
 		public int PositionType { get; set; }
 
+
 		/// <summary>
 		/// Gets the type of the position.
 		/// </summary>
@@ -77,14 +80,16 @@ namespace Phoenix.BL.Entities
 		public string PositionTypeString
 		{
 			get {
-				string positionType = "";
+				List<string> positionTypes = new List<string>();
 				foreach(var mask in Enum.GetValues(typeof(Position.PositionFlag))){
 					Position.PositionFlag flag = (Position.PositionFlag)mask;
 					if ((PositionType & (int)flag) != 0) {
-						positionType += flag.ToString () + " ";
+						positionTypes.Add(
+							System.Text.RegularExpressions.Regex.Replace (flag.ToString (), "(\\B[A-Z])", " $1")
+						);
 					}
 				}
-				return positionType.Trim();
+				return string.Join(", ", positionTypes);
 			}
 		}
 

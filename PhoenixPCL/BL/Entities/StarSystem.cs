@@ -66,7 +66,7 @@ namespace Phoenix.BL.Entities
 			OuterCapellan = 12,
 			Halo = 13,
 			CorewardArm = 14,
-			TranSpiral = 15,
+			Transpiral = 15,
 			OrionSpur = 16,
 			PerfidionReach = 17
 		}
@@ -84,6 +84,17 @@ namespace Phoenix.BL.Entities
 		/// <value>The system periphery.</value>
 		[Indexed]
 		public Periphery SystemPeriphery { get; set; }
+
+		/// <summary>
+		/// Gets the name of the periphery.
+		/// </summary>
+		/// <value>The name of the periphery.</value>
+		[Ignore]
+		public string PeripheryName { 
+			get {
+				return System.Text.RegularExpressions.Regex.Replace (SystemPeriphery.ToString(), "(\\B[A-Z])", " $1");
+			}
+		}
 
 		/// <summary>
 		/// Gets the name and identifier.
@@ -108,7 +119,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <value>The list detail.</value>
 		[Ignore]
-		public override string ListDetail { get { return SystemPeriphery.ToString(); } }
+		public override string ListDetail { get { return PeripheryName; } }
 
         /// <summary>
         /// Gets or sets the celestial bodies.
