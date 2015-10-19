@@ -51,12 +51,55 @@ namespace Phoenix.BL.Entities
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the preferences flag
+		/// </summary>
+		/// <value>The preferences.</value>
+		public int Preferences { get; set; }
+
+		/// <summary>
+		/// Sets the preference.
+		/// </summary>
+		/// <param name="flag">Flag.</param>
+		public void SetPreference(int flag)
+		{
+			Preferences |= flag;
+		}
+
+		/// <summary>
+		/// Unsets the preference.
+		/// </summary>
+		/// <param name="flag">Flag.</param>
+		public void UnsetPreference(int flag)
+		{
+			Preferences &= ~flag;
+		}
+
+		/// <summary>
+		/// Determines whether this user has a preference with the specified flag.
+		/// </summary>
+		/// <returns><c>true</c> if this flag is in user's preference; otherwise, <c>false</c>.</returns>
+		/// <param name="flag">Flag.</param>
+		public bool HasPreference(int flag)
+		{
+			return ((Preferences & flag) != 0);
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.User"/> class.
         /// </summary>
         public User ()
         {
         }
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.User"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.User"/>.</returns>
+		public override string ToString ()
+		{
+			return string.Format ("[User: Id={0}, Code={1}, Preferences={2}]", Id, Code, Preferences);
+		}
     }
 }
 

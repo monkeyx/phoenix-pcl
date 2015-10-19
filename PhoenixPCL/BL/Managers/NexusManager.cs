@@ -152,6 +152,11 @@ namespace Phoenix.BL.Managers
         /// <param name="results">Results.</param>
 		protected virtual async void RequestCallback(IEnumerable<T> results, Exception e)
         {
+			if (results == null) {
+				callback (new List<T> (), new Exception ("No results received " + GetType()));
+				return;
+			}
+			
 			foreach (T item in results) {
 				try {
                		await GetDataManager ().SaveItem (item);
