@@ -80,9 +80,12 @@ namespace Phoenix.BL.Managers
 		/// Deletes the order.
 		/// </summary>
 		/// <param name="order">Order.</param>
-		public async void DeleteOrder(Order order)
+		/// <param name="callback">Callback.</param>
+		public async void DeleteOrder(Order order, Action<IEnumerable<Order>> callback)
 		{
 			await GetDataManager ().DeleteItem (order);
+			IEnumerable<Order> list = await GetOrderDataManager ().GetOrdersForPosition (order.PositionId);
+			callback (list);
 		}
 
 		/// <summary>

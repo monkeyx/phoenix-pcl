@@ -88,8 +88,6 @@ namespace Phoenix.DAL
 		{
 			DL.PhoenixDatabase.ClearTable<Position> ();
 			DL.PhoenixDatabase.ClearTable<PositionTurn> ();
-			DL.PhoenixDatabase.ClearTable<Order> ();
-			DL.PhoenixDatabase.ClearTable<OrderParameter> ();
 		}
 
 		/// <summary>
@@ -103,7 +101,6 @@ namespace Phoenix.DAL
 			
 			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete Relationships (" + item.Id + ")");
 			DL.PhoenixDatabase.DeleteItemById<PositionTurn> (item.Id);
-			DL.PhoenixDatabase.DeleteOrders (item.Id);
 		}
 
 		/// <summary>
