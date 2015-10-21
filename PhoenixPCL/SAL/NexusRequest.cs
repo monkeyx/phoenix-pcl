@@ -157,6 +157,14 @@ namespace Phoenix.SAL
 			resultCallback = callback;
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "GET: " + RequestURL ());
 			Application.RestClient.GetAsync (RequestURL (), (stream) => {
+				if(stream == null){
+					if (attemptCount < maxAttempts) {
+						attemptCount += 1;
+						Get (callback);;
+						return;
+					}
+					callback (null, new Exception("Failed to get"));
+				}
 				try {
 					ReadStream (stream);
 					attemptCount = 0;
@@ -180,6 +188,14 @@ namespace Phoenix.SAL
 		{
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "POST: " + RequestURL ());
 			Application.RestClient.PostAsync (RequestURL (),ToXml(dto),async (response) => {
+				if(response == null){
+					if (attemptCount < maxAttempts) {
+						attemptCount += 1;
+						Post (dto, callback);
+						return;
+					}
+					callback (null, new Exception("Failed to post"));
+				}
 				try {
 					string responseString = await response.Content.ReadAsStringAsync();
 					if(responseString.Contains("error")){

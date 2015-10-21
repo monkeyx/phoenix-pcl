@@ -60,7 +60,6 @@ namespace Phoenix.SAL
 
 			while (xmlReader.Read ()) {
 				if (xmlReader.IsStartElement ()) {
-					// Log.WriteLine (Log.Layer.SAL, this.GetType (), xmlReader.Name);
 					try {
 						switch (xmlReader.Name) {
 						case "status":

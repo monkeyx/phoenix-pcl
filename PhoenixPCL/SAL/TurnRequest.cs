@@ -53,8 +53,12 @@ namespace Phoenix.SAL
 		/// Reads the stream.
 		/// </summary>
 		/// <param name="stream">Stream.</param>
-		protected override void ReadStream (System.IO.Stream stream)
+		protected override void ReadStream (Stream stream)
 		{
+			if (stream == null) {
+				resultCallback (new List<PositionTurn> (){},new Exception("No turn received"));
+				return;
+			}
 			string fileName = PositionId.ToString () + ".html";
 			StreamReader reader = new StreamReader (stream);
 			string content = reader.ReadToEnd ().Replace("url(","url(" + Phoenix.Application.BASE_URL);

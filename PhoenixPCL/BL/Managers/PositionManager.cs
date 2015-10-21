@@ -98,13 +98,18 @@ namespace Phoenix.BL.Managers
 			DataManager<PositionTurn> turnDM = DataManagerFactory.GetManager<PositionTurn> ();
 			TurnRequest request = new TurnRequest (User.Id, User.Code, positionId);
 			request.Get ((results, ex) => {
-				IEnumerator<PositionTurn> i = results.GetEnumerator ();
-				if (i.MoveNext ()) {
-					PositionTurn pt = i.Current;
-					turnDM.SaveItem (pt);
-					callback (pt.Content);
-				} else {
-					callback("Not Found");
+				if(results == null){
+					callback("Not found");
+				}
+				else {
+					IEnumerator<PositionTurn> i = results.GetEnumerator ();
+					if (i.MoveNext ()) {
+						PositionTurn pt = i.Current;
+						turnDM.SaveItem (pt);
+						callback (pt.Content);
+					} else {
+						callback("Not Found");
+					}
 				}
 			});
 		}

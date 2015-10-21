@@ -186,6 +186,11 @@ namespace Phoenix.BL.Managers
 		/// <param name="e">E.</param>
 		protected override async void RequestCallback(IEnumerable<Order> results, Exception e)
 		{
+			if (results == null) {
+				callback (new List<Order> (), e == null ? new Exception ("No results received " + GetType()) : e);
+				return;
+			}
+
 			foreach (Order item in results) {
 				try {
 					await GetDataManager ().SaveItem (item);

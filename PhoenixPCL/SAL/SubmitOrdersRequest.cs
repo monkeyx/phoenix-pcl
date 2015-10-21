@@ -58,7 +58,8 @@ namespace Phoenix.SAL
 		{
 			List<Order> orders = (List<Order>)dto;
 			StringBuilder sb = new StringBuilder ();
-			sb.Append ("<data>");
+			sb.Append ("<turns>");
+			sb.Append ("<turn pos_id=\"" + PositionId + "\" seq=\"\" seq_after=\"\" append=\"true\">");
 			sb.Append ("<orders>");
 			foreach (Order o in orders) {
 				sb.Append ("<order id=\"" + o.OrderTypeId + "\">");
@@ -70,7 +71,8 @@ namespace Phoenix.SAL
 				sb.Append ("</order>");
 			}
 			sb.Append ("</orders>");
-			sb.Append ("</data>");
+			sb.Append ("</turn>");
+			sb.Append ("</turns>");
 			string xml = sb.ToString ();
 			Log.WriteLine (Log.Layer.SAL, GetType (), "Submit Orders for Position: " + PositionId);
 			Log.WriteLine (Log.Layer.SAL, GetType (), xml);
