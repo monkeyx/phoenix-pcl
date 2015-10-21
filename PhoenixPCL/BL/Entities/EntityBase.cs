@@ -24,14 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using SQLite;
+using SQLite.Net.Attributes;
 
 namespace Phoenix.BL.Entities
 {
     /// <summary>
     /// Base class for all entities
     /// </summary>
-    public class EntityBase : IEntity, IEquatable<EntityBase>
+    public abstract class EntityBase : IEntity, IEquatable<EntityBase>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.EntityBase"/> class.
@@ -40,12 +40,11 @@ namespace Phoenix.BL.Entities
         {
         }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>The identifier.</value>
-		[PrimaryKey]
-        public virtual int Id { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		public abstract int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.
@@ -99,9 +98,9 @@ namespace Phoenix.BL.Entities
         /// <param name="other">The <see cref="Phoenix.EntityBase"/> to compare with the current <see cref="Phoenix.EntityBase"/>.</param>
         /// <returns><c>true</c> if the specified <see cref="Phoenix.EntityBase"/> is equal to the current
         /// <see cref="Phoenix.EntityBase"/>; otherwise, <c>false</c>.</returns>
-        public bool Equals(EntityBase other)
+		public bool Equals(EntityBase other)
         {
-            if (other != null && other.GetType() == GetType() && Id == other.Id) {
+			if (other != null && other.GetType() == GetType() && Id == other.Id) {
                 return true;
             }
             return false;
@@ -127,7 +126,7 @@ namespace Phoenix.BL.Entities
         /// <returns>A hash code for this instance that is suitable for use in hashing algorithms and data structures such as a
         /// hash table.</returns>
         public override int GetHashCode() {
-            return this.Id.GetHashCode();
+			return this.Id.GetHashCode();
         }
 
         /// <summary>
@@ -136,7 +135,7 @@ namespace Phoenix.BL.Entities
         /// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.EntityBase"/>.</returns>
         public override string ToString ()
         {
-            return string.Format ("[" + GetType().Name + "]: Id={0}, CreatedAt={1}, UpdatedAt={2}]", Id, CreatedAt, UpdatedAt);
+			return string.Format ("[" + GetType().Name + "]: Id={0}, CreatedAt={1}, UpdatedAt={2}]", Id, CreatedAt, UpdatedAt);
         }
     }
 }

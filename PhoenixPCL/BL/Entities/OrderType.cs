@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using SQLite;
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
@@ -75,6 +75,13 @@ namespace Phoenix.BL.Entities
 			RequestUpdate = 1,
 			ClearPendingOrders = 1050
 		}
+
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey]
+		public override int Id { get; set; }
 
 		/// <summary>
         /// Gets or sets the name.
@@ -219,7 +226,7 @@ namespace Phoenix.BL.Entities
 		[PrimaryKey, AutoIncrement]
 		public override int Id { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>

@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using SQLite;
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
@@ -70,6 +70,13 @@ namespace Phoenix.BL.Entities
 			OrionSpur = 16,
 			PerfidionReach = 17
 		}
+
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey]
+		public override int Id { get; set; }
 
 		/// <summary>
         /// Gets or sets the name.
@@ -186,14 +193,14 @@ namespace Phoenix.BL.Entities
 			Wormhole = 7
 		}
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>The identifier.</value>
-        [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey, AutoIncrement]
+		public override int Id { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the star system identifier.
         /// </summary>
         /// <value>The star system identifier.</value>
@@ -292,12 +299,12 @@ namespace Phoenix.BL.Entities
     [Table("JumpLink")]
     public class JumpLink : EntityBase
     {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>The identifier.</value>
-        [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey, AutoIncrement]
+		public override int Id { get; set; }
 
 		/// <summary>
 		/// Gets the list text.

@@ -29,7 +29,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using SQLite;
+using SQLite.Net;
 
 using Phoenix.BL.Entities;
 using Phoenix.BL.Managers;
@@ -98,17 +98,17 @@ namespace Phoenix
 		/// <summary>
 		/// Async GET method
 		/// </summary>
-		/// <returns>Stream</returns>
 		/// <param name="url">URL.</param>
-		Task<Stream> GetAsync(string url);
+		/// <param name="callback">Callback.</param>
+		void GetAsync(string url, Action<Stream> callback);
 
 		/// <summary>
 		/// Async POST method
 		/// </summary>
-		/// <returns>Stream</returns>
 		/// <param name="url">URL.</param>
 		/// <param name="dto">Dto.</param>
-		Task<HttpResponseMessage> PostAsync(string url, object dto);
+		/// <param name="callback">Callback.</param>
+		void PostAsync(string url, object dto, Action<HttpResponseMessage> callback);
 	}
 
 	/// <summary>
@@ -198,7 +198,11 @@ namespace Phoenix
 			Log.Logger = logger;
 			PhoenixDatabase.DatabaseProvider = dabaseProvider;
 
+			#if CLEAR_DATABASE
+			PhoenixDatabase.ClearDatabase();
+			#else
 			PhoenixDatabase.CreateTables ();
+			#endif
 			UserManager = new UserManager ();
 
 			DocumentFolder = documentFolder;

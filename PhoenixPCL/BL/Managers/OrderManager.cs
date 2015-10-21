@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 using Phoenix.BL.Entities;
 using Phoenix.DAL;
@@ -44,6 +45,32 @@ namespace Phoenix.BL.Managers
 		/// <param name="user">User.</param>
 		public OrderManager (User user) : base(user)
 		{
+		}
+
+		/// <summary>
+		/// Submits the orders for position.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void SubmitOrdersForPosition(int positionId, Action<int, Exception> callback)
+		{
+			List<Order> orders = await GetOrderDataManager ().GetOrdersForPosition (positionId);
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Submitting " + orders.Count + " orders for Position " + positionId);
+			GetRequest (positionId, true).Post (orders, (response, e) => {
+				if(e == null){
+					if(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created){
+						GetOrderDataManager().ClearOrdersForPosition(positionId);
+						callback(orders.Count,null);
+					}
+					else {
+						callback(0,new Exception("Error submitting orders. Status Code: " + response.StatusCode));
+					}
+				}
+				else {
+					callback(0,e);
+					Log.WriteLine (Log.Layer.BL, this.GetType (), e);
+				}
+			});
 		}
 
 		/// <summary>
@@ -73,7 +100,7 @@ namespace Phoenix.BL.Managers
 			FetchInProgress = true;
 			this.callback = callback;
 			Log.WriteLine (Log.Layer.BL, this.GetType (), "Fetching Order for Position " + positionId);
-			GetRequest (positionId).Fetch (RequestCallback);
+			GetRequest (positionId).Get (RequestCallback);
 		}
 
 		/// <summary>

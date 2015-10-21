@@ -43,10 +43,17 @@ namespace Phoenix.SAL
     public interface INexusRequest<T> where T :   IEntity, new()
     {
 		/// <summary>
-		/// Fetches data from Nexus
+		/// Gets data from Nexus
 		/// </summary>
 		/// <param name="callback">Callback.</param>
-		void Fetch(Action<IEnumerable<T>, Exception> callback);
+		void Get(Action<IEnumerable<T>, Exception> callback);
+
+		/// <summary>
+		/// Post the specified dto and callback.
+		/// </summary>
+		/// <param name="dto">Dto.</param>
+		/// <param name="callback">Callback.</param>
+		void Post(object dto, Action<HttpResponseMessage, Exception> callback);
     }
 
     /// <summary>
@@ -60,27 +67,37 @@ namespace Phoenix.SAL
         /// <returns>The request.</returns>
         /// <param name="user">User.</param>
 		/// <param name="positionId">Position identifier</param>
+		/// <param name="postRequest">Whether this is a POST request</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static INexusRequest<T> CreateRequest<T>(User user, int positionId = 0) where T : IEntity, new()
+		public static INexusRequest<T> CreateRequest<T>(User user, int positionId = 0, bool postRequest = false) where T : IEntity, new()
         {
-            switch (typeof(T).Name) {
-            case "GameStatus":
-                return (INexusRequest<T>)new GameStatusRequest (user.Id, user.Code);
-            case "InfoData":
-                return (INexusRequest<T>)new InfoRequest (user.Id, user.Code);
-            case "Item":
-                return (INexusRequest<T>)new ItemRequest (user.Id, user.Code);
-            case "OrderType":
-                return (INexusRequest<T>)new OrderDataRequest (user.Id, user.Code);
-            case "Position":
-                return (INexusRequest<T>)new PositionRequest (user.Id, user.Code);
-            case "StarSystem":
-                return (INexusRequest<T>)new SystemRequest (user.Id, user.Code);
-			case "Order":
-				return (INexusRequest<T>)new PendingOrdersRequest (user.Id, user.Code, positionId);
-            default:
-                throw new Exception ("Unsupported type"); 
-            }
+			if (postRequest) {
+				switch (typeof(T).Name) {
+				case "Order":
+					return (INexusRequest<T>)new SubmitOrdersRequest (user.Id, user.Code, positionId);
+				default:
+					throw new Exception ("Unsupported type"); 
+				}
+			} else {
+				switch (typeof(T).Name) {
+				case "GameStatus":
+					return (INexusRequest<T>)new GameStatusRequest (user.Id, user.Code);
+				case "InfoData":
+					return (INexusRequest<T>)new InfoRequest (user.Id, user.Code);
+				case "Item":
+					return (INexusRequest<T>)new ItemRequest (user.Id, user.Code);
+				case "OrderType":
+					return (INexusRequest<T>)new OrderDataRequest (user.Id, user.Code);
+				case "Position":
+					return (INexusRequest<T>)new PositionRequest (user.Id, user.Code);
+				case "StarSystem":
+					return (INexusRequest<T>)new SystemRequest (user.Id, user.Code);
+				case "Order":
+					return (INexusRequest<T>)new PendingOrdersRequest (user.Id, user.Code, positionId);
+				default:
+					throw new Exception ("Unsupported type"); 
+				}
+			}
         }
     }
 
@@ -132,21 +149,57 @@ namespace Phoenix.SAL
         }
 
 		/// <summary>
-		/// Fetches data from Nexus
+		/// Gets data from Nexus
 		/// </summary>
 		/// <param name="callback">Callback.</param>
-		public async void Fetch(Action<IEnumerable<T>, Exception> callback)
+		public void Get(Action<IEnumerable<T>, Exception> callback)
         {
 			resultCallback = callback;
-			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Fetch: " + RequestURL ());
-			try {
-				Stream stream = await Application.RestClient.GetAsync (RequestURL ());
-				ReadStream (stream);
-			}
-			catch(Exception ex){
-				callback (null, ex);
-			}
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "GET: " + RequestURL ());
+			Application.RestClient.GetAsync (RequestURL (), (stream) => {
+				try {
+					ReadStream (stream);
+					attemptCount = 0;
+				} catch (Exception ex) {
+					if (attemptCount < maxAttempts) {
+						attemptCount += 1;
+						Get (callback);
+						return;
+					}
+					callback (null, ex);
+				}
+			});
         }
+
+		/// <summary>
+		/// Post the specified dto and callback.
+		/// </summary>
+		/// <param name="dto">Dto.</param>
+		/// <param name="callback">Callback.</param>
+		public void Post(object dto, Action<HttpResponseMessage, Exception> callback)
+		{
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "POST: " + RequestURL ());
+			Application.RestClient.PostAsync (RequestURL (),ToXml(dto),async (response) => {
+				try {
+					string responseString = await response.Content.ReadAsStringAsync();
+					if(responseString.Contains("error")){
+						callback(response,new Exception(responseString));
+					}
+					else {
+						callback(response,null);
+					}
+					attemptCount = 0;
+				}
+				catch(Exception ex){
+					if (attemptCount < maxAttempts) {
+						attemptCount += 1;
+						Post (dto, callback);
+						return;
+					}
+					callback (null, ex);
+				}
+			});
+		}
 
 		/// <summary>
 		/// Reads the stream.
@@ -168,12 +221,25 @@ namespace Phoenix.SAL
 		{
 		}
 
+		/// <summary>
+		/// Converts DTO to XML
+		/// </summary>
+		/// <returns>The xml.</returns>
+		/// <param name="dto">DTO.</param>
+		protected virtual string ToXml(object dto)
+		{
+			return "";
+		}
+
 		protected Action<IEnumerable<T>, Exception> resultCallback;
 
 		private string RequestURL()
         {
             return BASE_URL + "&uid=" + UID + "&code=" + Code + "&sa=" + Action + "&tid=" + PositionId + "&pid=" + PositionId;
         }
+
+		private const int maxAttempts = 3;
+		private int attemptCount = 0;
     }
 }
 

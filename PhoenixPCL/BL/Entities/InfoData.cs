@@ -24,7 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using SQLite;
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
@@ -36,9 +36,9 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The identifier.</value>
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+		public override int Id { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the group.
         /// </summary>
         /// <value>The group.</value>

@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using SQLite;
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
@@ -35,6 +35,13 @@ namespace Phoenix.BL.Entities
     [Table("Item")]
     public class Item : EntityBase
     {
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey]
+		public override int Id { get; set; }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -220,9 +227,9 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The identifier.</value>
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+		public override int Id { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the item identifier.
         /// </summary>
         /// <value>The item identifier.</value>
@@ -268,9 +275,9 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The identifier.</value>
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+		public override int Id { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the item identifier.
         /// </summary>
         /// <value>The item identifier.</value>

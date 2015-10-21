@@ -70,7 +70,7 @@ namespace Phoenix.BL.Managers
             FetchInProgress = true;
 			this.callback = callback;
 			Log.WriteLine (Log.Layer.BL, this.GetType (), "Fetching Entities");
-            GetRequest ().Fetch (RequestCallback);
+            GetRequest ().Get (RequestCallback);
         }
 
 		/// <summary>
@@ -140,10 +140,11 @@ namespace Phoenix.BL.Managers
         /// Gets the request.
         /// </summary>
 		/// <param name="positionId">Position identifier</param>
+		/// <param name="postRequest">Whether this is a POST request</param>
         /// <returns>The request.</returns>
-		protected INexusRequest<T> GetRequest(int positionId = 0)
+		protected INexusRequest<T> GetRequest(int positionId = 0, bool postRequest = false)
         {
-			return NexusRequestFactory.CreateRequest<T> (User,positionId);
+			return NexusRequestFactory.CreateRequest<T> (User,positionId,postRequest);
         }
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace Phoenix.BL.Managers
 		protected virtual async void RequestCallback(IEnumerable<T> results, Exception e)
         {
 			if (results == null) {
-				callback (new List<T> (), new Exception ("No results received " + GetType()));
+				callback (new List<T> (), e == null ? new Exception ("No results received " + GetType()) : e);
 				return;
 			}
 			

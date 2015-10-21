@@ -27,7 +27,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using SQLite;
+using SQLite.Net;
 
 using Phoenix;
 using Phoenix.BL.Entities;
@@ -51,28 +51,21 @@ namespace Phoenix.DL
         /// </summary>
         public static void CreateTables()
         {
-            try
-            {
-                DatabaseProvider.GetConnection().CreateTable<GameStatus> ();
-                DatabaseProvider.GetConnection().CreateTable<InfoData> ();
-                DatabaseProvider.GetConnection().CreateTable<Item> ();
-                DatabaseProvider.GetConnection().CreateTable<RawMaterial> ();
-                DatabaseProvider.GetConnection().CreateTable<ItemProperty> ();
-                DatabaseProvider.GetConnection().CreateTable<OrderType> ();
-                DatabaseProvider.GetConnection().CreateTable<OrderParameterType> ();
-				DatabaseProvider.GetConnection().CreateTable<Order> ();
-				DatabaseProvider.GetConnection().CreateTable<OrderParameter> ();
-                DatabaseProvider.GetConnection().CreateTable<Position> ();
-				DatabaseProvider.GetConnection().CreateTable<PositionTurn> ();
-                DatabaseProvider.GetConnection().CreateTable<StarSystem> ();
-                DatabaseProvider.GetConnection().CreateTable<CelestialBody> ();
-                DatabaseProvider.GetConnection().CreateTable<JumpLink> ();
-				DatabaseProvider.GetConnection().CreateTable<User> ();
-            }
-            catch(Exception e){
-				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), e);
-                throw e;
-            }
+			CreateTable<GameStatus> ();
+			CreateTable<InfoData> ();
+			CreateTable<Item> ();
+			CreateTable<RawMaterial> ();
+			CreateTable<ItemProperty> ();
+			CreateTable<OrderType> ();
+			CreateTable<OrderParameterType> ();
+			CreateTable<Order> ();
+			CreateTable<OrderParameter> ();
+			CreateTable<Position> ();
+			CreateTable<PositionTurn> ();
+			CreateTable<StarSystem> ();
+			CreateTable<CelestialBody> ();
+			CreateTable<JumpLink> ();
+			CreateTable<User> ();
 
         }
 
@@ -81,21 +74,21 @@ namespace Phoenix.DL
         /// </summary>
         public static void ClearDatabase()
         {
-            DatabaseProvider.GetConnection().DropTable<GameStatus> ();
-            DatabaseProvider.GetConnection().DropTable<InfoData> ();
-            DatabaseProvider.GetConnection().DropTable<Item> ();
-            DatabaseProvider.GetConnection().DropTable<RawMaterial> ();
-            DatabaseProvider.GetConnection().DropTable<ItemProperty> ();
-            DatabaseProvider.GetConnection().DropTable<OrderType> ();
-            DatabaseProvider.GetConnection().DropTable<OrderParameterType> ();
-			DatabaseProvider.GetConnection().DropTable<Order> ();
-			DatabaseProvider.GetConnection().DropTable<OrderParameter> ();
-            DatabaseProvider.GetConnection().DropTable<Position> ();
-			DatabaseProvider.GetConnection().DropTable<PositionTurn> ();
-            DatabaseProvider.GetConnection().DropTable<StarSystem> ();
-            DatabaseProvider.GetConnection().DropTable<CelestialBody> ();
-            DatabaseProvider.GetConnection().DropTable<JumpLink> ();
-			DatabaseProvider.GetConnection().DropTable<User> ();
+            DropTable<GameStatus> ();
+            DropTable<InfoData> ();
+            DropTable<Item> ();
+            DropTable<RawMaterial> ();
+            DropTable<ItemProperty> ();
+            DropTable<OrderType> ();
+            DropTable<OrderParameterType> ();
+			DropTable<Order> ();
+			DropTable<OrderParameter> ();
+            DropTable<Position> ();
+			DropTable<PositionTurn> ();
+            DropTable<StarSystem> ();
+            DropTable<CelestialBody> ();
+            DropTable<JumpLink> ();
+			DropTable<User> ();
             CreateTables();
         }
 
@@ -207,7 +200,7 @@ namespace Phoenix.DL
 
             try {
                 item.UpdatedAt = DateTime.Now;
-                if(item.Id != 0 && HasItem<T>(item.Id)){
+				if(item.Id != 0 && HasItem<T>(item.Id)){
                     if (!insertOnly) {
                         lock (_locker) {
                             DatabaseProvider.GetConnection().Update(item);
@@ -559,6 +552,40 @@ namespace Phoenix.DL
 				return default(T);
 			}
         }
+
+		/// <summary>
+		/// Creates the table.
+		/// </summary>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		private static void CreateTable<T>() where T : new()
+		{
+			try {
+				lock(_locker){
+					DatabaseProvider.GetConnection().CreateTable<T>();
+					Log.WriteLine (Log.Layer.DL, typeof(PhoenixDatabase), "Successfully created table " + TableName(typeof(T)));
+				}
+			}
+			catch(Exception e) {
+				Log.WriteLine (Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage ("CreateTable", typeof(T), e));
+			}
+		}
+
+		/// <summary>
+		/// Drops the table.
+		/// </summary>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		private static void DropTable<T>() where T : new()
+		{
+			try {
+				lock(_locker){
+					DatabaseProvider.GetConnection().DropTable<T>();
+					Log.WriteLine (Log.Layer.DL, typeof(PhoenixDatabase), "Successfully dropped table " + TableName(typeof(T)));
+				}
+			}
+			catch(Exception e) {
+				Log.WriteLine (Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage ("DropTable", typeof(T), e));
+			}
+		}
     }
 }
 

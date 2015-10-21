@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using SQLite;
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
@@ -35,6 +35,13 @@ namespace Phoenix.BL.Entities
 	[Table("Order")]
 	public class Order : EntityBase
 	{
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey, AutoIncrement]
+		public override int Id { get; set; }
+
 		/// <summary>
 		/// Clears the pending orders.
 		/// </summary>
@@ -68,13 +75,6 @@ namespace Phoenix.BL.Entities
 				}
 			};
 		}
-
-		/// <summary>
-		/// Gets or sets the identifier.
-		/// </summary>
-		/// <value>The identifier.</value>
-		[PrimaryKey, AutoIncrement]
-		public override int Id { get; set; }
 
 		/// <summary>
 		/// Gets or sets the order type identifier.
