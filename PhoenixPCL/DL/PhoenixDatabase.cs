@@ -27,7 +27,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using SQLite;
+using SQLite.Net;
 
 using Phoenix;
 using Phoenix.BL.Entities;
@@ -51,26 +51,21 @@ namespace Phoenix.DL
         /// </summary>
         public static void CreateTables()
         {
-            try
-            {
-                DatabaseProvider.GetConnection().CreateTable<GameStatus> ();
-                DatabaseProvider.GetConnection().CreateTable<InfoData> ();
-                DatabaseProvider.GetConnection().CreateTable<Item> ();
-                DatabaseProvider.GetConnection().CreateTable<RawMaterial> ();
-                DatabaseProvider.GetConnection().CreateTable<ItemProperty> ();
-                DatabaseProvider.GetConnection().CreateTable<OrderType> ();
-                DatabaseProvider.GetConnection().CreateTable<OrderParameterType> ();
-                DatabaseProvider.GetConnection().CreateTable<Position> ();
-				DatabaseProvider.GetConnection().CreateTable<PositionTurn> ();
-                DatabaseProvider.GetConnection().CreateTable<StarSystem> ();
-                DatabaseProvider.GetConnection().CreateTable<CelestialBody> ();
-                DatabaseProvider.GetConnection().CreateTable<JumpLink> ();
-				DatabaseProvider.GetConnection().CreateTable<User> ();
-            }
-            catch(Exception e){
-				Log.WriteLine(Log.Layer.DL, typeof(PhoenixDatabase), e);
-                throw e;
-            }
+			CreateTable<GameStatus> ();
+			CreateTable<InfoData> ();
+			CreateTable<Item> ();
+			CreateTable<RawMaterial> ();
+			CreateTable<ItemProperty> ();
+			CreateTable<OrderType> ();
+			CreateTable<OrderParameterType> ();
+			CreateTable<Order> ();
+			CreateTable<OrderParameter> ();
+			CreateTable<Position> ();
+			CreateTable<PositionTurn> ();
+			CreateTable<StarSystem> ();
+			CreateTable<CelestialBody> ();
+			CreateTable<JumpLink> ();
+			CreateTable<User> ();
 
         }
 
@@ -79,19 +74,21 @@ namespace Phoenix.DL
         /// </summary>
         public static void ClearDatabase()
         {
-            DatabaseProvider.GetConnection().DropTable<GameStatus> ();
-            DatabaseProvider.GetConnection().DropTable<InfoData> ();
-            DatabaseProvider.GetConnection().DropTable<Item> ();
-            DatabaseProvider.GetConnection().DropTable<RawMaterial> ();
-            DatabaseProvider.GetConnection().DropTable<ItemProperty> ();
-            DatabaseProvider.GetConnection().DropTable<OrderType> ();
-            DatabaseProvider.GetConnection().DropTable<OrderParameterType> ();
-            DatabaseProvider.GetConnection().DropTable<Position> ();
-			DatabaseProvider.GetConnection().DropTable<PositionTurn> ();
-            DatabaseProvider.GetConnection().DropTable<StarSystem> ();
-            DatabaseProvider.GetConnection().DropTable<CelestialBody> ();
-            DatabaseProvider.GetConnection().DropTable<JumpLink> ();
-			DatabaseProvider.GetConnection().DropTable<User> ();
+            DropTable<GameStatus> ();
+            DropTable<InfoData> ();
+            DropTable<Item> ();
+            DropTable<RawMaterial> ();
+            DropTable<ItemProperty> ();
+            DropTable<OrderType> ();
+            DropTable<OrderParameterType> ();
+			DropTable<Order> ();
+			DropTable<OrderParameter> ();
+            DropTable<Position> ();
+			DropTable<PositionTurn> ();
+            DropTable<StarSystem> ();
+            DropTable<CelestialBody> ();
+            DropTable<JumpLink> ();
+			DropTable<User> ();
             CreateTables();
         }
 
@@ -203,7 +200,7 @@ namespace Phoenix.DL
 
             try {
                 item.UpdatedAt = DateTime.Now;
-                if(item.Id != 0 && HasItem<T>(item.Id)){
+				if(item.Id != 0 && HasItem<T>(item.Id)){
                     if (!insertOnly) {
                         lock (_locker) {
                             DatabaseProvider.GetConnection().Update(item);
@@ -298,6 +295,31 @@ namespace Phoenix.DL
         }
 
 		/// <summary>
+		/// Gets the info data by group identifier and nexus identifier.
+		/// </summary>
+		/// <returns>The info data by group identifier and nexus identifier.</returns>
+		/// <param name="groupId">Group identifier.</param>
+		/// <param name="nexusId">Nexus identifier.</param>
+		public static InfoData GetInfoDataByGroupIdAndNexusId(int groupId, int nexusId)
+		{
+			List<InfoData> list = Query<InfoData> ("select i.* from InfoData i where GroupId = ? and NexusId = ?", groupId, nexusId);
+			if (list.Count > 0) {
+				return list [0];
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Gets the info data by group identifier.
+		/// </summary>
+		/// <returns>The info data by group identifier.</returns>
+		/// <param name="groupId">Group identifier.</param>
+		public static List<InfoData> GetInfoDataByGroupId(int groupId)
+		{
+			return Query<InfoData> ("select i.* from InfoData i where GroupId = ? order by Name asc, NexusId asc", groupId);
+		}
+
+		/// <summary>
 		/// Gets the positions in star system.
 		/// </summary>
 		/// <returns>The positions in star system.</returns>
@@ -305,6 +327,15 @@ namespace Phoenix.DL
 		public static List<Position> GetPositionsInStarSystem(int starSystemId)
 		{
 			return Query<Position> ("select p.* from Position p where p.StarSystemId = ? order by Name asc", starSystemId);
+		}
+
+		/// <summary>
+		/// Gets the positions with orders.
+		/// </summary>
+		/// <returns>The positions with orders.</returns>
+		public static List<Position> GetPositionsWithOrders()
+		{
+			return Query<Position> ("select distinct p.* from Position p, `Order` o where o.PositionId = p.Id order by Name asc");
 		}
 
         /// <summary>
@@ -348,13 +379,33 @@ namespace Phoenix.DL
         }
 
 		/// <summary>
+		/// Gets the order type parameters.
+		/// </summary>
+		/// <returns>The order parameters.</returns>
+		/// <param name="orderId">Order identifier.</param>
+		public static List<OrderParameterType> GetOrderTypeParameters(int orderId)
+		{
+			return Query<OrderParameterType> ("select op.* from OrderParameterType op where op.OrderId = ?", orderId);
+		}
+
+		/// <summary>
+		/// Gets the orders for position.
+		/// </summary>
+		/// <returns>The orders for position.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public static List<Order> GetOrdersForPosition(int positionId)
+		{
+			return Query<Order> ("select o.* from `Order` o where o.PositionId = ? order by Id asc", positionId);
+		}
+
+		/// <summary>
 		/// Gets the order parameters.
 		/// </summary>
 		/// <returns>The order parameters.</returns>
 		/// <param name="orderId">Order identifier.</param>
-		public static List<OrderParameterType> GetOrderParameters(int orderId)
+		public static List<OrderParameter> GetOrderParameters(int orderId)
 		{
-			return Query<OrderParameterType> ("select op.* from OrderParameterType op where op.OrderId = ?", orderId);
+			return Query<OrderParameter> ("select op.* from OrderParameter op where op.OrderId = ? order by Id asc", orderId);
 		}
 
         /// <summary>
@@ -394,12 +445,30 @@ namespace Phoenix.DL
         }
 
 		/// <summary>
+		/// Deletes the order type parameters.
+		/// </summary>
+		/// <param name="orderId">Order identifier.</param>
+		public static void DeleteOrderTypeParameters(int orderId)
+		{
+			Execute ("delete from OrderParameterType where OrderId = ?", orderId);
+		}
+
+		/// <summary>
+		/// Deletes the orders.
+		/// </summary>
+		/// <param name="positionid">Positionid.</param>
+		public static void DeleteOrders(int positionid)
+		{
+			Execute ("delete from `Order` where PositionId = ?", positionid);
+		}
+
+		/// <summary>
 		/// Deletes the order parameters.
 		/// </summary>
 		/// <param name="orderId">Order identifier.</param>
 		public static void DeleteOrderParameters(int orderId)
 		{
-			Execute ("delete from OrderParameterType where OrderId = ?", orderId);
+			Execute ("delete from OrderParameter where OrderId = ?", orderId);
 		}
 
 		/// <summary>
@@ -483,6 +552,40 @@ namespace Phoenix.DL
 				return default(T);
 			}
         }
+
+		/// <summary>
+		/// Creates the table.
+		/// </summary>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		private static void CreateTable<T>() where T : new()
+		{
+			try {
+				lock(_locker){
+					DatabaseProvider.GetConnection().CreateTable<T>();
+					Log.WriteLine (Log.Layer.DL, typeof(PhoenixDatabase), "Successfully created table " + TableName(typeof(T)));
+				}
+			}
+			catch(Exception e) {
+				Log.WriteLine (Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage ("CreateTable", typeof(T), e));
+			}
+		}
+
+		/// <summary>
+		/// Drops the table.
+		/// </summary>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		private static void DropTable<T>() where T : new()
+		{
+			try {
+				lock(_locker){
+					DatabaseProvider.GetConnection().DropTable<T>();
+					Log.WriteLine (Log.Layer.DL, typeof(PhoenixDatabase), "Successfully dropped table " + TableName(typeof(T)));
+				}
+			}
+			catch(Exception e) {
+				Log.WriteLine (Log.Layer.DL, typeof(PhoenixDatabase), ErrorMessage ("DropTable", typeof(T), e));
+			}
+		}
     }
 }
 

@@ -67,7 +67,7 @@ namespace Phoenix.SAL
 								Name = xmlReader.GetAttribute ("name"),
 								Id = Int32.Parse (xmlReader.GetAttribute ("id")),
 								TypeFlag = Int32.Parse (xmlReader.GetAttribute ("typeflag")),
-								PositionFlag = Int32.Parse (xmlReader.GetAttribute ("posflag")),
+								Position = Int32.Parse (xmlReader.GetAttribute ("posflag")),
 								TUCost = Int32.Parse (xmlReader.GetAttribute ("tus"))
 							};
 							list.Add (item);
@@ -78,7 +78,7 @@ namespace Phoenix.SAL
 							OrderParameterType param = new OrderParameterType () {
 								Name = xmlReader.GetAttribute ("name"),
 								InfoType = Int32.Parse (xmlReader.GetAttribute ("infotype")),
-								DataType = Int32.Parse (xmlReader.GetAttribute ("datatype"))
+								DataType = (OrderType.DataTypes) Int32.Parse (xmlReader.GetAttribute ("datatype"))
 							};
 							item.Parameters.Add (param);
 						}

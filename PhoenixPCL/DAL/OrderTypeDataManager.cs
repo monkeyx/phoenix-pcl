@@ -64,7 +64,7 @@ namespace Phoenix.DAL
 		protected override void LoadRelationships (OrderType item)
 		{
 			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Load Relationships (" + item.Id + ")");
-			item.Parameters = DL.PhoenixDatabase.GetOrderParameters (item.Id);
+			item.Parameters = DL.PhoenixDatabase.GetOrderTypeParameters (item.Id);
 		}
 
 		/// <summary>
@@ -73,8 +73,11 @@ namespace Phoenix.DAL
 		/// <param name="item">Item.</param>
 		protected override void DeleteRelationships (OrderType item)
 		{
+			if (item == null || item.Id == 0)
+				return;
+			
 			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete Relationships (" + item.Id + ")");
-			DL.PhoenixDatabase.DeleteOrderParameters (item.Id);
+			DL.PhoenixDatabase.DeleteOrderTypeParameters (item.Id);
 		}
 
 		/// <summary>

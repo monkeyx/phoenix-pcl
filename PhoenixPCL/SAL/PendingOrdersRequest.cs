@@ -1,5 +1,5 @@
 ﻿//
-// TurnRequest.cs
+// PendingOrdersRequest.cs
 //
 // Author:
 //       Seyed Razavi <monkeyx@gmail.com>
@@ -35,44 +35,60 @@ using Phoenix.Util;
 namespace Phoenix.SAL
 {
 	/// <summary>
-	/// Turn request.
+	/// Pending orders request.
 	/// </summary>
-	public class TurnRequest : NexusRequest<PositionTurn>
+	public class PendingOrdersRequest : NexusRequest<Order>
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Phoenix.SAL.TurnRequest"/> class.
+		/// Initializes a new instance of the <see cref="Phoenix.SAL.PendingOrdersRequest"/> class.
 		/// </summary>
 		/// <param name="UID">User interface.</param>
 		/// <param name="Code">Code.</param>
 		/// <param name="positionId">Position identifier.</param>
-		public TurnRequest (int UID, string Code, int positionId) : base(UID,Code,"turn_data", positionId)
+		public PendingOrdersRequest (int UID, string Code, int positionId) : base(UID,Code,"pending_orders", positionId)
 		{
 		}
 
 		/// <summary>
-		/// Reads the stream.
+		/// Successfully fetched data and should be processed by subclass
 		/// </summary>
-		/// <param name="stream">Stream.</param>
-		protected override void ReadStream (Stream stream)
+		/// <param name="xmlReader">Xml reader.</param>
+		/// <param name="callback">Callback.</param>
+		protected override void Success(XmlReader xmlReader, Action<IEnumerable<Order>, Exception> callback)
 		{
-			if (stream == null) {
-				resultCallback (new List<PositionTurn> (){},new Exception("No turn received"));
-				return;
-			}
-			string fileName = PositionId.ToString () + ".html";
-			StreamReader reader = new StreamReader (stream);
-			string content = reader.ReadToEnd ().Replace("url(","url(" + Phoenix.Application.BASE_URL);
+			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
 
-			List<PositionTurn> list = new List<PositionTurn> () {
-				new PositionTurn{
-					Id = PositionId,
-					Content = content
+			List<Order> list = new List<Order> ();
+
+			Order order = null;
+			while (xmlReader.Read ()) {
+				if (xmlReader.IsStartElement ()) {
+					try {
+						switch(xmlReader.Name){
+						case "order":
+							order = new Order{
+								PositionId = PositionId,
+								OrderTypeId = Int32.Parse(xmlReader.GetAttribute("id")),
+							};
+							list.Add(order);
+							break;
+						case "param":
+							string value = null;
+							if(xmlReader.Read())
+								value = xmlReader.Value.Trim ();
+							OrderParameter param = new OrderParameter{
+								Value = value
+							};
+							order.Parameters.Add(param);
+							break;
+						}
+					} catch (Exception e) {
+						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);
+					}
 				}
-			};
+			}
 
-			Application.DocumentFolder.WriteFile (fileName, content);
-
-			resultCallback (list,null);
+			callback (list, null);
 		}
 	}
 }

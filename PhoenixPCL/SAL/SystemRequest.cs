@@ -66,7 +66,8 @@ namespace Phoenix.SAL
 						if (xmlReader.Name == "system") {
 							item = new StarSystem () {
 								Id = Int32.Parse (xmlReader.GetAttribute ("id")),
-								Name = xmlReader.GetAttribute ("name")    
+								Name = xmlReader.GetAttribute ("name"),
+								SystemPeriphery = (StarSystem.Periphery) Int32.Parse(xmlReader.GetAttribute("periphery_id"))
 							};
 							list.Add (item);
 						} else if (xmlReader.Name == "cbody") {

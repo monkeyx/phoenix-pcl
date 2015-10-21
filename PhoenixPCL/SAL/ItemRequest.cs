@@ -77,6 +77,9 @@ namespace Phoenix.SAL
 							break;
 						case "Name":
 							item.Name = xmlReader.GetAttribute ("value");
+							if(item.Name == "(null)"){
+								list.Remove(item);
+							}
 							break;
 						case "Type":
 							item.ItemType = xmlReader.GetAttribute ("value");
@@ -112,7 +115,10 @@ namespace Phoenix.SAL
 							break;
 						case "Item":
 							if(rm != null) {
-								rm.RawMaterialId = Int32.Parse (xmlReader.GetAttribute ("value"));
+								string value = xmlReader.GetAttribute ("value");
+								if(value != "xxx"){
+									rm.RawMaterialId = Int32.Parse (value);
+								}
 							}
 							break;
 						case "Quantity":

@@ -1,5 +1,5 @@
 ﻿//
-// TurnRequest.cs
+// InfoDataManager.cs
 //
 // Author:
 //       Seyed Razavi <monkeyx@gmail.com>
@@ -24,55 +24,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Xml;
-using System.Linq;
+using System.Threading.Tasks;
 
 using Phoenix.BL.Entities;
 using Phoenix.Util;
 
-namespace Phoenix.SAL
+namespace Phoenix.DAL
 {
 	/// <summary>
-	/// Turn request.
+	/// Info data manager.
 	/// </summary>
-	public class TurnRequest : NexusRequest<PositionTurn>
+	public class InfoDataManager : DataManager<InfoData>
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Phoenix.SAL.TurnRequest"/> class.
+		/// Gets the info data by group identifier and nexus identifier.
 		/// </summary>
-		/// <param name="UID">User interface.</param>
-		/// <param name="Code">Code.</param>
-		/// <param name="positionId">Position identifier.</param>
-		public TurnRequest (int UID, string Code, int positionId) : base(UID,Code,"turn_data", positionId)
+		/// <returns>The info data by group identifier and nexus identifier.</returns>
+		/// <param name="groupId">Group identifier.</param>
+		/// <param name="nexusId">Nexus identifier.</param>
+		public Task<InfoData> GetInfoDataByGroupIdAndNexusId(int groupId, int nexusId)
 		{
+			return Task<InfoData>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetInfoDataByGroupIdAndNexusId(groupId,nexusId);
+			});
 		}
 
 		/// <summary>
-		/// Reads the stream.
+		/// Gets the info data by group identifier.
 		/// </summary>
-		/// <param name="stream">Stream.</param>
-		protected override void ReadStream (Stream stream)
+		/// <returns>The info data by group identifier.</returns>
+		/// <param name="groupId">Group identifier.</param>
+		public Task<List<InfoData>> GetInfoDataByGroupId(int groupId)
 		{
-			if (stream == null) {
-				resultCallback (new List<PositionTurn> (){},new Exception("No turn received"));
-				return;
-			}
-			string fileName = PositionId.ToString () + ".html";
-			StreamReader reader = new StreamReader (stream);
-			string content = reader.ReadToEnd ().Replace("url(","url(" + Phoenix.Application.BASE_URL);
+			return Task<List<InfoData>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetInfoDataByGroupId(groupId);
+			});
+		}
 
-			List<PositionTurn> list = new List<PositionTurn> () {
-				new PositionTurn{
-					Id = PositionId,
-					Content = content
-				}
-			};
-
-			Application.DocumentFolder.WriteFile (fileName, content);
-
-			resultCallback (list,null);
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Phoenix.DAL.InfoDataManager"/> class.
+		/// </summary>
+		public InfoDataManager ()
+		{
 		}
 	}
 }

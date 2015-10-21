@@ -66,15 +66,19 @@ namespace Phoenix.SAL
 						if (xmlReader.Name == "type") {
 							groupName = xmlReader.GetAttribute ("name");
 							groupId = Int32.Parse (xmlReader.GetAttribute ("num"));
+							Log.WriteLine(Log.Layer.SAL,GetType(),"Group " + groupName + " (" + groupId + ")");
 						} else if (xmlReader.Name == "data") {
-							InfoData item = new InfoData () {
-								Name = xmlReader.GetAttribute ("name"),
-								NexusID = Int32.Parse (xmlReader.GetAttribute ("num")),
-								DataType = Int32.Parse (xmlReader.GetAttribute ("type")),
-								Group = groupName,
-								GroupID = groupId
-							};
-							list.Add (item);
+							string name = xmlReader.GetAttribute ("name");
+							if(name != "_locked"){
+								InfoData item = new InfoData () {
+									Name = name,
+									NexusId = Int32.Parse (xmlReader.GetAttribute ("num")),
+									DataType = Int32.Parse (xmlReader.GetAttribute ("type")),
+									Group = groupName,
+									GroupId = groupId
+								};
+								list.Add (item);
+							}
 						}
 					} catch (Exception e) {
 						Log.WriteLine (Log.Layer.SAL, this.GetType (), e);

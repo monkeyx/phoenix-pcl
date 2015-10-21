@@ -25,13 +25,64 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using SQLite;
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
     [Table("OrderType")]
     public class OrderType : EntityBase
     {
+		/// <summary>
+		/// Data types.
+		/// </summary>
+		public enum DataTypes
+		{
+			None = 0,
+			Integer = 1,
+			String = 2,
+			Boolean = 3
+		}
+
+		/// <summary>
+		/// Order flags.
+		/// </summary>
+		public enum OrderFlag {
+			Any = 0x0,    
+			ThrustMove = 0x1,           
+			Movement = 0x2,           
+			Transaction = 0x4,  
+			StandingOrder = 0x8,           
+			Basic = 0x10,           
+			Scan = 0x20,           
+			Other = 0x40,           
+			Issue = 0x80,           
+			Create = 0x100,        
+			SquadronOrder = 0x200,    
+			SquadronStandingOrder = 0x400,  
+			TurnType = 0x800,           
+			Boarding = 0x1000,        
+			PlanetaryInteraction = 0x2000,           
+			Macro = 0x4000,           
+			Copy = 0x8000,           
+			Full = 0xfffff  
+		}
+
+		/// <summary>
+		/// Special orders.
+		/// </summary>
+		public enum SpecialOrders 
+		{
+			RequestUpdate = 1,
+			ClearPendingOrders = 1050
+		}
+
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey]
+		public override int Id { get; set; }
+
 		/// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -51,7 +102,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <value>The list detail.</value>
 		[Ignore]
-		public override string ListDetail { get { return GetPositionType(); } }
+		public override string ListDetail { get { return PositionType; } }
 
         /// <summary>
         /// Gets or sets the type flag.
@@ -59,12 +110,53 @@ namespace Phoenix.BL.Entities
         /// <value>The type flag.</value>
         public int TypeFlag { get; set; }
 
+		/// <summary>
+		/// Gets the type description.
+		/// </summary>
+		/// <value>The type description.</value>
+		public string TypeDescription
+		{
+			get {
+				List<string> types = new List<string> ();
+				foreach(var mask in Enum.GetValues(typeof(OrderFlag))){
+					OrderFlag flag = (OrderFlag)mask;
+					if ((TypeFlag & (int)flag) != 0) {
+						types.Add (
+							System.Text.RegularExpressions.Regex.Replace (flag.ToString (), "(\\B[A-Z])", " $1")
+						);
+					}
+				}
+				return string.Join (", ", types);
+			}
+
+		}
+
         /// <summary>
         /// Gets or sets the position flag.
         /// </summary>
         /// <value>The position flag.</value>
         [Indexed]
-        public int PositionFlag { get; set; }
+        public int Position { get; set; }
+
+		/// <summary>
+		/// Gets the type of the position.
+		/// </summary>
+		/// <value>The type of the position.</value>
+		public string PositionType
+		{
+			get {
+				List<string> types = new List<string> ();
+				foreach(var mask in Enum.GetValues(typeof(Position.PositionFlag))){
+					Position.PositionFlag flag = (Position.PositionFlag)mask;
+					if ((Position & (int)flag) != 0) {
+						types.Add (
+							System.Text.RegularExpressions.Regex.Replace (flag.ToString (), "(\\B[A-Z])", " $1")
+						);
+					}
+				}
+				return string.Join (", ", types);
+			}
+		}
 
         /// <summary>
         /// Gets or sets the TU cost.
@@ -97,16 +189,13 @@ namespace Phoenix.BL.Entities
 		}
 
 		/// <summary>
-		/// Gets the type of the position.
+		/// Determines whether this instance is for position of the specified flag.
 		/// </summary>
-		/// <returns>The position type.</returns>
-		public string GetPositionType()
+		/// <returns><c>true</c> if this instance is for the position of the specified flag; otherwise, <c>false</c>.</returns>
+		/// <param name="flag">Flag.</param>
+		public bool IsForPosition(Position.PositionFlag flag)
 		{
-			if (Enum.IsDefined (typeof(Position.PositionType), PositionFlag)) {
-				return ((Position.PositionType)PositionFlag).ToString ();
-			} else {
-				return "Any";
-			}
+			return ((Position & (int)flag) != 0);
 		}
 
         /// <summary>
@@ -137,7 +226,7 @@ namespace Phoenix.BL.Entities
 		[PrimaryKey, AutoIncrement]
 		public override int Id { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -153,7 +242,7 @@ namespace Phoenix.BL.Entities
         /// Gets or sets the type of the data.
         /// </summary>
         /// <value>The type of the data.</value>
-        public int DataType { get; set; }
+		public OrderType.DataTypes DataType { get; set; }
 
         /// <summary>
         /// Gets or sets the order identifier.

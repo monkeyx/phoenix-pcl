@@ -24,7 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using SQLite;
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
@@ -36,21 +36,21 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The identifier.</value>
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+		public override int Id { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the group.
         /// </summary>
         /// <value>The group.</value>
         [Indexed]
         public override string Group { get; set; }
 
-        /// <summary>
-        /// Gets or sets the group I.
-        /// </summary>
-        /// <value>The group I.</value>
-        [Indexed]
-        public int GroupID { get; set; }
+		/// <summary>
+		/// Gets or sets the group identifier.
+		/// </summary>
+		/// <value>The group identifier.</value>
+		[Indexed]
+        public int GroupId { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -59,18 +59,32 @@ namespace Phoenix.BL.Entities
         [Indexed]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the nexus I.
-        /// </summary>
-        /// <value>The nexus I.</value>
+		/// <summary>
+		/// Gets or sets the nexus identifier.
+		/// </summary>
+		/// <value>The nexus identifier.</value>
         [Indexed]
-        public int NexusID { get; set; }
+        public int NexusId { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the data.
         /// </summary>
         /// <value>The type of the data.</value>
         public int DataType { get; set; }
+
+		/// <summary>
+		/// Gets the list text.
+		/// </summary>
+		/// <value>The list text.</value>
+		[Ignore]
+		public override string ListText { get { return ToString(); } }
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		[Ignore]
+		public override string ListDetail { get { return Group + " (" + GroupId + ")"; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.InfoData"/> class.
@@ -85,7 +99,7 @@ namespace Phoenix.BL.Entities
 		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.InfoData"/>.</returns>
 		public override string ToString ()
 		{
-			return string.Format ("{0} ({1})", Name, NexusID);
+			return string.Format ("{0} ({1})", Name, NexusId);
 		}
     }
 }

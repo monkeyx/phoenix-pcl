@@ -49,18 +49,38 @@ namespace Phoenix.BL.Managers
         /// <param name="id">Identifier.</param>
         /// <param name="code">Code.</param>
         /// <param name="callback">Callback.</param>
+		/// <remarks>Will remove any previously saved user details before saving this one</remarks>
         public async void Save(int id, string code, Action<User> callback)
         {
-            User user = new User () {
+			User user = DL.PhoenixDatabase.GetFirstItem<User> ();
+			if (user != null && user.Id == id && user.Code == code) {
+				callback (user);
+				return;
+			}
+            user = new User () {
                 Id = id,
                 Code = code
             };
 			Log.WriteLine (Log.Layer.BL, this.GetType (), "Removing Users");
 			await GetDataManager ().Clear ();
 			Log.WriteLine (Log.Layer.BL, this.GetType (), "Saving " + user);
-            user = await GetDataManager ().SaveItem (user);
-            callback (user);
+			user = await GetDataManager ().SaveItem (user);
+			callback (user);
         }
+
+		/// <summary>
+		/// Save the specified user and callback.
+		/// </summary>
+		/// <param name="user">User.</param>
+		/// <param name="callback">Callback.</param>
+		public async void Save(User user, Action<User> callback)
+		{
+			if (user == null)
+				return;
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Saving " + user);
+			user = await GetDataManager ().SaveItem (user);
+			callback (user);
+		}
 
 		/// <summary>
 		/// Count entities managed by this instance.

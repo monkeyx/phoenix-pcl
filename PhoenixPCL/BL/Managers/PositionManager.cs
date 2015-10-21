@@ -58,6 +58,16 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
+		/// Gets the positions with orders.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		public async void GetPositionsWithOrders(Action<IEnumerable<Position>> callback)
+		{
+			List<Position> list = await ((PositionDataManager)GetDataManager ()).GetPositionsWithOrders ();
+			callback (list);
+		}
+
+		/// <summary>
 		/// Gets the turn report.
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>
@@ -87,14 +97,19 @@ namespace Phoenix.BL.Managers
 		{
 			DataManager<PositionTurn> turnDM = DataManagerFactory.GetManager<PositionTurn> ();
 			TurnRequest request = new TurnRequest (User.Id, User.Code, positionId);
-			request.Fetch ((results, ex) => {
-				IEnumerator<PositionTurn> i = results.GetEnumerator ();
-				if (i.MoveNext ()) {
-					PositionTurn pt = i.Current;
-					turnDM.SaveItem (pt);
-					callback (pt.Content);
-				} else {
-					callback("Not Found");
+			request.Get ((results, ex) => {
+				if(results == null){
+					callback("Not found");
+				}
+				else {
+					IEnumerator<PositionTurn> i = results.GetEnumerator ();
+					if (i.MoveNext ()) {
+						PositionTurn pt = i.Current;
+						turnDM.SaveItem (pt);
+						callback (pt.Content);
+					} else {
+						callback("Not Found");
+					}
 				}
 			});
 		}

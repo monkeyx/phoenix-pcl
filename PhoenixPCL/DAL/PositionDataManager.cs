@@ -53,6 +53,17 @@ namespace Phoenix.DAL
 		}
 
 		/// <summary>
+		/// Gets the positions with orders.
+		/// </summary>
+		/// <returns>The positions with orders.</returns>
+		public Task<List<Position>> GetPositionsWithOrders()
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetPositionsWithOrders();
+			});
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Phoenix.DAL.PositionDataManager"/> class.
 		/// </summary>
 		public PositionDataManager ()
@@ -85,6 +96,10 @@ namespace Phoenix.DAL
 		/// <param name="item">Item.</param>
 		protected override void DeleteRelationships (Position item)
 		{
+			if (item == null || item.Id == 0)
+				return;
+			
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete Relationships (" + item.Id + ")");
 			DL.PhoenixDatabase.DeleteItemById<PositionTurn> (item.Id);
 		}
 

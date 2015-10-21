@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using SQLite;
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
@@ -47,11 +47,61 @@ namespace Phoenix.BL.Entities
 		}
 
 		/// <summary>
+		/// Periphery.
+		/// </summary>
+		public enum Periphery
+		{
+			None = 0,
+			InnerCapellan = 1,
+			Darkfold = 2,
+			Cluster = 3,
+			DewiekHome = 4,
+			DewiekPocket = 5,
+			DetinusRepublic = 6,
+			Twilight = 7,
+			InnerEmpire = 8,
+			Caliphate = 9,
+			FlagritzHome = 10,
+			FeliniEmpire = 11,
+			OuterCapellan = 12,
+			Halo = 13,
+			CorewardArm = 14,
+			Transpiral = 15,
+			OrionSpur = 16,
+			PerfidionReach = 17
+		}
+
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey]
+		public override int Id { get; set; }
+
+		/// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
         [Indexed]
         public string Name { get; set; }
+
+		/// <summary>
+		/// Gets or sets the system periphery.
+		/// </summary>
+		/// <value>The system periphery.</value>
+		[Indexed]
+		public Periphery SystemPeriphery { get; set; }
+
+		/// <summary>
+		/// Gets the name of the periphery.
+		/// </summary>
+		/// <value>The name of the periphery.</value>
+		[Ignore]
+		public string PeripheryName { 
+			get {
+				return System.Text.RegularExpressions.Regex.Replace (SystemPeriphery.ToString(), "(\\B[A-Z])", " $1");
+			}
+		}
 
 		/// <summary>
 		/// Gets the name and identifier.
@@ -76,7 +126,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <value>The list detail.</value>
 		[Ignore]
-		public override string ListDetail { get { return ""; } }
+		public override string ListDetail { get { return PeripheryName; } }
 
         /// <summary>
         /// Gets or sets the celestial bodies.
@@ -143,14 +193,14 @@ namespace Phoenix.BL.Entities
 			Wormhole = 7
 		}
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>The identifier.</value>
-        [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey, AutoIncrement]
+		public override int Id { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the star system identifier.
         /// </summary>
         /// <value>The star system identifier.</value>
@@ -249,12 +299,12 @@ namespace Phoenix.BL.Entities
     [Table("JumpLink")]
     public class JumpLink : EntityBase
     {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>The identifier.</value>
-        [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey, AutoIncrement]
+		public override int Id { get; set; }
 
 		/// <summary>
 		/// Gets the list text.

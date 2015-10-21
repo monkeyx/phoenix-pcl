@@ -24,7 +24,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using SQLite;
+using System.Collections.Generic;
+
+using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
 {
@@ -32,21 +34,25 @@ namespace Phoenix.BL.Entities
     public class Position : EntityBase
     {
 		/// <summary>
-		/// Position types.
+		/// Position flags.
 		/// </summary>
-		public enum PositionType
-		{
-			Agent = 7,
-			Debris = 4,
-			GP = 1,
-			None = 0,
-			Platform = 6,
-			Political = 5,
-			PD = 8,
-			Ship = 2,
-			Starbase = 3,
-			Misc = 32
+		public enum PositionFlag {
+			None = 0x00,          
+			GroundParty = 0x01,           
+			Ship = 0x02,           
+			Starbase = 0x04,           
+			Political = 0x08,           
+			Platform = 0x10,           
+			Agent = 0x20,           
+			Debris = 0x40   
 		}
+
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey]
+		public override int Id { get; set; }
 
 		/// <summary>
         /// Gets or sets the name.
@@ -63,6 +69,33 @@ namespace Phoenix.BL.Entities
 		public string NameAndId { 
 			get { 
 				return Name + " (" + Id + ")";
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the type of the position.
+		/// </summary>
+		/// <value>The type of the position.</value>
+		public int PositionType { get; set; }
+
+
+		/// <summary>
+		/// Gets the type of the position.
+		/// </summary>
+		/// <value>The type of the position.</value>
+		public string PositionTypeString
+		{
+			get {
+				List<string> positionTypes = new List<string>();
+				foreach(var mask in Enum.GetValues(typeof(Position.PositionFlag))){
+					Position.PositionFlag flag = (Position.PositionFlag)mask;
+					if ((PositionType & (int)flag) != 0) {
+						positionTypes.Add(
+							System.Text.RegularExpressions.Regex.Replace (flag.ToString (), "(\\B[A-Z])", " $1")
+						);
+					}
+				}
+				return string.Join(", ", positionTypes);
 			}
 		}
 
@@ -124,7 +157,15 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The position class.</value>
         [Indexed]
-        public string PositionClass { get; set; }
+        public string PositionClass { 
+			get {
+				return positionClass;
+			}
+			set {
+				positionClass = value;
+				TryToDeterminePositionFlag ();
+			}
+		}
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Phoenix.Position"/> is orders.
@@ -236,6 +277,8 @@ namespace Phoenix.BL.Entities
 		[Indexed]
 		public bool Orbiting { get; set; }
 
+
+
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.Position"/>.
 		/// </summary>
@@ -276,22 +319,28 @@ namespace Phoenix.BL.Entities
 				}
 			} else if (value.StartsWith ("Landed")) {
 				Landed = true;
-				value = value.Replace ("Landed on ", "").Replace (" at ", " ").Replace (" in ", " ");
+				value = value.Replace ("Landed on ", "");
 				string[] parts = value.Split (new string[]{ " - " }, StringSplitOptions.RemoveEmptyEntries);
 				if (parts.Length > 0) {
-					ParsePlanetString (parts [0]);
+					string[] subparts = value.Split(new string[]{" at "}, StringSplitOptions.RemoveEmptyEntries);
+					if (subparts.Length > 0) {
+						ParsePlanetString (subparts [0]);
+					}
+					if (subparts.Length > 1) {
+						subparts = value.Split(new string[]{" in "}, StringSplitOptions.RemoveEmptyEntries);
+						if (subparts.Length > 0) {
+							ParsePlanetCoordinateString (subparts [0]);
+						}
+						if (subparts.Length > 1) {
+							LandedTerrain = subparts [1];
+						}
+					}
 				}
 				if (parts.Length > 1) {
-					ParsePlanetCoordinateString (parts [1]);
+					ParseSystemCoordinateString (parts [1]);
 				}
 				if (parts.Length > 2) {
-					LandedTerrain = parts [2];
-				}
-				if (parts.Length > 3) {
-					ParseSystemCoordinateString (parts [3]);
-				}
-				if (parts.Length > 4) {
-					ParseStarSystemString (parts [4]);
+					ParseStarSystemString (parts [2]);
 				}
 			} else if (value.Contains (" Orbit - ")) {
 				Orbiting = true;
@@ -425,6 +474,27 @@ namespace Phoenix.BL.Entities
 				return 0;
 			}
 		}
+
+		private void TryToDeterminePositionFlag()
+		{
+			PositionType = 0;
+			if (string.IsNullOrWhiteSpace (positionClass)) {
+				// urgh could be a lot of things
+				PositionType |= (int)PositionFlag.Agent;
+				PositionType |= (int)PositionFlag.Debris;
+				PositionType |= (int)PositionFlag.GroundParty;
+				PositionType |= (int)PositionFlag.Platform;
+				PositionType |= (int)PositionFlag.Political;
+			} else if (positionClass == "Starbase") {
+				PositionType |= (int)PositionFlag.Starbase;
+			} else if (positionClass == "Outpost") {
+				PositionType |= (int)PositionFlag.Starbase;
+			} else {
+				PositionType |= (int)PositionFlag.Ship;
+			}
+		}
+
+		private string positionClass;
     }
 
 	/// <summary>
@@ -432,6 +502,12 @@ namespace Phoenix.BL.Entities
 	/// </summary>
 	public class PositionTurn : EntityBase 
 	{
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey]
+		public override int Id { get; set; }
 
 		/// <summary>
 		/// Gets or sets the turn path.

@@ -75,13 +75,14 @@ namespace Phoenix.DAL
         {
             // register managers
             RegisterManager<GameStatus>(new DataManager<GameStatus>());
-            RegisterManager<InfoData>(new DataManager<InfoData>());
+			RegisterManager<InfoData>(new InfoDataManager());
             RegisterManager<Item>(new ItemDataManager());
 			RegisterManager<OrderType>(new OrderTypeDataManager());
 			RegisterManager<Position>(new PositionDataManager());
             RegisterManager<StarSystem>(new StarSystemDataManager());
             RegisterManager<User>(new DataManager<User>());
 			RegisterManager<PositionTurn> (new DataManager<PositionTurn> ());
+			RegisterManager<Order> (new OrderDataManager ());
         }
 
         /// <summary>

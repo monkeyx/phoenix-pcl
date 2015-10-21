@@ -24,8 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
 
 using Phoenix.BL.Entities;
+using Phoenix.BL.Managers;
+using Phoenix.DAL;
 
 namespace Phoenix.BL.Managers
 {
@@ -34,6 +37,29 @@ namespace Phoenix.BL.Managers
     /// </summary>
     public class InfoManager : NexusManager<InfoData>
     {
+		/// <summary>
+		/// Gets the info data by group identifier and nexus identifier.
+		/// </summary>
+		/// <param name="groupId">Group identifier.</param>
+		/// <param name="nexusId">Nexus identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void GetInfoDataByGroupIdAndNexusId(int groupId, int nexusId, Action<InfoData> callback)
+		{
+			InfoData data = await GetInfoDataManager ().GetInfoDataByGroupIdAndNexusId (groupId,nexusId);
+			callback (data);
+		}
+
+		/// <summary>
+		/// Gets the info data by group identifier.
+		/// </summary>
+		/// <param name="groupId">Group identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void GetInfoDataByGroupId(int groupId, Action<List<InfoData>> callback)
+		{
+			List<InfoData> list = await GetInfoDataManager ().GetInfoDataByGroupId (groupId);
+			callback (list);
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.BL.Managers.InfoManager"/> class.
         /// </summary>
@@ -41,6 +67,11 @@ namespace Phoenix.BL.Managers
         public InfoManager (User user) : base(user)
         {
         }
+
+		private InfoDataManager GetInfoDataManager()
+		{
+			return (InfoDataManager)GetDataManager ();
+		}
     }
 }
 
