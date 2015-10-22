@@ -93,7 +93,7 @@ namespace Phoenix.DAL
 		/// <param name="item">Item.</param>
 		protected override void PersistRelationships (Order item)
 		{
-			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Order Parameters (" + item.Id + ": " + item.Parameters.Count);
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Order Parameters (" + item.Id + "): " + item.Parameters.Count);
 			if (item.OrderType == null) {
 				item.OrderType = DL.PhoenixDatabase.GetItem<OrderType> (item.OrderTypeId);
 				if (item.OrderType != null) {
