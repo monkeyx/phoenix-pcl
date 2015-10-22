@@ -152,7 +152,7 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
-		/// Clears the orders.
+		/// Clears pending orders (issuing a "Clear Pending Orders" order)
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>
 		/// <param name="callback">Callback.</param>
@@ -164,6 +164,17 @@ namespace Phoenix.BL.Managers
 			List<Order> list = new List<Order>();
 			list.Add(order);
 			callback(list);
+		}
+
+		/// <summary>
+		/// Deletes position's orders locally.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void DeleteLocalOrders(int positionId, Action<bool> callback)
+		{
+			await GetOrderDataManager ().ClearOrdersForPosition (positionId);
+			callback(true);
 		}
 
 		/// <summary>
