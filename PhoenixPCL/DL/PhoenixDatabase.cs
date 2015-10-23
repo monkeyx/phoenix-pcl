@@ -419,6 +419,17 @@ namespace Phoenix.DL
 			return Query<Notification> ("select n.* from Notification n where n.PositionId = ? order by DaysAgo asc", positionId);
 		}
 
+		/// <summary>
+		/// Gets the notifications for position.
+		/// </summary>
+		/// <returns>The notifications for position.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="priority">Priority.</param>
+		public static List<Notification> GetNotificationsForPosition(int positionId, Notification.NotificationPriority priority)
+		{
+			return Query<Notification> ("select n.* from Notification n where n.PositionId = ? and n.Priority = ? order by DaysAgo asc", positionId, priority);
+		}
+
         /// <summary>
         /// Deletes the item properties.
         /// </summary>

@@ -98,7 +98,8 @@ namespace Phoenix.BL.Entities
 		{
 			Green = 0,
 			Amber = 1,
-			Red = 2
+			Red = 2,
+			All = 3
 		}
 
 		/// <summary>

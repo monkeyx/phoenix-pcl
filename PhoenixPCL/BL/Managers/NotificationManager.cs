@@ -43,7 +43,8 @@ namespace Phoenix.BL.Managers
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>
 		/// <param name="callback">Callback.</param>
-		public async void AllForPosition(int positionId, Action<List<Notification>> callback)
+		/// <param name="priority">Priority</param>
+		public async void AllForPosition(int positionId, Action<List<Notification>> callback, Notification.NotificationPriority priority = Notification.NotificationPriority.All)
 		{
 			Log.WriteLine (Log.Layer.BL, this.GetType (), "All Notifications For Position " + positionId);
 			List<Notification> results = await GetNotificationDataManager ().GetNotificationsForPosition (positionId);

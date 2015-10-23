@@ -42,12 +42,19 @@ namespace Phoenix.DAL
 		/// </summary>
 		/// <returns>The notifications for position.</returns>
 		/// <param name="positionId">Position identifier.</param>
+		/// <param name="priority">Priority</param>
 		/// <param name="progressCallback">Progress callback.</param>
 		/// <param name="sort">If set to <c>true</c> sort.</param>
-		public Task<List<Notification>> GetNotificationsForPosition(int positionId, IProgress<int> progressCallback = null, bool sort = false)
+		public Task<List<Notification>> GetNotificationsForPosition(int positionId, Notification.NotificationPriority priority = Notification.NotificationPriority.All, IProgress<int> progressCallback = null, bool sort = false)
 		{
 			return Task<List<Notification>>.Factory.StartNew (() => {
-				List<Notification> models = DL.PhoenixDatabase.GetNotificationsForPosition(positionId);
+				List<Notification> models = null;
+				if(priority == Notification.NotificationPriority.All){
+					models = DL.PhoenixDatabase.GetNotificationsForPosition(positionId);
+				}
+				else {
+					models = DL.PhoenixDatabase.GetNotificationsForPosition(positionId,priority);
+				}
 				Log.WriteLine(Log.Layer.DAL,this.GetType(), "Get Notifications for Position " + positionId + ": " + models.Count);
 				return models;
 			});
