@@ -88,7 +88,7 @@ namespace Phoenix.BL.Managers
 		public async void All(Action<List<T>> callback)
 		{
 			Log.WriteLine (Log.Layer.BL, this.GetType (), "All Entities");
-			List<T> results = await GetDataManager ().GetItems ();
+			List<T> results = await GetDataManager ().GetItems (null,false);
 			callback (results);
 		}
 

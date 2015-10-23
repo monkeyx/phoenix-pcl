@@ -94,6 +94,8 @@ namespace Phoenix.SAL
 					return (INexusRequest<T>)new SystemRequest (user.Id, user.Code);
 				case "Order":
 					return (INexusRequest<T>)new PendingOrdersRequest (user.Id, user.Code, positionId);
+				case "Notification":
+					return (INexusRequest<T>)new NotesRequest (user.Id, user.Code);
 				default:
 					throw new Exception ("Unsupported type"); 
 				}

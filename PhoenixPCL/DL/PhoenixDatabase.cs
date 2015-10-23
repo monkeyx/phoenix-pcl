@@ -66,7 +66,7 @@ namespace Phoenix.DL
 			CreateTable<CelestialBody> ();
 			CreateTable<JumpLink> ();
 			CreateTable<User> ();
-
+			CreateTable<Notification> ();
         }
 
         /// <summary>
@@ -89,6 +89,7 @@ namespace Phoenix.DL
             DropTable<CelestialBody> ();
             DropTable<JumpLink> ();
 			DropTable<User> ();
+			DropTable<Notification> ();
             CreateTables();
         }
 
@@ -406,6 +407,16 @@ namespace Phoenix.DL
 		public static List<OrderParameter> GetOrderParameters(int orderId)
 		{
 			return Query<OrderParameter> ("select op.* from OrderParameter op where op.OrderId = ? order by Id asc", orderId);
+		}
+
+		/// <summary>
+		/// Gets the notifications for position.
+		/// </summary>
+		/// <returns>The notifications for position.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public static List<Notification> GetNotificationsForPosition(int positionId)
+		{
+			return Query<Notification> ("select n.* from Notification n where n.PositionId = ? order by DaysAgo asc", positionId);
 		}
 
         /// <summary>

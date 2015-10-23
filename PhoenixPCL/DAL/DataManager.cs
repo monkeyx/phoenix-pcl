@@ -83,6 +83,7 @@ namespace Phoenix.DAL
             RegisterManager<User>(new DataManager<User>());
 			RegisterManager<PositionTurn> (new DataManager<PositionTurn> ());
 			RegisterManager<Order> (new OrderDataManager ());
+			RegisterManager<Notification> (new NotificationDataManager ());
         }
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace Phoenix.DAL
         /// <returns>The items.</returns>
         /// <param name="progressCallback">Progress callback.</param>
         /// <param name="sort">If set to <c>true</c> sort.</param>
-        public Task<List<T>> GetItems(IProgress<int> progressCallback = null, bool sort = false)
+		public Task<List<T>> GetItems(IProgress<int> progressCallback = null, bool sort = false)
         {
             return Task<List<T>>.Factory.StartNew (() => {
                 List<T> models = DL.PhoenixDatabase.GetItems<T>(OrderBy());

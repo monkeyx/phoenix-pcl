@@ -80,7 +80,7 @@ namespace Phoenix.BL.Managers
 		/// <param name="callback">Callback.</param>
 		public async void AllForPosition(int positionId, Action<List<Order>> callback)
 		{
-			Log.WriteLine (Log.Layer.BL, this.GetType (), "All Entities");
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "All Orders For Position " + positionId);
 			List<Order> results = await GetOrderDataManager ().GetOrdersForPosition (positionId);
 			callback (results);
 		}
