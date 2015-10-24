@@ -111,7 +111,7 @@ namespace Phoenix.BL.Entities
 			GroundParty = 1,
 			Ship = 2,
 			Starbase = 3,
-			Deris = 4,
+			Debris = 4,
 			Political = 5,
 			Platform = 6,
 			Agent = 7
@@ -137,6 +137,28 @@ namespace Phoenix.BL.Entities
 			Recreation = 2,
 			Trained = 3,
 			Refit = 4
+		}
+
+		/// <summary>
+		/// Complex change type.
+		/// </summary>
+		public enum ComplexChangeType
+		{
+			Built = 0,
+			Scrapped = 1,
+			Activated = 2,
+			Deactivated = 3
+		}
+
+		/// <summary>
+		/// Registered base activity type.
+		/// </summary>
+		public enum RegisteredBaseActivityType
+		{
+			Attacked = 0,
+			Bought = 1,
+			Registered = 2,
+			Deregistered = 3
 		}
 
 		/// <summary>
@@ -223,16 +245,16 @@ namespace Phoenix.BL.Entities
 		public Position Position { get; set; }
 
 		/// <summary>
-		/// Gets or sets the system identifier.
+		/// Gets or sets the star system identifier.
 		/// </summary>
 		/// <value>The system identifier.</value>
-		public int SystemId { get; set; }
+		public int StarSystemId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the name of the system.
+		/// Gets or sets the name of the star system.
 		/// </summary>
 		/// <value>The name of the system.</value>
-		public string SystemName { get; set; }
+		public string StarSystemName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the system.
@@ -558,6 +580,18 @@ namespace Phoenix.BL.Entities
 		public Item ComplexItem { get; set; }
 
 		/// <summary>
+		/// Gets or sets the type of the change.
+		/// </summary>
+		/// <value>The type of the change.</value>
+		public ComplexChangeType ChangeType { get; set; }
+
+		/// <summary>
+		/// Gets or sets the type of the base activity.
+		/// </summary>
+		/// <value>The type of the base activity.</value>
+		public RegisteredBaseActivityType BaseActivityType { get; set; }
+
+		/// <summary>
 		/// Gets the type description.
 		/// </summary>
 		/// <value>The type description.</value>
@@ -660,10 +694,10 @@ namespace Phoenix.BL.Entities
 				title = PositionName;
 				break;
 			case NotificationType.NewRestrictedCelestials:
-				title = SystemName;
+				title = StarSystemName;
 				break;
 			case NotificationType.NewRestrictedSystemLink:
-				title = SystemName;
+				title = StarSystemName;
 				break;
 			case NotificationType.NewRestrictedItems:
 				title = ItemName;
@@ -675,7 +709,7 @@ namespace Phoenix.BL.Entities
 				title = "New Mission";
 				break;
 			case NotificationType.NewRestrictedSystemLocations:
-				title = SystemName;
+				title = StarSystemName;
 				break;
 			case NotificationType.DeliveredTo:
 				title = PositionName;
@@ -783,10 +817,10 @@ namespace Phoenix.BL.Entities
 
 			switch (Type) {
 			case NotificationType.Turns:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.NewPosition:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.ActiveMission:
 				details.Add (PositionName);
@@ -825,13 +859,13 @@ namespace Phoenix.BL.Entities
 			case NotificationType.MarketBuys:
 				break;
 			case NotificationType.Boarding:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.Raiding:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.CombatTransactions:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.SoldPosition:
 				details.Add ("$" + Stellars);
@@ -839,7 +873,7 @@ namespace Phoenix.BL.Entities
 			case NotificationType.Restricted:
 				break;
 			case NotificationType.PlanetarySales:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.NexusRequestFacebook:
 				details.Add ("$" + Stellars);
@@ -847,13 +881,13 @@ namespace Phoenix.BL.Entities
 			case NotificationType.GamesmasterNote:
 				break;
 			case NotificationType.Spotted:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.TurnError:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.Warning:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.ResearchFinished:
 				details.Add (ItemName);
@@ -865,31 +899,31 @@ namespace Phoenix.BL.Entities
 				details.Add ("$" + Stellars);
 				break;
 			case NotificationType.OrbitalDrop:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.OrbitalResupply:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.SpecialAction:
 				break;
 			case NotificationType.Message:
 				break;
 			case NotificationType.AgentAction:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.Reminder:
 				break;
 			case NotificationType.ComplexChange:
-				details.Add (ComplexTypeName);
+				// TODO fix // details.Add (ComplexTypeName);
 				break;
 			case NotificationType.RegisteredBaseActivity:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.OpportunityFire:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.EscapingCombat:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			}
 
@@ -901,7 +935,7 @@ namespace Phoenix.BL.Entities
 				details.Add (PositionType.ToString());
 				break;
 			case NotificationType.Battles:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.Deliveries:
 				details.Add ("x " + Quantity);
@@ -947,7 +981,7 @@ namespace Phoenix.BL.Entities
 				details.Add (CelestialBodyName);
 				break;
 			case NotificationType.GamesmasterNote:
-				details.Add (SystemName);
+				details.Add (StarSystemName);
 				break;
 			case NotificationType.Spotted:
 				details.Add (Location);
@@ -970,6 +1004,7 @@ namespace Phoenix.BL.Entities
 			case NotificationType.AgentAction:
 				break;
 			case NotificationType.ComplexChange:
+				details.Add (ChangeType.ToString ());
 				break;
 			case NotificationType.RegisteredBaseActivity:
 				details.Add (CelestialBodyName);
@@ -1035,6 +1070,7 @@ namespace Phoenix.BL.Entities
 				details.Add ("x " + Quantity);
 				break;
 			case NotificationType.RegisteredBaseActivity:
+				details.Add (BaseActivityType.ToString ());
 				break;
 			}
 
@@ -1144,10 +1180,10 @@ namespace Phoenix.BL.Entities
 				PositionId = ParseInt (value);
 				break;
 			case NotificationType.NewRestrictedCelestials:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.NewRestrictedSystemLink:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.NewRestrictedItems:
 				ItemId = ParseInt (value);
@@ -1159,7 +1195,7 @@ namespace Phoenix.BL.Entities
 				MissionId = ParseInt (value);
 				break;
 			case NotificationType.NewRestrictedSystemLocations:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.DeliveredTo:
 				PositionId = ParseInt (value);
@@ -1256,10 +1292,10 @@ namespace Phoenix.BL.Entities
 		{
 			switch (Type) {
 			case NotificationType.Turns:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.NewPosition:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.ActiveMission:
 				PositionId = ParseInt (value);
@@ -1268,22 +1304,22 @@ namespace Phoenix.BL.Entities
 				NumberOfShips = ParseInt (value);
 				break;
 			case NotificationType.Deliveries:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Pickups:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Buys:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Sells:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.TransferIn:
 				Stellars = ParseInt (value);
 				break;
 			case NotificationType.PositionTransfers:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.RelationsChanges:
 				Status = value;
@@ -1295,25 +1331,25 @@ namespace Phoenix.BL.Entities
 				CelestialBodyId = ParseInt (value);
 				break;
 			case NotificationType.DeliveredTo:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.PickedUpFrom:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.MarketSells:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.MarketBuys:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Boarding:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Raiding:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.CombatTransactions:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.SoldPosition:
 				Stellars = ParseInt (value);
@@ -1321,7 +1357,7 @@ namespace Phoenix.BL.Entities
 			case NotificationType.Restricted:
 				break;
 			case NotificationType.PlanetarySales:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.NexusRequestFacebook:
 				Stellars = ParseInt (value);
@@ -1330,13 +1366,13 @@ namespace Phoenix.BL.Entities
 				GroupId = ParseInt (value);
 				break;
 			case NotificationType.Spotted:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.TurnError:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Warning:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.ResearchFinished:
 				ItemId = ParseInt (value);
@@ -1348,10 +1384,10 @@ namespace Phoenix.BL.Entities
 				Stellars = ParseInt (value);
 				break;
 			case NotificationType.OrbitalDrop:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.OrbitalResupply:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.SpecialAction:
 				Message = value;
@@ -1360,7 +1396,7 @@ namespace Phoenix.BL.Entities
 				Message = value;
 				break;
 			case NotificationType.AgentAction:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Reminder:
 				Message = value;
@@ -1369,13 +1405,13 @@ namespace Phoenix.BL.Entities
 				ComplexType = value;
 				break;
 			case NotificationType.RegisteredBaseActivity:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.OpportunityFire:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.EscapingCombat:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			}
 		}
@@ -1390,7 +1426,7 @@ namespace Phoenix.BL.Entities
 				PositionType = ParsePositonType (value);
 				break;
 			case NotificationType.Battles:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Deliveries:
 				Quantity = ParseInt (value);
@@ -1437,7 +1473,7 @@ namespace Phoenix.BL.Entities
 				CelestialBodyId = ParseInt (value);
 				break;
 			case NotificationType.GamesmasterNote:
-				SystemId = ParseInt (value);
+				StarSystemId = ParseInt (value);
 				break;
 			case NotificationType.Spotted:
 				Location = value;
@@ -1462,7 +1498,7 @@ namespace Phoenix.BL.Entities
 				Message = value;
 				break;
 			case NotificationType.ComplexChange:
-				Message = value;
+				ChangeType = (ComplexChangeType)ParseInt(value);
 				break;
 			case NotificationType.RegisteredBaseActivity:
 				CelestialBodyId = ParseInt (value);
@@ -1534,7 +1570,7 @@ namespace Phoenix.BL.Entities
 				Quantity = ParseInt(value);
 				break;
 			case NotificationType.RegisteredBaseActivity:
-				Message = value;
+				BaseActivityType = (RegisteredBaseActivityType)ParseInt (value);
 				break;
 			}
 		}

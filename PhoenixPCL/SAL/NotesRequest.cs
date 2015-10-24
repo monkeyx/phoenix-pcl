@@ -201,8 +201,8 @@ namespace Phoenix.SAL
 		private void UpdateSystemNames(int systemId, string name, List<Notification> list)
 		{
 			foreach (Notification n in list) {
-				if (n.SystemId == systemId) {
-					n.SystemName = name;
+				if (n.StarSystemId == systemId) {
+					n.StarSystemName = name;
 				}
 			}
 		}
@@ -210,7 +210,7 @@ namespace Phoenix.SAL
 		private void UpdateSquadNames(int squadId, string name, List<Notification> list)
 		{
 			foreach (Notification n in list) {
-				if (n.SquadronId == squadId) {
+				if (n.SquadronId > 0 && n.SquadronId == squadId) {
 					n.SquadronName = name;
 				}
 			}
@@ -228,7 +228,7 @@ namespace Phoenix.SAL
 		private void UpdateCBodyNames(int systemId, int cbodyId, string name, List<Notification> list)
 		{
 			foreach (Notification n in list) {
-				if (n.SystemId == systemId && n.CelestialBodyId == cbodyId) {
+				if (n.StarSystemId == systemId && n.CelestialBodyId == cbodyId) {
 					n.CelestialBodyName = name;
 				}
 			}
@@ -237,7 +237,7 @@ namespace Phoenix.SAL
 		private void UpdateAffiliationNames(int affId, string name, List<Notification> list)
 		{
 			foreach (Notification n in list) {
-				if (n.AffiliationId == affId) {
+				if (n.AffiliationId > 0 && n.AffiliationId == affId) {
 					n.AffiliationName = name;
 				}
 			}

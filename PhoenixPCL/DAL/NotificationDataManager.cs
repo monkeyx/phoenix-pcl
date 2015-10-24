@@ -116,8 +116,8 @@ namespace Phoenix.DAL
 			if (item.PositionId > 0) {
 				item.Position = DL.PhoenixDatabase.GetItem<Position> (item.PositionId);
 			}
-			if (item.SystemId > 0) {
-				item.StarSystem = DL.PhoenixDatabase.GetItem<StarSystem> (item.SystemId);
+			if (item.StarSystemId > 0) {
+				item.StarSystem = DL.PhoenixDatabase.GetItem<StarSystem> (item.StarSystemId);
 				if (item.StarSystem != null && item.CelestialBodyId > 0) {
 					item.CelestialBody = item.StarSystem.GetCelestialBody (item.CelestialBodyId);
 				}
