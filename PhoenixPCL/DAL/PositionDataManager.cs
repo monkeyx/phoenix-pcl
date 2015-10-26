@@ -38,6 +38,40 @@ namespace Phoenix.DAL
 	public class PositionDataManager : DataManager<Position>
 	{
 		/// <summary>
+		/// Gets the note.
+		/// </summary>
+		/// <returns>The note.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public Task<PositionNote> GetNote(int positionId)
+		{
+			return Task<PositionNote>.Factory.StartNew (() => {
+				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Get Note for Position " + positionId);
+				return DL.PhoenixDatabase.GetItem<PositionNote> (positionId);
+			});
+		}
+
+		/// <summary>
+		/// Saves the note.
+		/// </summary>
+		/// <returns>The note.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="note">Note.</param>
+		public Task<PositionNote> SaveNote(int positionId, string note){
+			return Task<PositionNote>.Factory.StartNew (() => {
+				PositionNote pn = DL.PhoenixDatabase.GetItem<PositionNote> (positionId);
+				if(pn == null){
+					pn = new PositionNote{
+						Id = positionId
+					};
+				}
+				pn.Note = note;
+				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Note for Position " + positionId + "\n" + note);
+				DL.PhoenixDatabase.SaveItem<PositionNote>(pn);
+				return pn;
+			});
+		}
+
+		/// <summary>
 		/// Gets the positions with turns.
 		/// </summary>
 		/// <returns>The positions with turns.</returns>

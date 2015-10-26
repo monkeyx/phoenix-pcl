@@ -67,6 +67,7 @@ namespace Phoenix.DL
 			CreateTable<JumpLink> ();
 			CreateTable<User> ();
 			CreateTable<Notification> ();
+			CreateTable<PositionNote> ();
         }
 
         /// <summary>
@@ -90,6 +91,7 @@ namespace Phoenix.DL
             DropTable<JumpLink> ();
 			DropTable<User> ();
 			DropTable<Notification> ();
+			DropTable<PositionNote> ();
             CreateTables();
         }
 
