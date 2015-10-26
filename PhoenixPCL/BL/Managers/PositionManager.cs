@@ -47,6 +47,17 @@ namespace Phoenix.BL.Managers
         }
 
 		/// <summary>
+		/// Gets the positions with turns.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		/// <param name="daysAgo">Days ago.</param>
+		public async void GetPositionsWithTurns(Action<IEnumerable<Position>> callback, int daysAgo = 0)
+		{
+			List<Position> list = await ((PositionDataManager)GetDataManager ()).GetPositionsWithTurns (daysAgo);
+			callback (list);
+		}
+
+		/// <summary>
 		/// Gets the positions in star system.
 		/// </summary>
 		/// <param name="starSystem">Star system.</param>

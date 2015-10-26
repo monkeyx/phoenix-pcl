@@ -321,6 +321,16 @@ namespace Phoenix.DL
 		}
 
 		/// <summary>
+		/// Gets the positions with turns.
+		/// </summary>
+		/// <returns>The positions with turns.</returns>
+		/// <param name="daysAgo">Days ago.</param>
+		public static List<Position> GetPositionsWithTurns(int daysAgo)
+		{
+			return Query<Position> ("select p.* from Position p, Notification n where p.Id = n.PositionId and n.Type = ? and n.DaysAgo = ?", Notification.NotificationType.Turns, daysAgo);
+		}
+
+		/// <summary>
 		/// Gets the positions in star system.
 		/// </summary>
 		/// <returns>The positions in star system.</returns>

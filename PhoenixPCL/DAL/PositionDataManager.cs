@@ -38,6 +38,18 @@ namespace Phoenix.DAL
 	public class PositionDataManager : DataManager<Position>
 	{
 		/// <summary>
+		/// Gets the positions with turns.
+		/// </summary>
+		/// <returns>The positions with turns.</returns>
+		/// <param name="daysAgo">Days ago.</param>
+		public Task<List<Position>> GetPositionsWithTurns(int daysAgo)
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetPositionsWithTurns (daysAgo);
+			});
+		}
+
+		/// <summary>
 		/// Gets the positions in star system.
 		/// </summary>
 		/// <returns>The positions in star system.</returns>
