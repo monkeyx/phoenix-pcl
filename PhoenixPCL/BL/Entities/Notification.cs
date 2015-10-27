@@ -123,8 +123,8 @@ namespace Phoenix.BL.Entities
 		public enum PlanetaryTradeCategory
 		{
 			TradeGoods = 0,
-			Drugs = 1,
-			Life = 2
+			Life = 1,
+			Drugs = 2
 		}
 
 		/// <summary>
@@ -132,10 +132,10 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		public enum ComplexVisitType
 		{
-			Maintained = 0,
+			Recreation = 0,
 			Repair = 1,
-			Recreation = 2,
-			Trained = 3,
+			Maintenance = 2,
+			Upgrade = 3,
 			Refit = 4
 		}
 
@@ -155,10 +155,39 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		public enum RegisteredBaseActivityType
 		{
-			Attacked = 0,
-			Bought = 1,
-			Registered = 2,
-			Deregistered = 3
+			Registered = 0,
+			Deregistered = 1,
+			Attacked = 2,
+			Bought = 3
+		}
+
+		/// <summary>
+		/// Warning type.
+		/// </summary>
+		public enum WarningType
+		{
+			DeepCoreStructure = 0,
+			ComplexesNotProducing = 1,
+			StarbaseLowEfficiency = 2,
+			StarbaseLowSecurity = 3,
+			ShipLowIntegrity = 4,
+			Scouted = 5,
+			BaseSubverted = 6,
+			BaseRegistrationRevoked = 7
+		}
+
+		/// <summary>
+		/// Error type.
+		/// </summary>
+		public enum ErrorType
+		{
+			NoStargateKey = 0,
+			UnknownBase = 1,
+			UnknownStarSystem = 2,
+			UnknownCelestialBody = 3,
+			IncorrectSecurity = 4,
+			NoThrust = 5,
+			MaintenanceFailed = 6
 		}
 
 		/// <summary>
@@ -540,7 +569,7 @@ namespace Phoenix.BL.Entities
 		/// Gets or sets the error code.
 		/// </summary>
 		/// <value>The error code.</value>
-		public string ErrorCode { get; set; }
+		public ErrorType ErrorCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the error message.
@@ -552,7 +581,7 @@ namespace Phoenix.BL.Entities
 		/// Gets or sets the warning code.
 		/// </summary>
 		/// <value>The warning code.</value>
-		public string WarningCode { get; set; }
+		public WarningType WarningCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the warning message.
@@ -595,10 +624,44 @@ namespace Phoenix.BL.Entities
 		/// Gets the type description.
 		/// </summary>
 		/// <value>The type description.</value>
+		[Ignore]
 		public string TypeDescription
 		{
 			get {
 				return System.Text.RegularExpressions.Regex.Replace (Type.ToString(), "(\\B[A-Z])", " $1");
+			}
+		}
+
+		/// <summary>
+		/// Gets the position type description.
+		/// </summary>
+		/// <value>The position type description.</value>
+		[Ignore]
+		public string PositionTypeDescription {
+			get {
+				return System.Text.RegularExpressions.Regex.Replace (PositionType.ToString(), "(\\B[A-Z])", " $1");
+			}
+		}
+
+		/// <summary>
+		/// Gets the warning code description.
+		/// </summary>
+		/// <value>The warning code description.</value>
+		[Ignore]
+		public string WarningCodeDescription {
+			get {
+				return System.Text.RegularExpressions.Regex.Replace (WarningCode.ToString(), "(\\B[A-Z])", " $1");
+			}
+		}
+
+		/// <summary>
+		/// Gets the error code description.
+		/// </summary>
+		/// <value>The error code description.</value>
+		[Ignore]
+		public string ErrorCodeDescription {
+			get {
+				return System.Text.RegularExpressions.Regex.Replace (ErrorCode.ToString(), "(\\B[A-Z])", " $1");
 			}
 		}
 
@@ -929,10 +992,10 @@ namespace Phoenix.BL.Entities
 
 			switch (Type) {
 			case NotificationType.Turns:
-				details.Add (PositionType.ToString());
+				details.Add (PositionTypeDescription);
 				break;
 			case NotificationType.NewPosition:
-				details.Add (PositionType.ToString());
+				details.Add (PositionTypeDescription);
 				break;
 			case NotificationType.Battles:
 				details.Add (StarSystemName);
@@ -950,7 +1013,7 @@ namespace Phoenix.BL.Entities
 				details.Add ("x " + Quantity);
 				break;
 			case NotificationType.PositionTransfers:
-				details.Add (PositionType.ToString());
+				details.Add (PositionTypeDescription);
 				break;
 			case NotificationType.SystemCharters:
 				break;
@@ -1055,10 +1118,10 @@ namespace Phoenix.BL.Entities
 				details.Add (CelestialBodyName);
 				break;
 			case NotificationType.TurnError:
-				details.Add (ErrorCode);
+				details.Add (ErrorCodeDescription);
 				break;
 			case NotificationType.Warning:
-				details.Add (WarningCode);
+				details.Add (WarningCodeDescription);
 				break;
 			case NotificationType.OrbitalDrop:
 				details.Add (ItemName);
@@ -1555,10 +1618,10 @@ namespace Phoenix.BL.Entities
 				CelestialBodyId = ParseInt (value);
 				break;
 			case NotificationType.TurnError:
-				ErrorCode = value;
+				ErrorCode = (ErrorType)ParseInt(value);
 				break;
 			case NotificationType.Warning:
-				WarningCode = value;
+				WarningCode = (WarningType)ParseInt(value);
 				break;
 			case NotificationType.OrbitalDrop:
 				ItemId = ParseInt (value);
