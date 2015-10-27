@@ -62,6 +62,18 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
+		/// Deletes the note.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void DeleteNote(int positionId, Action<List<Position>> callback)
+		{
+			await GetPositionDataManager ().DeleteNote (positionId);
+			List<Position> list = await GetPositionDataManager ().GetPositionsWithNotes ();
+			callback (list);
+		}
+
+		/// <summary>
 		/// Saves the note.
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>
@@ -69,12 +81,28 @@ namespace Phoenix.BL.Managers
 		/// <param name="callback">Callback.</param>
 		public async void SaveNote(int positionId, string note, Action<string> callback)
 		{
+			if (string.IsNullOrWhiteSpace (note)) {
+				DeleteNote (positionId, (results) => {
+				});
+				callback (null);
+				return;
+			}
 			PositionNote pn = await GetPositionDataManager ().SaveNote (positionId, note);
 			if (pn == null) {
 				callback (null);
 			} else {
 				callback (pn.Note);
 			}
+		}
+
+		/// <summary>
+		/// Gets the positions with notes.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		public async void GetPositionsWithNotes(Action<IEnumerable<Position>> callback)
+		{
+			List<Position> list = await GetPositionDataManager ().GetPositionsWithNotes ();
+			callback (list);
 		}
 
 		/// <summary>

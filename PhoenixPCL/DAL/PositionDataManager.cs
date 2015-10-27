@@ -37,6 +37,19 @@ namespace Phoenix.DAL
 	/// </summary>
 	public class PositionDataManager : DataManager<Position>
 	{
+
+		/// <summary>
+		/// Deletes the note.
+		/// </summary>
+		/// <returns>The note.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public Task DeleteNote(int positionId){
+			return Task.Factory.StartNew (() => {
+				DL.PhoenixDatabase.DeleteItemById<PositionNote>(positionId);
+				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Deleted Note for Position " + positionId);
+			});
+		}
+
 		/// <summary>
 		/// Gets the note.
 		/// </summary>
@@ -68,6 +81,17 @@ namespace Phoenix.DAL
 				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Note for Position " + positionId + "\n" + note);
 				DL.PhoenixDatabase.SaveItem<PositionNote>(pn);
 				return pn;
+			});
+		}
+
+		/// <summary>
+		/// Gets the positions with notes.
+		/// </summary>
+		/// <returns>The positions with notes.</returns>
+		public Task<List<Position>> GetPositionsWithNotes()
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetPositionsWithNotes();
 			});
 		}
 

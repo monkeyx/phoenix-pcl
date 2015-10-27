@@ -348,7 +348,16 @@ namespace Phoenix.DL
 		/// <returns>The positions with orders.</returns>
 		public static List<Position> GetPositionsWithOrders()
 		{
-			return Query<Position> ("select distinct p.* from Position p, `Order` o where o.PositionId = p.Id order by Name asc");
+			return Query<Position> ("select distinct p.* from Position p, `Order` o where o.PositionId = p.Id order by p.Name asc");
+		}
+
+		/// <summary>
+		/// Gets the positions with notes.
+		/// </summary>
+		/// <returns>The positions with notes.</returns>
+		public static List<Position> GetPositionsWithNotes()
+		{
+			return Query<Position> ("select distinct p.* from Position p, PositionNote pn where pn.Id = p.Id order by p.Name asc");
 		}
 
         /// <summary>
