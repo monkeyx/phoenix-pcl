@@ -131,6 +131,26 @@ namespace Phoenix.BL.Entities
 		}
 
 		/// <summary>
+		/// Creates a copy of the order with the specified position identifier.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		public Order Copy(int positionId)
+		{
+			Order newOrder = new Order {
+				OrderTypeId  = this.OrderTypeId,
+				OrderType = this.OrderType,
+				PositionId = positionId
+			};
+			foreach (OrderParameter param in Parameters) {
+				newOrder.Parameters.Add (new OrderParameter {
+					Value = param.Value,
+					DisplayValue = param.DisplayValue
+				});
+			}
+			return newOrder;
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Phoenix.BL.Entities.Order"/> class.
 		/// </summary>
 		public Order ()

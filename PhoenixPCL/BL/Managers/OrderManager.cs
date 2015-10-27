@@ -48,6 +48,19 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
+		/// Copies the orders.
+		/// </summary>
+		/// <param name="fromPositionId">From position identifier.</param>
+		/// <param name="toPositionId">To position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void CopyOrders(int fromPositionId, int toPositionId, Action<List<Order>> callback)
+		{
+			await GetOrderDataManager ().CopyOrders (fromPositionId, toPositionId);
+			List<Order> orders = await GetOrderDataManager ().GetOrdersForPosition (toPositionId);
+			callback (orders);
+		}
+
+		/// <summary>
 		/// Submits the orders for position.
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>
