@@ -360,6 +360,20 @@ namespace Phoenix.DL
 			return Query<Position> ("select distinct p.* from Position p, PositionNote pn where pn.Id = p.Id order by p.Name asc");
 		}
 
+		/// <summary>
+		/// Gets the type of the positions of.
+		/// </summary>
+		/// <returns>The positions of type.</returns>
+		/// <param name="positionType">Position type.</param>
+		public static List<Position> GetPositionsOfType(Position.PositionFlag positionType)
+		{
+			if (positionType != Position.PositionFlag.None) {
+				return Query<Position> ("select p.* from Position p where p.PositionType = ? order by p.Name asc", positionType);
+			} else {
+				return Query<Position> ("select p.* from Position p order by p.Name asc");
+			}
+		}
+
         /// <summary>
         /// Gets the item properties.
         /// </summary>

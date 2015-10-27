@@ -96,6 +96,17 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
+		/// Gets the type of the positions of.
+		/// </summary>
+		/// <param name="positionType">Position type.</param>
+		/// <param name="callback">Callback.</param>
+		public async void GetPositionsOfType(Position.PositionFlag positionType, Action<IEnumerable<Position>> callback)
+		{
+			List<Position> list = await GetPositionDataManager ().GetPositionsOfType (positionType);
+			callback (list);
+		}
+
+		/// <summary>
 		/// Gets the positions with notes.
 		/// </summary>
 		/// <param name="callback">Callback.</param>

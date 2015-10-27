@@ -85,6 +85,18 @@ namespace Phoenix.DAL
 		}
 
 		/// <summary>
+		/// Gets the type of the positions of.
+		/// </summary>
+		/// <returns>The positions of type.</returns>
+		/// <param name="positionType">Position type.</param>
+		public Task<List<Position>> GetPositionsOfType(Position.PositionFlag positionType)
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetPositionsOfType(positionType);
+			});
+		}
+
+		/// <summary>
 		/// Gets the positions with notes.
 		/// </summary>
 		/// <returns>The positions with notes.</returns>
