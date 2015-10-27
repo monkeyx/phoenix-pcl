@@ -252,11 +252,20 @@ namespace Phoenix.BL.Entities
         public int OrderId { get; set; }
 
 		/// <summary>
-		/// Gets the detail.
+		/// Gets the list text.
 		/// </summary>
-		/// <value>The detail.</value>
-		[Ignore]
-		public string Detail {
+		/// <value>The list text.</value>
+		public override string ListText {
+			get {
+				return Name;
+			}
+		}
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		public override string ListDetail {
 			get {
 				return "Info Type: " + InfoType + " Data Type: " + DataType;
 			}

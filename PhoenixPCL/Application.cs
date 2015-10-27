@@ -176,6 +176,12 @@ namespace Phoenix
 		public static OrderManager OrderManager { get; set; }
 
 		/// <summary>
+		/// Gets or sets the notification manager.
+		/// </summary>
+		/// <value>The notification manager.</value>
+		public static NotificationManager NotificationManager { get; set; }
+
+		/// <summary>
 		/// Gets or sets the document folder.
 		/// </summary>
 		/// <value>The document folder.</value>
@@ -224,6 +230,7 @@ namespace Phoenix
 			PositionManager = new PositionManager (user);
 			StarSystemManager = new StarSystemManager (user);
 			OrderManager = new OrderManager (user);
+			NotificationManager = new NotificationManager (user);
 		}
 	}
 }

@@ -153,6 +153,21 @@ namespace Phoenix.BL.Entities
 			}
 		}
 
+		/// <summary>
+		/// Gets the body.
+		/// </summary>
+		/// <returns>The body.</returns>
+		/// <param name="localId">Local identifier.</param>
+		public CelestialBody GetCelestialBody(int localId)
+		{
+			foreach (CelestialBody body in CelestialBodies) {
+				if (body.LocalCelestialBodyId == localId) {
+					return body;
+				}
+			}
+			return null;
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.StarSystem"/> class.
         /// </summary>

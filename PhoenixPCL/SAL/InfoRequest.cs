@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using System.Linq;
 
 using Phoenix.BL.Entities;
 using Phoenix.Util;
@@ -37,6 +38,8 @@ namespace Phoenix.SAL
     /// </summary>
     public class InfoRequest : NexusRequest<InfoData>
     {
+		readonly static string[] IGNORE_INFO = {"_locked", "(null)"};
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.SAL.InfoRequest"/> class.
         /// </summary>
@@ -69,7 +72,7 @@ namespace Phoenix.SAL
 							Log.WriteLine(Log.Layer.SAL,GetType(),"Group " + groupName + " (" + groupId + ")");
 						} else if (xmlReader.Name == "data") {
 							string name = xmlReader.GetAttribute ("name");
-							if(name != "_locked"){
+							if(!IGNORE_INFO.Contains(name)){
 								InfoData item = new InfoData () {
 									Name = name,
 									NexusId = Int32.Parse (xmlReader.GetAttribute ("num")),

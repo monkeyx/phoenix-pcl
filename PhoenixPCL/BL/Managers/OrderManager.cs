@@ -48,6 +48,19 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
+		/// Copies the orders.
+		/// </summary>
+		/// <param name="fromPositionId">From position identifier.</param>
+		/// <param name="toPositionId">To position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void CopyOrders(int fromPositionId, int toPositionId, Action<List<Order>> callback)
+		{
+			await GetOrderDataManager ().CopyOrders (fromPositionId, toPositionId);
+			List<Order> orders = await GetOrderDataManager ().GetOrdersForPosition (toPositionId);
+			callback (orders);
+		}
+
+		/// <summary>
 		/// Submits the orders for position.
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>
@@ -80,7 +93,7 @@ namespace Phoenix.BL.Managers
 		/// <param name="callback">Callback.</param>
 		public async void AllForPosition(int positionId, Action<List<Order>> callback)
 		{
-			Log.WriteLine (Log.Layer.BL, this.GetType (), "All Entities");
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "All Orders For Position " + positionId);
 			List<Order> results = await GetOrderDataManager ().GetOrdersForPosition (positionId);
 			callback (results);
 		}
@@ -152,7 +165,7 @@ namespace Phoenix.BL.Managers
 		}
 
 		/// <summary>
-		/// Clears the orders.
+		/// Clears pending orders (issuing a "Clear Pending Orders" order)
 		/// </summary>
 		/// <param name="positionId">Position identifier.</param>
 		/// <param name="callback">Callback.</param>
@@ -164,6 +177,17 @@ namespace Phoenix.BL.Managers
 			List<Order> list = new List<Order>();
 			list.Add(order);
 			callback(list);
+		}
+
+		/// <summary>
+		/// Deletes position's orders locally.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void DeleteLocalOrders(int positionId, Action<bool> callback)
+		{
+			await GetOrderDataManager ().ClearOrdersForPosition (positionId);
+			callback(true);
 		}
 
 		/// <summary>

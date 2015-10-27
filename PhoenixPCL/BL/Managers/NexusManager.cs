@@ -88,7 +88,7 @@ namespace Phoenix.BL.Managers
 		public async void All(Action<List<T>> callback)
 		{
 			Log.WriteLine (Log.Layer.BL, this.GetType (), "All Entities");
-			List<T> results = await GetDataManager ().GetItems ();
+			List<T> results = await GetDataManager ().GetItems (null,false);
 			callback (results);
 		}
 
@@ -114,6 +114,22 @@ namespace Phoenix.BL.Managers
             T item = await GetDataManager ().GetFirstItem ();
             callback (item);
         }
+
+		/// <summary>
+		/// Delete the specified item and callback.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		/// <param name="callback">Callback.</param>
+		public async void Delete(T item, Action<IEnumerable<T>> callback)
+		{
+			Log.WriteLine (Log.Layer.BL, this.GetType (), "Delete Entity " + item);
+			if (item == null) {
+				callback (await GetDataManager ().GetItems ());
+				return;
+			}
+			await GetDataManager ().DeleteItem (item);
+			callback (await GetDataManager ().GetItems ());
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.NexusManager`1"/> class.

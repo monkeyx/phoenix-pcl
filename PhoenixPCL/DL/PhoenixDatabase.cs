@@ -66,7 +66,8 @@ namespace Phoenix.DL
 			CreateTable<CelestialBody> ();
 			CreateTable<JumpLink> ();
 			CreateTable<User> ();
-
+			CreateTable<Notification> ();
+			CreateTable<PositionNote> ();
         }
 
         /// <summary>
@@ -89,6 +90,8 @@ namespace Phoenix.DL
             DropTable<CelestialBody> ();
             DropTable<JumpLink> ();
 			DropTable<User> ();
+			DropTable<Notification> ();
+			DropTable<PositionNote> ();
             CreateTables();
         }
 
@@ -320,6 +323,16 @@ namespace Phoenix.DL
 		}
 
 		/// <summary>
+		/// Gets the positions with turns.
+		/// </summary>
+		/// <returns>The positions with turns.</returns>
+		/// <param name="daysAgo">Days ago.</param>
+		public static List<Position> GetPositionsWithTurns(int daysAgo)
+		{
+			return Query<Position> ("select p.* from Position p, Notification n where p.Id = n.PositionId and n.Type = ? and n.DaysAgo = ?", Notification.NotificationType.Turns, daysAgo);
+		}
+
+		/// <summary>
 		/// Gets the positions in star system.
 		/// </summary>
 		/// <returns>The positions in star system.</returns>
@@ -335,7 +348,30 @@ namespace Phoenix.DL
 		/// <returns>The positions with orders.</returns>
 		public static List<Position> GetPositionsWithOrders()
 		{
-			return Query<Position> ("select distinct p.* from Position p, `Order` o where o.PositionId = p.Id order by Name asc");
+			return Query<Position> ("select distinct p.* from Position p, `Order` o where o.PositionId = p.Id order by p.Name asc");
+		}
+
+		/// <summary>
+		/// Gets the positions with notes.
+		/// </summary>
+		/// <returns>The positions with notes.</returns>
+		public static List<Position> GetPositionsWithNotes()
+		{
+			return Query<Position> ("select distinct p.* from Position p, PositionNote pn where pn.Id = p.Id order by p.Name asc");
+		}
+
+		/// <summary>
+		/// Gets the type of the positions of.
+		/// </summary>
+		/// <returns>The positions of type.</returns>
+		/// <param name="positionType">Position type.</param>
+		public static List<Position> GetPositionsOfType(Position.PositionFlag positionType)
+		{
+			if (positionType != Position.PositionFlag.None) {
+				return Query<Position> ("select p.* from Position p where p.PositionType = ? order by p.Name asc", positionType);
+			} else {
+				return Query<Position> ("select p.* from Position p order by p.Name asc");
+			}
 		}
 
         /// <summary>
@@ -406,6 +442,27 @@ namespace Phoenix.DL
 		public static List<OrderParameter> GetOrderParameters(int orderId)
 		{
 			return Query<OrderParameter> ("select op.* from OrderParameter op where op.OrderId = ? order by Id asc", orderId);
+		}
+
+		/// <summary>
+		/// Gets the notifications for position.
+		/// </summary>
+		/// <returns>The notifications for position.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public static List<Notification> GetNotificationsForPosition(int positionId)
+		{
+			return Query<Notification> ("select n.* from Notification n where n.PositionId = ? order by DaysAgo asc", positionId);
+		}
+
+		/// <summary>
+		/// Gets the notifications for position.
+		/// </summary>
+		/// <returns>The notifications for position.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="priority">Priority.</param>
+		public static List<Notification> GetNotificationsForPosition(int positionId, Notification.NotificationPriority priority)
+		{
+			return Query<Notification> ("select n.* from Notification n where n.PositionId = ? and n.Priority = ? order by DaysAgo asc", positionId, priority);
 		}
 
         /// <summary>

@@ -47,13 +47,94 @@ namespace Phoenix.BL.Managers
         }
 
 		/// <summary>
+		/// Gets the note.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void GetNote(int positionId, Action<string> callback)
+		{
+			PositionNote note = await GetPositionDataManager ().GetNote (positionId);
+			if (note == null) {
+				callback (null);
+			} else {
+				callback (note.Note);
+			}
+		}
+
+		/// <summary>
+		/// Deletes the note.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="callback">Callback.</param>
+		public async void DeleteNote(int positionId, Action<List<Position>> callback)
+		{
+			await GetPositionDataManager ().DeleteNote (positionId);
+			List<Position> list = await GetPositionDataManager ().GetPositionsWithNotes ();
+			callback (list);
+		}
+
+		/// <summary>
+		/// Saves the note.
+		/// </summary>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="note">Note.</param>
+		/// <param name="callback">Callback.</param>
+		public async void SaveNote(int positionId, string note, Action<string> callback)
+		{
+			if (string.IsNullOrWhiteSpace (note)) {
+				DeleteNote (positionId, (results) => {
+				});
+				callback (null);
+				return;
+			}
+			PositionNote pn = await GetPositionDataManager ().SaveNote (positionId, note);
+			if (pn == null) {
+				callback (null);
+			} else {
+				callback (pn.Note);
+			}
+		}
+
+		/// <summary>
+		/// Gets the type of the positions of.
+		/// </summary>
+		/// <param name="positionType">Position type.</param>
+		/// <param name="callback">Callback.</param>
+		public async void GetPositionsOfType(Position.PositionFlag positionType, Action<IEnumerable<Position>> callback)
+		{
+			List<Position> list = await GetPositionDataManager ().GetPositionsOfType (positionType);
+			callback (list);
+		}
+
+		/// <summary>
+		/// Gets the positions with notes.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		public async void GetPositionsWithNotes(Action<IEnumerable<Position>> callback)
+		{
+			List<Position> list = await GetPositionDataManager ().GetPositionsWithNotes ();
+			callback (list);
+		}
+
+		/// <summary>
+		/// Gets the positions with turns.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		/// <param name="daysAgo">Days ago.</param>
+		public async void GetPositionsWithTurns(Action<IEnumerable<Position>> callback, int daysAgo = 0)
+		{
+			List<Position> list = await GetPositionDataManager().GetPositionsWithTurns (daysAgo);
+			callback (list);
+		}
+
+		/// <summary>
 		/// Gets the positions in star system.
 		/// </summary>
 		/// <param name="starSystem">Star system.</param>
 		/// <param name="callback">Callback.</param>
 		public async void GetPositionsInStarSystem(StarSystem starSystem, Action<IEnumerable<Position>> callback)
 		{
-			List<Position> list = await ((PositionDataManager)GetDataManager ()).GetPositionsInStarSystem (starSystem);
+			List<Position> list = await GetPositionDataManager().GetPositionsInStarSystem (starSystem);
 			callback (list);
 		}
 
@@ -63,7 +144,7 @@ namespace Phoenix.BL.Managers
 		/// <param name="callback">Callback.</param>
 		public async void GetPositionsWithOrders(Action<IEnumerable<Position>> callback)
 		{
-			List<Position> list = await ((PositionDataManager)GetDataManager ()).GetPositionsWithOrders ();
+			List<Position> list = await GetPositionDataManager().GetPositionsWithOrders ();
 			callback (list);
 		}
 
@@ -112,6 +193,11 @@ namespace Phoenix.BL.Managers
 					}
 				}
 			});
+		}
+
+		private PositionDataManager GetPositionDataManager()
+		{
+			return (PositionDataManager)GetDataManager ();
 		}
     }
 }

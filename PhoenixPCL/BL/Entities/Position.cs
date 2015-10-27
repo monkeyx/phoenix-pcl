@@ -534,5 +534,32 @@ namespace Phoenix.BL.Entities
 		{
 		}
 	}
+
+	/// <summary>
+	/// Position notes.
+	/// </summary>
+	[Table("PositionNote")]
+	public class PositionNote : EntityBase
+	{
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+		[PrimaryKey]
+		public override int Id { get; set; }
+
+		/// <summary>
+		/// Gets or sets the note.
+		/// </summary>
+		/// <value>The note.</value>
+		public string Note { get; set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Phoenix.BL.Entities.PositionNotes"/> class.
+		/// </summary>
+		public PositionNote()
+		{
+		}
+	}
 }
 

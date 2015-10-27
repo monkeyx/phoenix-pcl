@@ -38,6 +38,26 @@ namespace Phoenix.DAL
 	public class OrderDataManager : DataManager<Order>
 	{
 		/// <summary>
+		/// Copies the orders.
+		/// </summary>
+		/// <returns>The orders.</returns>
+		/// <param name="fromPositionId">From position identifier.</param>
+		/// <param name="toPositionId">To position identifier.</param>
+		public Task CopyOrders(int fromPositionId, int toPositionId)
+		{
+			return Task.Factory.StartNew (() => {
+				List<Order> models = DL.PhoenixDatabase.GetOrdersForPosition(fromPositionId);
+				Log.WriteLine(Log.Layer.DAL,this.GetType(), "Copying Orders from Position " + fromPositionId + " to " + toPositionId + ": " + models.Count);
+				foreach(Order o in models){
+					LoadRelationships(o);
+					Order newOrder = o.Copy(toPositionId);
+					DL.PhoenixDatabase.SaveItem<Order>(newOrder);
+					PersistRelationships(newOrder);
+				}
+			});
+		}
+
+		/// <summary>
 		/// Clears for position.
 		/// </summary>
 		/// <returns>The for position.</returns>
@@ -93,7 +113,7 @@ namespace Phoenix.DAL
 		/// <param name="item">Item.</param>
 		protected override void PersistRelationships (Order item)
 		{
-			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Order Parameters (" + item.Id + ": " + item.Parameters.Count);
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Order Parameters (" + item.Id + "): " + item.Parameters.Count);
 			if (item.OrderType == null) {
 				item.OrderType = DL.PhoenixDatabase.GetItem<OrderType> (item.OrderTypeId);
 				if (item.OrderType != null) {

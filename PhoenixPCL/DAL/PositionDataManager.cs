@@ -37,6 +37,88 @@ namespace Phoenix.DAL
 	/// </summary>
 	public class PositionDataManager : DataManager<Position>
 	{
+
+		/// <summary>
+		/// Deletes the note.
+		/// </summary>
+		/// <returns>The note.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public Task DeleteNote(int positionId){
+			return Task.Factory.StartNew (() => {
+				DL.PhoenixDatabase.DeleteItemById<PositionNote>(positionId);
+				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Deleted Note for Position " + positionId);
+			});
+		}
+
+		/// <summary>
+		/// Gets the note.
+		/// </summary>
+		/// <returns>The note.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		public Task<PositionNote> GetNote(int positionId)
+		{
+			return Task<PositionNote>.Factory.StartNew (() => {
+				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Get Note for Position " + positionId);
+				return DL.PhoenixDatabase.GetItem<PositionNote> (positionId);
+			});
+		}
+
+		/// <summary>
+		/// Saves the note.
+		/// </summary>
+		/// <returns>The note.</returns>
+		/// <param name="positionId">Position identifier.</param>
+		/// <param name="note">Note.</param>
+		public Task<PositionNote> SaveNote(int positionId, string note){
+			return Task<PositionNote>.Factory.StartNew (() => {
+				PositionNote pn = DL.PhoenixDatabase.GetItem<PositionNote> (positionId);
+				if(pn == null){
+					pn = new PositionNote{
+						Id = positionId
+					};
+				}
+				pn.Note = note;
+				Log.WriteLine (Log.Layer.DAL, this.GetType (), "Save Note for Position " + positionId + "\n" + note);
+				DL.PhoenixDatabase.SaveItem<PositionNote>(pn);
+				return pn;
+			});
+		}
+
+		/// <summary>
+		/// Gets the type of the positions of.
+		/// </summary>
+		/// <returns>The positions of type.</returns>
+		/// <param name="positionType">Position type.</param>
+		public Task<List<Position>> GetPositionsOfType(Position.PositionFlag positionType)
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetPositionsOfType(positionType);
+			});
+		}
+
+		/// <summary>
+		/// Gets the positions with notes.
+		/// </summary>
+		/// <returns>The positions with notes.</returns>
+		public Task<List<Position>> GetPositionsWithNotes()
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetPositionsWithNotes();
+			});
+		}
+
+		/// <summary>
+		/// Gets the positions with turns.
+		/// </summary>
+		/// <returns>The positions with turns.</returns>
+		/// <param name="daysAgo">Days ago.</param>
+		public Task<List<Position>> GetPositionsWithTurns(int daysAgo)
+		{
+			return Task<List<Position>>.Factory.StartNew (() => {
+				return DL.PhoenixDatabase.GetPositionsWithTurns (daysAgo);
+			});
+		}
+
 		/// <summary>
 		/// Gets the positions in star system.
 		/// </summary>
