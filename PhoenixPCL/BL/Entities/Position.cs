@@ -277,7 +277,12 @@ namespace Phoenix.BL.Entities
 		[Indexed]
 		public bool Orbiting { get; set; }
 
-
+		/// <summary>
+		/// Gets or sets the market.
+		/// </summary>
+		/// <value>The market.</value>
+		[Ignore]
+		public MarketBase Market { get; set; }
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.Position"/>.

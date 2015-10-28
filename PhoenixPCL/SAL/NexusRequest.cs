@@ -97,6 +97,8 @@ namespace Phoenix.SAL
 					return (INexusRequest<T>)new PendingOrdersRequest (user.Id, user.Code, positionId);
 				case "Notification":
 					return (INexusRequest<T>)new NotesRequest (user.Id, user.Code);
+				case "MarketBase":
+					return (INexusRequest<T>)new MarketRequest (user.Id, user.Code);
 				default:
 					throw new Exception ("Unsupported type"); 
 				}
@@ -112,7 +114,7 @@ namespace Phoenix.SAL
         /// <summary>
         /// Base URL for Nexus XML
         /// </summary>
-		public const string BASE_URL = Phoenix.Application.BASE_URL + "index.php?a=xml";
+		public const string BASE_URL = Phoenix.Application.BASE_URL + "index.php?";
 
         /// <summary>
         /// Gets or sets the user interface.
@@ -250,11 +252,20 @@ namespace Phoenix.SAL
 			return "";
 		}
 
+		/// <summary>
+		/// Gets the request action.
+		/// </summary>
+		/// <returns>The request action.</returns>
+		protected virtual string GetRequestAction()
+		{
+			return "xml";
+		}
+
 		protected Action<IEnumerable<T>, Exception> resultCallback;
 
 		private string RequestURL()
         {
-            return BASE_URL + "&uid=" + UID + "&code=" + Code + "&sa=" + Action + "&tid=" + PositionId + "&pid=" + PositionId;
+			return BASE_URL + "a=" + GetRequestAction() + "&uid=" + UID + "&code=" + Code + "&sa=" + Action + "&tid=" + PositionId + "&pid=" + PositionId;
         }
 
 		#if NEXUS_ATTEMPT_COUNT

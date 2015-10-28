@@ -25,6 +25,8 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 using SQLite.Net.Attributes; 
 
 namespace Phoenix.BL.Entities
@@ -130,7 +132,7 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The type of the infrastructure environment.</value>
         [Ignore]
-        public List<RawMaterial> RawMaterials { get; set; }
+		public List<RawMaterial> RawMaterials { get; set; } = new List<RawMaterial> ();
 
         /// <summary>
         /// Gets or sets the race.
@@ -155,7 +157,7 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The properties.</value>
         [Ignore]
-        public Dictionary<string, ItemProperty> Properties { get; set; }
+		public Dictionary<string, ItemProperty> Properties { get; set; } = new Dictionary<string, ItemProperty> ();
 
 		/// <summary>
 		/// Gets the group that the entity belongs to
@@ -168,7 +170,26 @@ namespace Phoenix.BL.Entities
 			}
 		}
 
-        /// <summary>
+		/// <summary>
+		/// Gets or sets the markets.
+		/// </summary>
+		/// <value>The markets.</value>
+		[Ignore]
+		public List<MarketItem> MarketItems { get; set; } = new List<MarketItem>();
+
+		/// <summary>
+		/// Gets the markets.
+		/// </summary>
+		/// <value>The markets.</value>
+		[Ignore]
+		public IEnumerable<MarketBase> Markets { 
+			get { 
+				return from element in MarketItems
+					select element.Base;
+			} 
+		}
+
+		/// <summary>
         /// Adds the property.
         /// </summary>
         /// <param name="key">Key.</param>
@@ -187,7 +208,7 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <returns>The property.</returns>
         /// <param name="key">Key.</param>
-        public string GetProperty(string key)
+		public string GetProperty(string key)
         {
             ItemProperty p;
             if (Properties.TryGetValue (key, out p)) {
@@ -197,13 +218,12 @@ namespace Phoenix.BL.Entities
             }
         }
 
-        /// <summary>
+		/// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.Item"/> class.
         /// </summary>
         public Item ()
         {
-            RawMaterials = new List<RawMaterial> ();
-            Properties = new Dictionary<string, ItemProperty> ();
+			
         }
 
 		/// <summary>

@@ -84,6 +84,7 @@ namespace Phoenix.DAL
 			RegisterManager<PositionTurn> (new DataManager<PositionTurn> ());
 			RegisterManager<Order> (new OrderDataManager ());
 			RegisterManager<Notification> (new NotificationDataManager ());
+			RegisterManager<MarketBase> (new MarketBaseDataManager ());
         }
 
         /// <summary>

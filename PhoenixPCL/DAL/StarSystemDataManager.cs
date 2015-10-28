@@ -72,6 +72,7 @@ namespace Phoenix.DAL
 			foreach (JumpLink jl in item.JumpLinks) {
 				jl.ToStarSysytem = DL.PhoenixDatabase.GetItem<StarSystem> (jl.ToStarSystemId);
 			}
+			item.Markets = DL.PhoenixDatabase.GetMarketsInSystem (item.Id);
         }
 
         /// <summary>

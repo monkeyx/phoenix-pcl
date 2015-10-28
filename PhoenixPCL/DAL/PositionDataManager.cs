@@ -161,6 +161,16 @@ namespace Phoenix.DAL
 			if (item.StarSystemId > 0) {
 				item.StarSystem = DL.PhoenixDatabase.GetItem<StarSystem> (item.StarSystemId);
 			}
+			if (item.PositionType == (int)Position.PositionFlag.Starbase) {
+				item.Market = DL.PhoenixDatabase.GetItem<MarketBase> (item.Id);
+				if (item.Market != null) {
+					item.Market.Items = DL.PhoenixDatabase.GetMarketItemsForBase (item.Id);
+					foreach (MarketItem mi in item.Market.Items) {
+						mi.Item = DL.PhoenixDatabase.GetItem<Item> (mi.ItemId);
+						mi.Base = item.Market;
+					}
+				}
+			}
 		}
 
 		/// <summary>

@@ -133,14 +133,14 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The celestial bodies.</value>
         [Ignore]
-        public List<CelestialBody> CelestialBodies { get; set; }
+		public List<CelestialBody> CelestialBodies { get; set; } = new List<CelestialBody> ();
 
         /// <summary>
         /// Gets or sets the jump links.
         /// </summary>
         /// <value>The jump links.</value>
         [Ignore]
-        public List<JumpLink> JumpLinks { get; set; }
+		public List<JumpLink> JumpLinks { get; set; } = new List<JumpLink> ();
 
 		/// <summary>
 		/// Gets the group that the entity belongs to
@@ -168,13 +168,19 @@ namespace Phoenix.BL.Entities
 			return null;
 		}
 
+		/// <summary>
+		/// Gets or sets the markets.
+		/// </summary>
+		/// <value>The markets.</value>
+		[Ignore]
+		public List<MarketBase> Markets { get; set; } = new List<MarketBase>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.StarSystem"/> class.
         /// </summary>
         public StarSystem ()
         {
-			CelestialBodies = new List<CelestialBody> ();
-			JumpLinks = new List<JumpLink> ();
+			
         }
 
 		/// <summary>
@@ -285,13 +291,14 @@ namespace Phoenix.BL.Entities
 		/// Gets the location.
 		/// </summary>
 		/// <value>The location.</value>
+		[Ignore]
 		public string Location {
 			get {
 				return Quad.ToString () + " " + Ring;
 			}
 		}
 
-        /// <summary>
+		/// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.CelestialBody"/> class.
         /// </summary>
         public CelestialBody()

@@ -131,55 +131,61 @@ namespace Phoenix
 		/// Gets or sets the user manager.
 		/// </summary>
 		/// <value>The user manager.</value>
-		public static UserManager UserManager { get; set; }
+		public static UserManager UserManager { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the game status manager.
+		/// Gets the game status manager.
 		/// </summary>
 		/// <value>The game status manager.</value>
-		public static GameStatusManager GameStatusManager { get; set; }
+		public static GameStatusManager GameStatusManager { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the info manager.
+		/// Gets the info manager.
 		/// </summary>
 		/// <value>The info manager.</value>
-		public static InfoManager InfoManager { get; set; }
+		public static InfoManager InfoManager { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the item manager.
+		/// Gets the item manager.
 		/// </summary>
 		/// <value>The item manager.</value>
-		public static ItemManager ItemManager { get; set; }
+		public static ItemManager ItemManager { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the order type manager.
+		/// Gets the order type manager.
 		/// </summary>
 		/// <value>The order type manager.</value>
-		public static OrderTypeManager OrderTypeManager { get; set; }
+		public static OrderTypeManager OrderTypeManager { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the position manager.
+		/// Gets the position manager.
 		/// </summary>
 		/// <value>The position manager.</value>
-		public static PositionManager PositionManager { get; set; }
+		public static PositionManager PositionManager { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the star system manager.
+		/// Gets the star system manager.
 		/// </summary>
 		/// <value>The star system manager.</value>
-		public static StarSystemManager StarSystemManager { get; set; }
+		public static StarSystemManager StarSystemManager { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the order manager.
+		/// Gets the order manager.
 		/// </summary>
 		/// <value>The order manager.</value>
-		public static OrderManager OrderManager { get; set; }
+		public static OrderManager OrderManager { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the notification manager.
+		/// Gets the notification manager.
 		/// </summary>
 		/// <value>The notification manager.</value>
-		public static NotificationManager NotificationManager { get; set; }
+		public static NotificationManager NotificationManager { get; private set; }
+
+		/// <summary>
+		/// Gets the market manager.
+		/// </summary>
+		/// <value>The market manager.</value>
+		public static MarketManager MarketManager { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the document folder.
@@ -231,6 +237,7 @@ namespace Phoenix
 			StarSystemManager = new StarSystemManager (user);
 			OrderManager = new OrderManager (user);
 			NotificationManager = new NotificationManager (user);
+			MarketManager = new MarketManager (user);
 		}
 	}
 }

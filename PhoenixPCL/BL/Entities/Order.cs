@@ -115,7 +115,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		/// <value>The parameters.</value>
 		[Ignore]
-		public List<OrderParameter> Parameters { get; set; }
+		public List<OrderParameter> Parameters { get; set; } = new List<OrderParameter> ();
 
 		/// <summary>
 		/// Gets the parameter description.
@@ -155,7 +155,7 @@ namespace Phoenix.BL.Entities
 		/// </summary>
 		public Order ()
 		{
-			Parameters = new List<OrderParameter> ();
+			
 		}
 	}
 

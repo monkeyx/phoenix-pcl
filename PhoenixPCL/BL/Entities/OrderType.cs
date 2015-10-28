@@ -175,7 +175,7 @@ namespace Phoenix.BL.Entities
         /// </summary>
         /// <value>The parameters.</value>
         [Ignore]
-        public List<OrderParameterType> Parameters { get; set; }
+		public List<OrderParameterType> Parameters { get; set; } = new List<OrderParameterType>();
 
 		/// <summary>
 		/// Gets the group that the entity belongs to
@@ -203,7 +203,7 @@ namespace Phoenix.BL.Entities
         /// </summary>
         public OrderType ()
         {
-            Parameters = new List<OrderParameterType>();
+			
         }
 
 		/// <summary>

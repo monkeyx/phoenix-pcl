@@ -68,6 +68,8 @@ namespace Phoenix.DL
 			CreateTable<User> ();
 			CreateTable<Notification> ();
 			CreateTable<PositionNote> ();
+			CreateTable<MarketBase> ();
+			CreateTable<MarketItem> ();
         }
 
         /// <summary>
@@ -92,6 +94,8 @@ namespace Phoenix.DL
 			DropTable<User> ();
 			DropTable<Notification> ();
 			DropTable<PositionNote> ();
+			DropTable<MarketBase> ();
+			DropTable<MarketItem> ();
             CreateTables();
         }
 
@@ -465,6 +469,36 @@ namespace Phoenix.DL
 			return Query<Notification> ("select n.* from Notification n where n.PositionId = ? and n.Priority = ? order by DaysAgo asc", positionId, priority);
 		}
 
+		/// <summary>
+		/// Gets the market items for base.
+		/// </summary>
+		/// <returns>The market items for base.</returns>
+		/// <param name="baseId">Base identifier.</param>
+		public static List<MarketItem> GetMarketItemsForBase(int baseId)
+		{
+			return Query<MarketItem> ("select mi.* from MarketItem mi where mi.BaseId = ?", baseId);
+		}
+
+		/// <summary>
+		/// Gets the market items for item.
+		/// </summary>
+		/// <returns>The market items for item.</returns>
+		/// <param name="itemId">Item identifier.</param>
+		public static List<MarketItem> GetMarketItemsForItem(int itemId)
+		{
+			return Query<MarketItem> ("select mi.* from MarketItem mi where mi.ItemId = ?", itemId);
+		}
+
+		/// <summary>
+		/// Gets the markets in system.
+		/// </summary>
+		/// <returns>The markets in system.</returns>
+		/// <param name="starSystemId">Star system identifier.</param>
+		public static List<MarketBase> GetMarketsInSystem(int starSystemId)
+		{
+			return Query<MarketBase> ("select mb.* from MarketBase mb where mb.StarSystemId = ?", starSystemId);
+		}
+
         /// <summary>
         /// Deletes the item properties.
         /// </summary>
@@ -526,6 +560,15 @@ namespace Phoenix.DL
 		public static void DeleteOrderParameters(int orderId)
 		{
 			Execute ("delete from OrderParameter where OrderId = ?", orderId);
+		}
+
+		/// <summary>
+		/// Deletes the market items for base.
+		/// </summary>
+		/// <param name="baseId">Base identifier.</param>
+		public static void DeleteMarketItemsForBase(int baseId)
+		{
+			Execute ("delete from MarketItem where BaseId = ?", baseId);
 		}
 
 		/// <summary>

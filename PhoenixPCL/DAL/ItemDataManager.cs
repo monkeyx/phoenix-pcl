@@ -86,6 +86,11 @@ namespace Phoenix.DAL
 			if (item.SubstituteItemId > 0) {
 				item.SubstituteItem = DL.PhoenixDatabase.GetItem<Item> (item.SubstituteItemId);
 			}
+			item.MarketItems = DL.PhoenixDatabase.GetMarketItemsForItem (item.Id);
+			foreach (MarketItem mi in item.MarketItems) {
+				mi.Base = DL.PhoenixDatabase.GetItem<MarketBase> (mi.BaseId);
+				mi.Item = item;
+			}
         }
 
         /// <summary>

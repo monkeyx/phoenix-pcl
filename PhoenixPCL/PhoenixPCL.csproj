@@ -11,7 +11,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
     <Description>Portable class library for Phoenix Nexus</Description>
-    <ReleaseVersion>0.2</ReleaseVersion>
+    <ReleaseVersion>0.3</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +77,10 @@
     <Compile Include="DAL\NotificationDataManager.cs" />
     <Compile Include="SAL\NotesRequest.cs" />
     <Compile Include="BL\Managers\NotificationManager.cs" />
+    <Compile Include="BL\Entities\MarketBase.cs" />
+    <Compile Include="DAL\MarketBaseDataManager.cs" />
+    <Compile Include="BL\Managers\MarketManager.cs" />
+    <Compile Include="SAL\MarketRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
