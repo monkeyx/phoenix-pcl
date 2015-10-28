@@ -175,6 +175,25 @@ namespace Phoenix.BL.Entities
 		[Ignore]
 		public List<MarketBase> Markets { get; set; } = new List<MarketBase>();
 
+		/// <summary>
+		/// Determines whether this star system is linked the specified star system by identifier.
+		/// </summary>
+		/// <returns><c>true</c> if this instance is linked the specified to; otherwise, <c>false</c>.</returns>
+		/// <param name="toStarSystemId">Target star system identifier</param>
+		public bool IsLinked(int toStarSystemId)
+		{
+			if (toStarSystemId == 0)
+				return false;
+			if (toStarSystemId == Id)
+				return true;
+			foreach (JumpLink jl in JumpLinks) {
+				if (jl.ToStarSystemId == toStarSystemId) {
+					return true;
+				}
+			}
+			return false;
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.StarSystem"/> class.
         /// </summary>

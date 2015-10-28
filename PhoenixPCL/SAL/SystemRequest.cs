@@ -56,8 +56,8 @@ namespace Phoenix.SAL
         {
 			Log.WriteLine (Log.Layer.SAL, this.GetType (), "Success");
 
-            List<StarSystem> list = new List<StarSystem> ();
-
+			Dictionary<int,StarSystem> map = new Dictionary<int,StarSystem> ();
+            
             StarSystem item = null;
 
             while (xmlReader.Read ()) {
@@ -69,7 +69,7 @@ namespace Phoenix.SAL
 								Name = xmlReader.GetAttribute ("name"),
 								SystemPeriphery = (StarSystem.Periphery) Int32.Parse(xmlReader.GetAttribute("periphery_id"))
 							};
-							list.Add (item);
+							map.Add (item.Id, item);
 						} else if (xmlReader.Name == "cbody") {
 							item.CelestialBodies.Add (new CelestialBody () {
 								StarSystemId = item.Id,
@@ -92,10 +92,48 @@ namespace Phoenix.SAL
 				}
             }
 
-			callback (from element in list
+			bool extrapolate = true;
+			while (extrapolate) {
+				extrapolate = false;
+				List<StarSystem> systems = new List<StarSystem> (map.Values);
+				foreach (StarSystem starSystem in systems) {
+					if (ExtrapolateJumpLinks (starSystem, map)) {
+						extrapolate = true;
+					}
+				}
+			}
+
+			callback (from element in map.Values
 				orderby element.Name
 				select element, null);
         }
+
+		private bool ExtrapolateJumpLinks(StarSystem starSystem, Dictionary<int,StarSystem> allSystems)
+		{
+			bool extrapolated = false;
+			List<JumpLink> links = new List<JumpLink> (starSystem.JumpLinks);
+			foreach (JumpLink jl in links) {
+				if (jl.Distance < 4 && allSystems.ContainsKey(jl.ToStarSystemId)) {
+					StarSystem connectingStarSystem = allSystems [jl.ToStarSystemId];
+					List<JumpLink> connectingLinks = new List<JumpLink> (connectingStarSystem.JumpLinks);
+					foreach (JumpLink jl2 in connectingLinks) {
+						if (!starSystem.IsLinked (jl2.ToStarSystemId)) {
+							int distance = (jl.Distance + jl2.Distance);
+							if (distance <= 4 && allSystems.ContainsKey (jl2.ToStarSystemId)) {
+								extrapolated = true;
+								Log.WriteLine (Log.Layer.SAL, GetType (), "Extrapolated link between " + starSystem + " and " + connectingStarSystem + ": " + distance + " jumps");
+								starSystem.JumpLinks.Add (new JumpLink {
+									StarSystemId = starSystem.Id,
+									ToStarSystemId = jl2.ToStarSystemId,
+									Distance = distance
+								});
+							}
+						}
+					}
+				}
+			}
+			return extrapolated;
+		}
     }
 }
 
