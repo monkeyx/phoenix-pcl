@@ -94,10 +94,12 @@ namespace Phoenix.DAL
 		/// </summary>
 		protected override void DeleteAllEntities()
 		{
-			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete All Star Systems, Celestial Bodies and Jump Links");
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete All Star Systems, Celestial Bodies, Jump Links, Navigation Paths and Path Points");
 			DL.PhoenixDatabase.ClearTable<StarSystem>();
 			DL.PhoenixDatabase.ClearTable<CelestialBody>();
 			DL.PhoenixDatabase.ClearTable<JumpLink>();
+			DL.PhoenixDatabase.ClearTable<NavigationPath> ();
+			DL.PhoenixDatabase.ClearTable<PathPoint> ();
 		}
 
 		/// <summary>

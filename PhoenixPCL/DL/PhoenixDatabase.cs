@@ -70,6 +70,8 @@ namespace Phoenix.DL
 			CreateTable<PositionNote> ();
 			CreateTable<MarketBase> ();
 			CreateTable<MarketItem> ();
+			CreateTable<NavigationPath> ();
+			CreateTable<PathPoint> ();
         }
 
         /// <summary>
@@ -96,6 +98,8 @@ namespace Phoenix.DL
 			DropTable<PositionNote> ();
 			DropTable<MarketBase> ();
 			DropTable<MarketItem> ();
+			DropTable<NavigationPath> ();
+			DropTable<PathPoint> ();
             CreateTables();
         }
 
@@ -499,6 +503,27 @@ namespace Phoenix.DL
 			return Query<MarketBase> ("select mb.* from MarketBase mb where mb.StarSystemId = ?", starSystemId);
 		}
 
+		/// <summary>
+		/// Gets the navigation path.
+		/// </summary>
+		/// <returns>The navigation path.</returns>
+		/// <param name="fromStarSystemId">From star system identifier.</param>
+		/// <param name="toStarSystemId">To star system identifier.</param>
+		public static List<NavigationPath> GetNavigationPath(int fromStarSystemId, int toStarSystemId)
+		{
+			return Query<NavigationPath> ("select np.* from NavigationPath np where np.FromStarSystemId = ? and np.ToStarSystemId = ?", fromStarSystemId, toStarSystemId);
+		}
+
+		/// <summary>
+		/// Gets the path points.
+		/// </summary>
+		/// <returns>The path points.</returns>
+		/// <param name="navigationPathId">Navigation path identifier.</param>
+		public static List<PathPoint> GetPathPoints(int navigationPathId)
+		{
+			return Query<PathPoint> ("select pp.* from PathPoint pp where pp.NavigationPathId = ?", navigationPathId);
+		}
+
         /// <summary>
         /// Deletes the item properties.
         /// </summary>
@@ -569,6 +594,15 @@ namespace Phoenix.DL
 		public static void DeleteMarketItemsForBase(int baseId)
 		{
 			Execute ("delete from MarketItem where BaseId = ?", baseId);
+		}
+
+		/// <summary>
+		/// Deletes the path points.
+		/// </summary>
+		/// <param name="navigationPathId">Navigation path identifier.</param>
+		public static void DeletePathPoints(int navigationPathId)
+		{
+			Execute ("delete from PathPoint where NavigationPathId = ?", navigationPathId);
 		}
 
 		/// <summary>

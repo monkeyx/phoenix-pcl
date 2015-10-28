@@ -24,8 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
 
 using Phoenix.BL.Entities;
+using Phoenix.DAL;
+using Phoenix.Util;
 
 namespace Phoenix.BL.Managers
 {
@@ -34,13 +37,45 @@ namespace Phoenix.BL.Managers
     /// </summary>
     public class StarSystemManager : NexusManager<StarSystem>
     {
-        /// <summary>
+		/// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.BL.Managers.StarSystemManager"/> class.
         /// </summary>
         /// <param name="user">User.</param>
         public StarSystemManager (User user) : base(user)
         {
         }
+
+		/// <summary>
+		/// Requests the callback.
+		/// </summary>
+		/// <param name="results">Results.</param>
+		/// <param name="e">E.</param>
+		protected override async void RequestCallback(IEnumerable<StarSystem> results, Exception e)
+		{
+			if (results == null) {
+				callback (new List<StarSystem> (), e == null ? new Exception ("No results received " + GetType()) : e);
+				return;
+			}
+
+			foreach (StarSystem item in results) {
+				try {
+					await GetDataManager ().SaveItem (item);
+				}
+				catch(Exception ex){
+					Log.WriteLine (Log.Layer.BL, this.GetType (), ex);
+				}
+			}
+			FetchInProgress = false;
+			FetchCompleted = true;
+
+			NavigationPathDataManager pathManager = (NavigationPathDataManager) DataManagerFactory.GetManager<NavigationPath> ();
+
+			foreach (StarSystem ss in results) {
+				await pathManager.GeneratePaths (ss.Id, new List<PathPoint> ());
+			}
+
+			callback (results, e);
+		}
     }
 }
 
