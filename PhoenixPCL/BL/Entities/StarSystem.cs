@@ -1,4 +1,4 @@
-﻿//
+//
 // StarSystem.cs
 //
 // Author:
