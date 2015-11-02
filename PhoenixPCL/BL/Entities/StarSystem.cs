@@ -72,6 +72,31 @@ namespace Phoenix.BL.Entities
 		}
 
 		/// <summary>
+		/// Periphery abbreviation.
+		/// </summary>
+		public enum PeripheryAbbreviation
+		{
+			N = 0,
+			IC = 1,
+			DRK = 2,
+			CLU = 3,
+			DHP = 4,
+			DPP = 5,
+			DTR = 6,
+			TWI = 7,
+			IE = 8,
+			CAL = 9,
+			FLZ = 10,
+			FEL = 11,
+			OC = 12,
+			HAL = 13,
+			CA = 14,
+			TSP = 15,
+			OS = 16,
+			PR = 17
+		}
+
+		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
@@ -100,6 +125,19 @@ namespace Phoenix.BL.Entities
 		public string PeripheryName { 
 			get {
 				return System.Text.RegularExpressions.Regex.Replace (SystemPeriphery.ToString(), "(\\B[A-Z])", " $1");
+			}
+		}
+
+		/// <summary>
+		/// Gets the name of the periphery short.
+		/// </summary>
+		/// <value>The name of the periphery short.</value>
+		[Ignore]
+		public string PeripheryShortName {
+			get {
+				int peripheryCode = (int)SystemPeriphery;
+				PeripheryAbbreviation pa = (PeripheryAbbreviation)peripheryCode;
+				return pa.ToString ();
 			}
 		}
 
@@ -149,7 +187,18 @@ namespace Phoenix.BL.Entities
 		[Ignore]
 		public override string Group { 
 			get { 
-				return string.IsNullOrWhiteSpace(Name) ? "" : Name.Substring(0,1);
+				return PeripheryName;
+			}
+		}
+
+		/// <summary>
+		/// Gets the group short name the entity belongs to
+		/// </summary>
+		/// <value>The group short name.</value>
+		[Ignore]
+		public override string GroupShortName {
+			get {
+				return PeripheryShortName;
 			}
 		}
 
