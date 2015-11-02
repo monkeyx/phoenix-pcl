@@ -33,6 +33,39 @@ namespace Phoenix.BL.Entities
 	public class NavigationPath : EntityBase
 	{
 		/// <summary>
+		/// Combines the paths.
+		/// </summary>
+		/// <returns>The paths.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		public static List<PathPoint> CombinePaths(NavigationPath a, NavigationPath b)
+		{
+			List<PathPoint> points = new List<PathPoint> ();
+			foreach (PathPoint pp in a.PathPoints) {
+				points.Add (new PathPoint {
+					ToStarSystemId = pp.ToStarSystemId,
+					Distance = pp.Distance,
+					FromStarSystemId = pp.FromStarSystemId
+				});
+			}
+
+			foreach (PathPoint pp in b.PathPoints) {
+				points.Add (new PathPoint {
+					ToStarSystemId = pp.ToStarSystemId,
+					Distance = pp.Distance,
+					FromStarSystemId = pp.FromStarSystemId
+				});
+			}
+
+			return points;
+		}
+
+		/// <summary>
+		/// Maximum jumps for a navigation path
+		/// </summary>
+		public const int MAX_JUMPS = 4;
+
+		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
@@ -47,6 +80,12 @@ namespace Phoenix.BL.Entities
 		public int FromStarSystemId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the name of the from star system.
+		/// </summary>
+		/// <value>The name of the from star system.</value>
+		public string FromStarSystemName { get; set; }
+
+		/// <summary>
 		/// Gets or sets to star system identifier.
 		/// </summary>
 		/// <value>To star system identifier.</value>
@@ -54,11 +93,17 @@ namespace Phoenix.BL.Entities
 		public int ToStarSystemId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the path point count.
+		/// Gets or sets the name of the to star system.
 		/// </summary>
-		/// <value>The path point count.</value>
+		/// <value>The name of the to star system.</value>
+		public string ToStarSystemName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the total jumps.
+		/// </summary>
+		/// <value>The total jumps.</value>
 		[Indexed]
-		public int PathPointCount { get; set; }
+		public int TotalJumps { get; set; }
 
 		/// <summary>
 		/// Gets or sets the path points.
@@ -73,7 +118,7 @@ namespace Phoenix.BL.Entities
 		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.NavigationPath"/>.</returns>
 		public override string ToString ()
 		{
-			return string.Format ("[NavigationPath: Id={0}, FromStarSystemId={1}, ToStarSystemId={2}, PathPointCount={3}, PathPoints={4}]", Id, FromStarSystemId, ToStarSystemId, PathPointCount, PathPoints);
+			return string.Format ("{0} ({1}) -> {2} ({3})", FromStarSystemName, FromStarSystemId,ToStarSystemName,ToStarSystemId);
 		}
 
 		/// <summary>
@@ -95,6 +140,20 @@ namespace Phoenix.BL.Entities
 		public override int Id { get; set; }
 
 		/// <summary>
+		/// Gets the list text.
+		/// </summary>
+		/// <value>The list text.</value>
+		[Ignore]
+		public override string ListText { get { return ToStarSystemName; } }
+
+		/// <summary>
+		/// Gets the list detail.
+		/// </summary>
+		/// <value>The list detail.</value>
+		[Ignore]
+		public override string ListDetail { get { return DistanceString; } }
+
+		/// <summary>
 		/// Gets or sets the navigation path identifier.
 		/// </summary>
 		/// <value>The navigation path identifier.</value>
@@ -102,23 +161,45 @@ namespace Phoenix.BL.Entities
 		public int NavigationPathId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the jump link identifier.
-		/// </summary>
-		/// <value>The jump link identifier.</value>
-		public int JumpLinkId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the jump link.
-		/// </summary>
-		/// <value>The jump link.</value>
-		[Ignore]
-		public JumpLink JumpLink { get; set; }
-
-		/// <summary>
 		/// Gets or sets to star system identifier.
 		/// </summary>
 		/// <value>To star system identifier.</value>
 		public int ToStarSystemId { get; set; }
+
+		/// <summary>
+		/// Gets or sets to star sysytem.
+		/// </summary>
+		/// <value>To star sysytem.</value>
+		[Ignore]
+		public StarSystem ToStarSysytem { get; set; }
+
+		/// <summary>
+		/// Gets the name of the to star system.
+		/// </summary>
+		/// <value>The name of the to star system.</value>
+		[Ignore]
+		public string ToStarSystemName { 
+			get {
+				return ToStarSysytem == null ? "Unknown" : ToStarSysytem.ToString ();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the distance.
+		/// </summary>
+		/// <value>The distance.</value>
+		public int Distance { get; set; }
+
+		/// <summary>
+		/// Gets the distance string.
+		/// </summary>
+		/// <value>The distance string.</value>
+		[Ignore]
+		public string DistanceString {
+			get {
+				return Distance.ToString () + (Distance == 1 ? " jump" : " jumps");
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets from star system identifier.
@@ -132,7 +213,7 @@ namespace Phoenix.BL.Entities
 		/// <returns>A <see cref="System.String"/> that represents the current <see cref="Phoenix.BL.Entities.PathPoint"/>.</returns>
 		public override string ToString ()
 		{
-			return string.Format ("[PathPoint: Id={0}, NavigationPathId={1}, JumpLinkId={2}, JumpLink={3}, ToStarSystemId={4}, FromStarSystemId={5}]", Id, NavigationPathId, JumpLinkId, JumpLink, ToStarSystemId, FromStarSystemId);
+			return string.Format ("Jump {0} ({1})", ToStarSystemName,ToStarSystemId);
 		}
 
 		/// <summary>

@@ -72,6 +72,7 @@ namespace Phoenix.DL
 			CreateTable<MarketItem> ();
 			CreateTable<NavigationPath> ();
 			CreateTable<PathPoint> ();
+			CreateTable<TradeRoute> ();
         }
 
         /// <summary>
@@ -100,6 +101,7 @@ namespace Phoenix.DL
 			DropTable<MarketItem> ();
 			DropTable<NavigationPath> ();
 			DropTable<PathPoint> ();
+			DropTable<TradeRoute> ();
             CreateTables();
         }
 
@@ -423,6 +425,17 @@ namespace Phoenix.DL
         }
 
 		/// <summary>
+		/// Gets the jump links between systems.
+		/// </summary>
+		/// <returns>The jump links between systems.</returns>
+		/// <param name="fromSystemId">From system identifier.</param>
+		/// <param name="toSystemId">To system identifier.</param>
+		public static List<JumpLink> GetJumpLinksBetweenSystems(int fromSystemId, int toSystemId)
+		{
+			return Query<JumpLink> ("select jl.* from JumpLink jl where jl.StarSystemId = ? and jl.ToStarSystemId", fromSystemId, toSystemId);
+		}
+
+		/// <summary>
 		/// Gets the order type parameters.
 		/// </summary>
 		/// <returns>The order parameters.</returns>
@@ -511,7 +524,18 @@ namespace Phoenix.DL
 		/// <param name="toStarSystemId">To star system identifier.</param>
 		public static List<NavigationPath> GetNavigationPath(int fromStarSystemId, int toStarSystemId)
 		{
-			return Query<NavigationPath> ("select np.* from NavigationPath np where np.FromStarSystemId = ? and np.ToStarSystemId = ?", fromStarSystemId, toStarSystemId);
+			return Query<NavigationPath> ("select np.* from NavigationPath np where np.FromStarSystemId = ? and np.ToStarSystemId = ? order by TotalJumps asc", fromStarSystemId, toStarSystemId);
+		}
+
+		/// <summary>
+		/// Gets the interconnecting system
+		/// </summary>
+		/// <returns>The interconnecting system.</returns>
+		/// <param name="fromStarSystemId">From star system identifier.</param>
+		/// <param name="toStarSystemId">To star system identifier.</param>
+		public static int GetInterconnectingSystem(int fromStarSystemId, int toStarSystemId)
+		{
+			return ExecuteScalar<int> ("select b.FromStarSystemId from NavigationPath a, NavigationPath b where a.ToStarSystemId = b.FromStarSystemId and a.FromStarSystemId = ? and b.ToStarSystemId = ? limit 0,1", fromStarSystemId, toStarSystemId);
 		}
 
 		/// <summary>
@@ -521,7 +545,41 @@ namespace Phoenix.DL
 		/// <param name="navigationPathId">Navigation path identifier.</param>
 		public static List<PathPoint> GetPathPoints(int navigationPathId)
 		{
-			return Query<PathPoint> ("select pp.* from PathPoint pp where pp.NavigationPathId = ?", navigationPathId);
+			return Query<PathPoint> ("select pp.* from PathPoint pp where pp.NavigationPathId = ? order by Id asc", navigationPathId);
+		}
+
+		/// <summary>
+		/// Gets the trade routes from base.
+		/// </summary>
+		/// <returns>The trade routes from base.</returns>
+		/// <param name="fromBaseId">From base identifier.</param>
+		/// <param name="lifeSupport">If set to <c>true</c> life support.</param>
+		public static List<TradeRoute> GetTradeRoutesFromBase(int fromBaseId, bool lifeSupport)
+		{
+			return Query<TradeRoute>("select tr.* from TradeRoute tr where tr.FromBaseId = ? and tr.IsLifeSupportRequired = ?",fromBaseId,lifeSupport);
+		}
+
+		/// <summary>
+		/// Gets the trade routes from system.
+		/// </summary>
+		/// <returns>The trade routes from system.</returns>
+		/// <param name="fromSystemId">From system identifier.</param>
+		/// <param name="lifeSupport">If set to <c>true</c> life support.</param>
+		public static List<TradeRoute> GetTradeRoutesFromSystem(int fromSystemId, bool lifeSupport)
+		{
+			return Query<TradeRoute>("select tr.* from TradeRoute tr where tr.FromSystemId = ? and tr.IsLifeSupportRequired = ?",fromSystemId,lifeSupport);
+		}
+
+		/// <summary>
+		/// Gets the trade routes from system for item.
+		/// </summary>
+		/// <returns>The trade routes from system for item.</returns>
+		/// <param name="fromSystemId">From system identifier.</param>
+		/// <param name="itemId">Item identifier.</param>
+		/// <param name="lifeSupport">If set to <c>true</c> life support.</param>
+		public static List<TradeRoute> GetTradeRoutesFromSystemForItem(int fromSystemId, int itemId, bool lifeSupport)
+		{
+			return Query<TradeRoute>("select tr.* from TradeRoute tr where tr.FromSystemId = ? and tr.IsLifeSupportRequired = ? and tr.ItemId = ?",fromSystemId,lifeSupport,itemId);
 		}
 
         /// <summary>

@@ -96,9 +96,10 @@ namespace Phoenix.DAL
 		/// </summary>
 		protected override void DeleteAllEntities ()
 		{
-			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete All Market Bases and Market Items");
+			Log.WriteLine (Log.Layer.DAL, this.GetType (), "Delete All Market Bases, Market Items and Trade Routes");
 			DL.PhoenixDatabase.ClearTable<MarketBase> ();
 			DL.PhoenixDatabase.ClearTable<MarketItem> ();
+			DL.PhoenixDatabase.ClearTable<TradeRoute>();
 		}
 
 		/// <summary>

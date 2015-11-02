@@ -178,6 +178,21 @@ namespace Phoenix.BL.Entities
 		}
 
 		/// <summary>
+		/// Gets the selling item.
+		/// </summary>
+		/// <returns>The selling item.</returns>
+		/// <param name="itemId">Item identifier.</param>
+		public MarketItem GetSellingItem(int itemId)
+		{
+			foreach (MarketItem mi in Selling) {
+				if (mi.ItemId == itemId) {
+					return mi;
+				}
+			}
+			return null;
+		}
+
+		/// <summary>
 		/// Gets the buying.
 		/// </summary>
 		/// <value>The buying.</value>
@@ -188,6 +203,21 @@ namespace Phoenix.BL.Entities
 						where element.BuyQuantity > 0
 					select element;
 			}
+		}
+
+		/// <summary>
+		/// Gets the buying item.
+		/// </summary>
+		/// <returns>The buying item.</returns>
+		/// <param name="itemId">Item identifier.</param>
+		public MarketItem GetBuyingItem(int itemId)
+		{
+			foreach (MarketItem mi in Buying) {
+				if (mi.ItemId == itemId) {
+					return mi;
+				}
+			}
+			return null;
 		}
 
 		/// <summary>

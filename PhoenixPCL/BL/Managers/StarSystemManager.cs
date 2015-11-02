@@ -70,9 +70,13 @@ namespace Phoenix.BL.Managers
 
 			NavigationPathDataManager pathManager = (NavigationPathDataManager) DataManagerFactory.GetManager<NavigationPath> ();
 
+			await pathManager.Clear ();
+
 			foreach (StarSystem ss in results) {
 				await pathManager.GeneratePaths (ss.Id, new List<PathPoint> ());
 			}
+
+			Log.WriteLine (Log.Layer.BL, GetType (), "Navigation Paths Generated: " + pathManager.Count);
 
 			callback (results, e);
 		}

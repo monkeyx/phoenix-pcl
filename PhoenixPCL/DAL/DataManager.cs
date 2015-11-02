@@ -86,6 +86,7 @@ namespace Phoenix.DAL
 			RegisterManager<Notification> (new NotificationDataManager ());
 			RegisterManager<MarketBase> (new MarketBaseDataManager ());
 			RegisterManager<NavigationPath> (new NavigationPathDataManager ());
+			RegisterManager<TradeRoute> (new TradeRouteDataManager ());
         }
 
         /// <summary>

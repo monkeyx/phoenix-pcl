@@ -219,6 +219,20 @@ namespace Phoenix.BL.Entities
         }
 
 		/// <summary>
+		/// Gets a value indicating whether this instance is life support required.
+		/// </summary>
+		/// <value><c>true</c> if this instance is life support required; otherwise, <c>false</c>.</value>
+		public bool IsLifeSupportRequired {
+			get {
+				String prop = GetProperty ("Lifeform");
+				if (!string.IsNullOrWhiteSpace(prop) && prop == "1") {
+					return true;
+				}
+				return false;
+			}
+		}
+
+		/// <summary>
         /// Initializes a new instance of the <see cref="Phoenix.Item"/> class.
         /// </summary>
         public Item ()

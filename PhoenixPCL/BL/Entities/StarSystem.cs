@@ -78,7 +78,7 @@ namespace Phoenix.BL.Entities
 		{
 			N = 0,
 			IC = 1,
-			DAR = 2,
+			DRK = 2,
 			CLU = 3,
 			DHP = 4,
 			DPP = 5,

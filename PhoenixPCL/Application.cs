@@ -188,6 +188,12 @@ namespace Phoenix
 		public static MarketManager MarketManager { get; private set; }
 
 		/// <summary>
+		/// Gets the path manager.
+		/// </summary>
+		/// <value>The path manager.</value>
+		public static NavigationPathManager PathManager { get; private set; }
+
+		/// <summary>
 		/// Gets or sets the document folder.
 		/// </summary>
 		/// <value>The document folder.</value>
@@ -216,6 +222,7 @@ namespace Phoenix
 			PhoenixDatabase.CreateTables ();
 			#endif
 			UserManager = new UserManager ();
+			PathManager = new NavigationPathManager ();
 
 			DocumentFolder = documentFolder;
 			RestClient = restClient;
