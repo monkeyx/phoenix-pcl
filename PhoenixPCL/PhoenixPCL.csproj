@@ -81,8 +81,6 @@
     <Compile Include="DAL\MarketBaseDataManager.cs" />
     <Compile Include="BL\Managers\MarketManager.cs" />
     <Compile Include="SAL\MarketRequest.cs" />
-    <Compile Include="BL\Entities\NavigationPath.cs" />
-    <Compile Include="DAL\NavigationPathDataManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
